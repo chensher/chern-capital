@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="chern_capital: a small personal website for notes, links, and experiments."
+    />
+    <title>chern_capital</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <canvas id="signal-canvas" aria-hidden="true"></canvas>
+
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="chern_capital home">chern_capital</a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="#notes">Notes</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow">Personal website</p>
+          <h1 id="hero-title">chern_capital</h1>
+          <p class="lede">
+            A quiet public room for notes, links, tiny experiments, and whatever becomes worth keeping.
+          </p>
+          <div class="hero-actions" aria-label="Site shortcuts">
+            <a class="button primary" href="#notes">Enter</a>
+            <a class="button ghost" href="#contact">Say hello</a>
+          </div>
+        </div>
+        <div class="status-strip" aria-label="Site status">
+          <span>online soon</span>
+          <span>static</span>
+          <span>zero-cost hosting ready</span>
+        </div>
+      </section>
+
+      <section id="notes" class="section-block">
+        <div class="section-heading">
+          <p class="eyebrow">01</p>
+          <h2>Notes</h2>
+        </div>
+        <div class="content-grid">
+          <article class="item">
+            <p class="item-label">Now</p>
+            <h3>Start with a blank page</h3>
+            <p>
+              This space can become a log of ideas, reading notes, market observations, or short essays.
+            </p>
+          </article>
+          <article class="item">
+            <p class="item-label">Later</p>
+            <h3>Keep only what compounds</h3>
+            <p>
+              Add entries slowly. The site is designed to feel complete even before it has a lot of content.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section id="projects" class="section-block">
+        <div class="section-heading">
+          <p class="eyebrow">02</p>
+          <h2>Projects</h2>
+        </div>
+        <div class="content-grid">
+          <article class="item accent-green">
+            <p class="item-label">Build</p>
+            <h3>Small tools</h3>
+            <p>
+              A place for scripts, visualizations, research notebooks, or anything useful enough to share.
+            </p>
+          </article>
+          <article class="item accent-gold">
+            <p class="item-label">Archive</p>
+            <h3>Open questions</h3>
+            <p>
+              Store questions before answers arrive. Good questions make a personal site feel alive.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section id="contact" class="section-block contact-section">
+        <div class="section-heading">
+          <p class="eyebrow">03</p>
+          <h2>Contact</h2>
+        </div>
+        <div class="contact-panel">
+          <p>
+            Replace this line with an email, GitHub profile, X account, Telegram handle, or any link you trust.
+          </p>
+          <button class="copy-button" type="button" data-copy="hello@chern.capital">
+            Copy placeholder email
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>chern_capital</span>
+      <span>static site, no backend</span>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
