@@ -177,6 +177,68 @@ p {
   padding-bottom: clamp(5rem, 9vw, 8rem);
 }
 
+.home-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.feature-panel {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: clamp(1.2rem, 3vw, 1.8rem);
+  background: var(--panel);
+  border-top: 3px solid var(--gold);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.feature-panel h3 {
+  max-width: 780px;
+  margin: 2rem 0 0.8rem;
+  font-size: clamp(1.45rem, 3vw, 2.3rem);
+  line-height: 1.12;
+}
+
+.feature-panel p:not(.item-label) {
+  max-width: 900px;
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.78;
+}
+
+.reading-entry {
+  border-top-color: var(--blue);
+}
+
+.action-link {
+  width: fit-content;
+  min-height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.35rem;
+  border: 1px solid rgba(247, 243, 232, 0.3);
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  background: rgba(247, 243, 232, 0.08);
+  color: var(--ink);
+  font-weight: 700;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    transform 160ms ease;
+}
+
+.action-link:hover,
+.action-link:focus-visible {
+  border-color: rgba(247, 243, 232, 0.56);
+  background: rgba(247, 243, 232, 0.12);
+  transform: translateY(-1px);
+}
+
+.compact-grid .rule-card {
+  min-height: 12rem;
+}
+
 .section-heading {
   position: sticky;
   top: 6rem;

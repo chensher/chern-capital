@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="chern_capital 对 vcp_plot.py 与 VCP 筛选规则的说明。"
+      content="chern_capital：交易实战工具与交易阅读笔记。"
     />
     <title>chern_capital</title>
     <link rel="stylesheet" href="styles.css" />
@@ -16,367 +16,119 @@
     <header class="site-header">
       <a class="brand" href="#top" aria-label="chern_capital home">chern_capital</a>
       <nav class="nav-links" aria-label="页面导航">
+        <a href="#practice">交易实战</a>
         <a href="#reading">阅读</a>
-        <a href="#workflow">流程</a>
-        <a href="#rules">规则</a>
-        <a href="#output">输出</a>
+        <a href="#structure">结构</a>
       </nav>
     </header>
 
     <main id="top">
-      <section class="hero" aria-labelledby="hero-title">
-        <p class="eyebrow">VCP screening notes</p>
-        <h1 id="hero-title">vcp_plot.py</h1>
+      <section class="hero home-hero" aria-labelledby="hero-title">
+        <p class="eyebrow">Trading workspace</p>
+        <h1 id="hero-title">交易实战</h1>
         <p class="lede">
-          这是我用来复盘 VCP 候选股的可视化脚本：读取最新筛选结果，重新拉取前复权日线，
-          为每只股票生成 K 线、均线、52 周高点和成交量图，方便快速判断收缩形态是否值得继续跟踪。
+          这里先放正在使用的交易工具、筛选脚本和阅读笔记。首页只保留入口与当前重点，
+          细节进入对应页面，避免把不同层级的内容混在一起。
         </p>
-        <div class="metric-strip" aria-label="脚本关键参数">
-          <span><strong>180</strong> 图上交易日</span>
-          <span><strong>400</strong> 拉取历史天数</span>
-          <span><strong>8</strong> 并发线程</span>
-          <span><strong>4</strong> 网络重试</span>
+        <div class="metric-strip" aria-label="站点当前模块">
+          <span><strong>01</strong> 脚本筛选</span>
+          <span><strong>02</strong> 阅读书架</span>
+          <span><strong>static</strong> 纯静态站</span>
+          <span><strong>Pages</strong> GitHub / Cloudflare</span>
         </div>
       </section>
 
-      <section id="reading" class="section-block reading-section">
+      <section id="practice" class="section-block">
         <div class="section-heading">
-          <p class="eyebrow">Reading 01</p>
+          <p class="eyebrow">Practice</p>
+          <h2>交易实战</h2>
+        </div>
+        <div class="home-stack">
+          <article class="feature-panel">
+            <p class="item-label">脚本筛选 / VCP</p>
+            <h3>vcp_plot.py：把候选股变成可复核图表</h3>
+            <p>
+              这个模块服务于“先筛，再看图”的实战流程：筛选器先压缩股票池，
+              <code>vcp_plot.py</code> 再读取最新 <code>vcp_result_*.csv</code>，
+              拉取前复权日线并生成带 K 线、均线、52 周高点和成交量的复盘页面。
+            </p>
+          </article>
+
+          <div class="rule-grid compact-grid">
+            <article class="rule-card">
+              <p class="item-label">输入</p>
+              <h3>承接筛选结果</h3>
+              <p>
+                自动读取当前目录最新的 <code>vcp_result_*.csv</code>，
+                不在画图阶段重新全市场扫描。
+              </p>
+            </article>
+            <article class="rule-card">
+              <p class="item-label">复盘</p>
+              <h3>图形验证形态</h3>
+              <p>
+                每只候选股生成交互图，重点观察趋势、回撤、缩量、振幅收缩和是否接近 52 周高位。
+              </p>
+            </article>
+            <article class="rule-card">
+              <p class="item-label">边界</p>
+              <h3>脚本不替代判断</h3>
+              <p>
+                规则只负责缩小观察范围；最终仍要人工确认市场环境、板块位置、流动性和买卖点。
+              </p>
+            </article>
+            <article class="rule-card">
+              <p class="item-label">命令</p>
+              <h3>本地离线生成</h3>
+              <p>
+                运行 <code>python vcp_screener.py</code> 后接
+                <code>python vcp_plot.py</code>，再把静态结果发布到网站。
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="reading" class="section-block">
+        <div class="section-heading">
+          <p class="eyebrow">Reading</p>
           <h2>阅读</h2>
         </div>
-        <div class="reading-wrap">
-          <div class="reading-intro">
-            <p class="item-label">第一本 / 缠论</p>
-            <h3>原文精读（第一轮）</h3>
+        <div class="home-stack">
+          <article class="feature-panel reading-entry">
+            <p class="item-label">交易阅读 / 第一本</p>
+            <h3>缠论：原文精读（第一轮）</h3>
             <p>
-              这组摘录更像一座交易阅读的记忆宫殿：先进入“位次”的门厅，理解未知、人性与认知的边界；
-              再穿过市场走廊，把趋势、安全价格、独立系统、均线缠绕、背驰与短差放到可回忆的位置上。
-              后续其他交易书可以继续增加新的房间。
+              这本先做成“记忆宫殿”：把位次、人性、趋势、安全线、独立系统、背驰与短差分别放入不同房间。
+              首页只放入口，完整摘录和心得进入阅读页。
             </p>
-          </div>
-
-          <div class="palace-map" aria-label="阅读记忆宫殿路线">
-            <a href="#palace-foyer">门厅：位次</a>
-            <a href="#palace-humanity">镜室：人性</a>
-            <a href="#palace-market">交易厅：趋势</a>
-            <a href="#palace-systems">筛选台：系统</a>
-            <a href="#palace-short">短差室：买点</a>
-            <a href="#palace-raw">原文库：全文</a>
-          </div>
-
-          <div class="palace-room" id="palace-foyer">
-            <div class="room-marker">门厅</div>
-            <div class="room-body">
-              <p class="item-label">番外 / 20061113</p>
-              <h3>重构位次，安顿人性</h3>
-              <blockquote>子曰：“不患，无位；患，所以立。不患，莫己知求，为可知也。”</blockquote>
-              <p class="ai-note">
-                AI 路标：这一间先放“未知”。不要急着证明未知可知，而是建立能站住的依据。
-                市场里的“无位”不是空缺，而是等待实践灌注意义的场域。
-              </p>
-              <ul class="note-list">
-                <li>“无位”本身无需恐惧，关键在建构“立”的依据。</li>
-                <li>未来走势是“无位”的，本质在践行中存在。</li>
-                <li>通过“患”所确立的不仅是能力品德（立），更是存在者获得意义坐标的过程（位）。</li>
-                <li>“无位”不是空缺，而是等待意义灌注的场域。</li>
-                <li>个人解读，20250713：未知是等待赋予意义的，不去将注意力分配在纠结其为什么未知/尝试证明其并不是未知。而是选择求其“能知”。同时避免先入为主，尊重“未知”。</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="palace-room" id="palace-humanity">
-            <div class="room-marker">镜室</div>
-            <div class="room-body">
-              <p class="item-label">番外 / 20061117-20061124</p>
-              <h3>人性不是改造对象，位次才是操作对象</h3>
-              <blockquote>子曰：“不患人之不己知；患不知人也。”</blockquote>
-              <blockquote>“不己知”是社会中所有人存在的必然状态，如果真有什么“人性”，唯一可能的“人性”就是“不己知”。任何理论，如果违背了这个“不己知”，就是荒谬可笑的。例如，有某种上世纪被无数人吹捧的主流经济学，以所谓人的理性为前提，这种经济学只能是垃圾经济学。因为“不己知”，在人类理性的层次上，“非理性”是无位次的，人类的理性因“非理性”的无位次而位次，叫嚣人类理性的，根本上从来都是“非理性”的。</blockquote>
-              <blockquote>任何希望通过灵魂深处爆发革命而达到改造社会的运动都是荒谬可笑的。</blockquote>
-              <p>
-                个人延伸：对于个人亦是如此，我们指望一个人的“顿悟/领悟/改变”，亦是可笑的妄想。
-                那么可以做什么？关注“位次”。
-              </p>
-              <blockquote>从“人不知”到“人不愠”，是不能从“不己知”下手的，因为无从下手。在这一点上，马克思和孔子是完全一致的。</blockquote>
-              <blockquote>子曰：“性相，近也；习相，远也。”</blockquote>
-              <p>
-                DS 辅助解析：当波普尔在逻辑迷宫中撞墙时，东方智者早已指明出路：
-                孔子在川上叹“逝者如斯夫”，在时间位次中把握存在；
-                庄子笑“子非鱼安知鱼之乐”，打破认知位次的傲慢。
-                证伪主义的崩溃警示我们：真理不在命题的纸牌屋中，而在“知不知”的谦卑与“为可为”的践履之间。
-              </p>
-              <blockquote>孔子说：一切现象，当被认为是恶的就会被厌恶，对此必须摈弃一切厌恶当下直观；一切现象，当被认为是好的就会被喜好，对此必须摈弃一切喜好当下直观。</blockquote>
-            </div>
-          </div>
-
-          <div class="palace-room" id="palace-market">
-            <div class="room-marker">交易厅</div>
-            <div class="room-body">
-              <p class="item-label">第 4 / 6 / 7 / 8 课</p>
-              <h3>趋势、节奏与安全线</h3>
-              <blockquote>对于市场来说，介入就是介入生死，无所依据地从容于各种模式之间，无所往而生其心，而心实无所生，方可于生死而从容。</blockquote>
-              <p>规则中形成的安全价格，可以造成一个高胜率低风险的策略。</p>
-              <blockquote>牛市的第一阶段都是这样的，一线股先长，它们不到位，其他股票怎么长？全世界的牛市都基本这样子，没什么新鲜的。</blockquote>
-              <blockquote>错过了这个节奏怎么办？如果你跟盘技术还行的，就要在回档的时候跟进强势股票。散户就怕跌，但牛市里，跌就是爹，一跌就等于爹来了，又要发钱了。</blockquote>
-              <blockquote>有一种方式是最简单的，就是盯着所有放量突破上市首日最高价的新股以及放量突破年线然后缩量回调年线的老股，这都是以后的黑马。</blockquote>
-              <blockquote>但散户可以看小盘股，原则是一样的，不过小盘股可要留意，一般大盘股启动的骗线比较少，小盘股可不一定，这都要自己好好去揣摩。散户就当好散户，别整天想着抄底、逃顶，底都让你抄了，顶都让你逃了，不是散户的人吃什么去呀？散户，一定要等趋势明确才介入或退出，这样会少走很多弯路。</blockquote>
-              <blockquote>要长期胜利，就一定要坚持用最小风险换取最大利润。</blockquote>
-              <blockquote>当然，搞的分类原则，各人可以有所不同。例如，250天线以及周线上的成交量压力线的突破；资金量不大且短线技术还可以的，可以把250天线改成70天线、35天线，甚至改为30分钟图里的相应均线；对新股，可以用上市第一日的最高价作为标准；还有，就是接近安全线的股票，例如在第六期里，本ID给出的一个带认沽权怔的认购权怔介入的安全线标准；而对于有一定水平的人，识别各种空头陷阱，利用空头陷阱介入是一个很好的方法。</blockquote>
-            </div>
-          </div>
-
-          <div class="palace-room" id="palace-systems">
-            <div class="room-marker">筛选台</div>
-            <div class="room-body">
-              <p class="item-label">第 9 课</p>
-              <h3>独立程序与轮动系统</h3>
-              <blockquote>但问题不像表面所见那么糟，在数学中，有一个乘法原则可以完全解决这个问题。假设三个互相独立的程序分别为30%、40%、30%，这都是很普通的并不出色的程序。那么由这三个程序组成的程序组，就是30%40%30%=3.6%。</blockquote>
-              <blockquote>现在，问题的关键变成，如何去寻找这三个互相独立的程序。首先，技术指标，都单纯涉及价量的输入而来，都不是独立的，只需要选择任意一个技术指标构成一个买卖程序就可以。对于水平高点的人来说，一个带均线和成交量的K线图，比任何技术指标都有意义。其次，任何一个股票都不是独立的，在整个股票市场中，处在一定的比价关系中，这个比价关系的变动，也可以构成一个买卖系统，这个买卖系统是和市场资金的流向相关的，一切与市场资金相关的系统，都不能与之独立；最后，可以选择基本面构成一个程序，但这个基本面不是单纯指公司赢利之类的，像本ID在前几期所说，国航李总当兵出身不会让自己的股票长期跌破发行价这么没面子，还有认沽权证基本不会让兑现等等，这才是更重要的基本面，这需要对市场的参与者、对人性有更多的了解才可能精通。</blockquote>
-              <blockquote>炒股不花时间，只有牛市时候才需要看股票，本ID 2001年到2005年，4年连一眼股票都不看。现在就算看，一天也就4小时，这不是钱的问题，而是一个智力问题，股票对于本ID来说，就是一个智力游戏，休息的好方法。</blockquote>
-              <blockquote>震荡就是折腾，利用折腾，技术高的就可以玩轮动的游戏。大盘震荡，股票可不一定震荡，创新高的股票仍不会少。</blockquote>
-              <blockquote>随便告诉你一个奥秘，介入股票最好在均线粘合时，例如这股票，11月13日就是最好的短线介入时期，而现在等于要赌第二波，比原来的位置差多了。</blockquote>
-            </div>
-          </div>
-
-          <div class="palace-room" id="palace-short">
-            <div class="room-marker">短差室</div>
-            <div class="room-body">
-              <p class="item-label">第 12 / 14 / 16 课</p>
-              <h3>均线缠绕、背驰与买点</h3>
-              <blockquote>综合上述，利用均线构成的买卖系统，首先要利用男上位最后一次缠绕后背弛构成的空头陷阱抄底进入，这是第一个值得买入的位置，而第二个值得买入或加码的位置，就是女上位后第一次缠绕形成的低位。站在该系统下，这两个买点的风险是最小的，准确地说，收益和风险之比是最大的，也是唯一值得买入的两个点。</blockquote>
-              <blockquote>在MACD图上，绿柱子比上一次的明显缩短，而低位却低于上次绿柱子出现时的低位。如何判断背驰走势结束，最简单的就是当绿柱子缩短，而股价继续创新低，这次，明显地发生在2003年9月26日这一周，意味着底部出现，第一类买点构造完成，可以大举介入了。</blockquote>
-              <blockquote>大级别的第二类买点由次一级别相应走势的第一类买点构成。</blockquote>
-              <blockquote>缠中说禅短差程序就是：大级别买点介入的，在次级别第一类卖点出现时，可以先减仓，其后在次级别第一类买点出现时回补。对于周线买点介入的，就应该利用日线的第一类卖点减仓，其后在第一类买点回补。</blockquote>
-              <blockquote>当然，如果资金量小，不是按周线的，第一类、第二类买点都是最多按日线的，就可以相应在30分钟等更小的级别内找到第一类卖点而弄出短差来，那就太细了，各位自己研究去。</blockquote>
-              <p class="ai-note">第 16 课在当前文档中只保留编号，尚未记录摘录；这里先留作下一轮阅读的空房间。</p>
-            </div>
-          </div>
-
-          <div class="palace-room raw-room" id="palace-raw">
-            <div class="room-marker">原文库</div>
-            <div class="room-body">
-              <p class="item-label">完整转写</p>
-              <h3>chan.md 全文</h3>
-              <pre><code>原文精读（第一轮）
-
-- 番外
-  &gt; 重构位次，安顿人性
-  &gt;
-  - 20061113
-    &gt; 子曰：“不患，无位；患，所以立。不患，莫己知求，为可知也。”
-    &gt;
-    - DS辅助解析
-      - “无位” 本身无需恐惧，关键在建构“立”的依据
-        &gt; 未来走势是"无位"的，本质在践行中存在
-      - 通过“患”所确立的不仅是能力品德（立），更是存在者获得意义坐标的过程（位）。
-      - “无位”不是空缺，而是等待意义灌注的场域
-    - 个人解读
-      &gt; 20250713-
-      &gt;
-      - 未知是等待赋予意义的，不去将注意力分配在纠结其为什么未知/尝试证明其并不是未知。而是选择求其”能知“。同时避免先入为主，尊重"未知".
-  - 20061117
-    &gt; 子曰：“不患人之不己知；患不知人也。”
-    - *“不己知”是社会中所有人存在的必然状态，如果真有什么“人性”，唯一可能的“人性”就是“不己知”。任何理论，如果违背了这个“不己知”，就是荒谬可笑的。例如，有某种上世纪被无数人吹捧的主流经济学，以所谓人的理性为前提，这种经济学只能是垃圾经济学。因为“不己知”，在人类理性的层次上，“非理性”是无位次的，人类的理性因“非理性”的无位次而位次，叫嚣人类理性的，根本上从来都是“非理性”的。*
-    - *任何希望通过灵魂深处爆发革命而达到改造社会的运动都是荒谬可笑的*
-      &gt; 对于个人亦是如此，我们指望一个人的"顿悟/领悟/改变"，亦是可笑的妄想。
-      &gt; 那么可以做什么？关注"位次"
-      &gt;
-    - *从“人不知”到“人不愠”，是不能从“不己知”下手的，因为无从下手。在这一点上，马克思和孔子是完全一致的*
-  - 20061119
-    &gt; 子曰：“性相，近也；习相，远也。”
-    - DS
-      &gt; 结语：跃出语言的捕蝇瓶
-      &gt; 当波普尔在逻辑迷宫中撞墙时，东方智者早已指明出路：
-      &gt;
-      &gt; 孔子在川上叹“逝者如斯夫” → 在时间位次中把握存在
-      &gt;
-      &gt; 庄子笑“子非鱼安知鱼之乐” → 打破认知位次的傲慢
-      &gt;
-      &gt; 证伪主义的崩溃警示我们：
-      &gt;
-      &gt; 真理不在命题的纸牌屋中，而在“知不知”的谦卑与“为可为”的践履之间——
-      &gt; 此谓“知其白，守其黑，为天下式”的终极智慧。
-  - 20061124
-    - *孔子说：一切现象，当被认为是恶的就会被厌恶，对此必须摈弃一切厌恶当下直观；一切现象，当被认为是好的就会被喜好，对此必须摈弃一切喜好当下直观。*
-- 4
-  - *对于市场来说，介入就是介入生死，无所依据地从容于各种模式之间，无所往而生其心，而心实无所生，方可于生死而从容*
-- 6
-  - 规则中形成的安全价格，可以造成一个高胜率低风险的策略
-- 7
-  - *牛市的第一阶段都是这样的，一线股先长，它们不到位，其他股票怎么长？全世界的牛市都基本这样子，没什么新鲜的*
-  - *错过了这个节奏怎么办？如果你跟盘技术还行的，就要在回档的时候跟进强势股票。散户就怕跌，但牛市里，跌就是爹，一跌就等于爹来了，又要发钱了*
-  - *有一种方式是最简单的，就是盯着所有放量突破上市首日最高价的新股以及放量突破年线然后缩量回调年线的老股，这都是以后的黑马*
-  - *但散户可以看小盘股，原则是一样的，不过小盘股可要留意，一般大盘股启动的骗线比较少，小盘股可不一定，这都要自己好好去揣摩。散户就当好散户，别整天想着抄底、逃顶，底都让你抄了，顶都让你逃了，不是散户的人吃什么去呀？散户，一定要等趋势明确才介入或退出，这样会少走很多弯路*
-  - *要长期胜利，就一定要坚持用最小风险换取最大利润*
-- 8
-  - *当然，搞的分类原则，各人可以有所不同。例如，250天线以及周线上的成交量压力线的突破；资金量不大且短线技术还可以的，可以把250天线改成70天线、35天线，甚至改为30分钟图里的相应均线；对新股，可以用上市第一日的最高价作为标准；还有，就是接近安全线的股票，例如在第六期里，本ID给出的一个带认沽权怔的认购权怔介入的安全线标准；而对于有一定水平的人，识别各种空头陷阱，利用空头陷阱介入是一个很好的方法*
-- 9
-  - *但问题不像表面所见那么糟，在数学中，有一个乘法原则可以完全解决这个问题。假设三个互相独立的程序分别为30%、40%、30%，这都是很普通的并不出色的程序。那么由这三个程序组成的程序组，就是30%40%30%=3.6%*
-  - *现在，问题的关键变成，如何去寻找这三个互相独立的程序。首先，技术指标，都单纯涉及价量的输入而来，都不是独立的，只需要选择任意一个技术指标构成一个买卖程序就可以。对于水平高点的人来说，一个带均线和成交量的K线图，比任何技术指标都有意义。其次，任何一个股票都不是独立的，在整个股票市场中，处在一定的比价关系中，这个比价关系的变动，也可以构成一个买卖系统，这个买卖系统是和市场资金的流向相关的，一切与市场资金相关的系统，都不能与之独立；最后，可以选择基本面构成一个程序，但这个基本面不是单纯指公司赢利之类的，像本ID在前几期所说，国航李总当兵出身不会让自己的股票长期跌破发行价这么没面子，还有认沽权证基本不会让兑现等等，这才是更重要的基本面，这需要对市场的参与者、对人性有更多的了解才可能精通。*
-  - *炒股不花时间，只有牛市时候才需要看股票，本ID 2001年到2005年，4年连一眼股票都不看。现在就算看，一天也就4小时，这不是钱的问题，而是一个智力问题，股票对于本ID来说，就是一个智力游戏，休息的好方法。*
-  - *震荡就是折腾，利用折腾，技术高的就可以玩轮动的游戏。大盘震荡，股票可不一定震荡，创新高的股票仍不会少。*
-  - *随便告诉你一个奥秘，介入股票最好在均线粘合时，例如这股票，11月13日就是最好的短线介入时期，而现在等于要赌第二波，比原来的位置差多了。*
-- 12
-  - *综合上述，利用均线构成的买卖系统，首先要利用男上位最后一次缠绕后背弛构成的空头陷阱抄底进入，这是第一个值得买入的位置，而第二个值得买入或加码的位置，就是女上位后第一次缠绕形成的低位。站在该系统下，这两个买点的风险是最小的，准确地说，收益和风险之比是最大的，也是唯一值得买入的两个点。*
-- 14
-  - *在MACD图上，绿柱子比上一次的明显缩短，而低位却低于上次绿柱子出现时的低位。如何判断背驰走势结束，最简单的就是当绿柱子缩短，而股价继续创新低，这次，明显地发生在2003年9月26日这一周，意味着底部出现，第一类买点构造完成，可以大举介入了。*
-  - *大级别的第二类买点由次一级别相应走势的第一类买点构成*
-  - *缠中说禅短差程序就是：大级别买点介入的，在次级别第一类卖点出现时，可以先减仓，其后在次级别第一类买点出现时回补。对于周线买点介入的，就应该利用日线的第一类卖点减仓，其后在第一类买点回补。*
-  - *当然，如果资金量小，不是按周线的，第一类、第二类买点都是最多按日线的，就可以相应在30分钟等更小的级别内找到第一类卖点而弄出短差来，那就太细了，各位自己研究去*
-- 16</code></pre>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="workflow" class="section-block">
-        <div class="section-heading">
-          <p class="eyebrow">Script 01</p>
-          <h2>脚本流程</h2>
-        </div>
-        <div class="flow-list">
-          <article class="flow-step">
-            <span>1</span>
-            <div>
-              <h3>读取最新结果</h3>
-              <p>
-                <code>find_latest_csv()</code> 会在当前目录寻找 <code>vcp_result_*.csv</code>，
-                按文件名排序后取最新一个。
-                这意味着画图脚本不重新全市场筛选，而是承接前一步筛选器的结果。
-              </p>
-            </div>
+            <a class="action-link" href="reading.html">进入阅读宫殿</a>
           </article>
-          <article class="flow-step">
-            <span>2</span>
-            <div>
-              <h3>补充行情数据</h3>
-              <p>
-                对 CSV 中的每个代码调用 AkShare 的 <code>stock_zh_a_daily</code>，
-                使用新浪财经源拉取前复权日线。代码会被转换成新浪格式：
-                <code>60/68/11/51</code> 走上交所 <code>sh</code>，其他默认走深交所 <code>sz</code>。
-              </p>
-            </div>
-          </article>
-          <article class="flow-step">
-            <span>3</span>
-            <div>
-              <h3>并发与容错</h3>
-              <p>
-                <code>ThreadPoolExecutor</code> 默认 8 个线程并发拉取数据；每只股票最多重试 4 次，
-                等待时间按 1.2 秒递增，适合应对代理或数据源的短暂抖动。
-              </p>
-            </div>
-          </article>
-          <article class="flow-step">
-            <span>4</span>
-            <div>
-              <h3>生成复盘页面</h3>
-              <p>
-                每只股票生成一张 Plotly 交互图，最后输出 <code>vcp_charts_YYYYMMDD_HHMM.html</code>。
-                页面顶部有候选股汇总表，下面是逐个股票的日线图。
-              </p>
-            </div>
-          </article>
-        </div>
-      </section>
 
-      <section id="rules" class="section-block">
-        <div class="section-heading">
-          <p class="eyebrow">Script 02</p>
-          <h2>筛选规则</h2>
-        </div>
-        <div class="rule-grid">
-          <article class="rule-card">
-            <p class="item-label">股票池</p>
-            <h3>先限定主板样本</h3>
+          <article class="code-panel">
+            <p class="item-label">后续扩展</p>
             <p>
-              筛选器从 A 股代码表开始，只保留 <code>60</code> 和 <code>00</code> 开头的沪深主板股票，
-              剔除 ST、退市相关名称，减少流动性和异常状态带来的噪声。
-            </p>
-          </article>
-          <article class="rule-card">
-            <p class="item-label">周线趋势</p>
-            <h3>先要求大级别向上</h3>
-            <p>
-              最新周线必须满足 <code>Close &gt; 周 MA10 &gt; 周 MA30</code>，并且 MA10、MA30
-              相比 4 周前都在上行。这个规则把脚本限定在中期趋势仍然抬升的股票里。
-            </p>
-          </article>
-          <article class="rule-card">
-            <p class="item-label">回撤位置</p>
-            <h3>回调但不破坏结构</h3>
-            <p>
-              收盘价要站上日线 MA50；相对 52 周高点的回撤必须大于 3% 且不超过 25%；
-              同时收盘价要高于 52 周低点的 1.3 倍，避免选到离底部过近的弱势品种。
-            </p>
-          </article>
-          <article class="rule-card">
-            <p class="item-label">量能收缩</p>
-            <h3>近 5 日明显缩量</h3>
-            <p>
-              <code>vol5/vol20 &lt; 0.8</code>，也就是最近 5 日平均成交量低于最近 20 日均量的 80%。
-              这是 VCP 中“供应减少”的量化代理。
-            </p>
-          </article>
-          <article class="rule-card">
-            <p class="item-label">波动收缩</p>
-            <h3>振幅也要一起收窄</h3>
-            <p>
-              日振幅定义为 <code>(high - low) / pre_close</code>。最近 5 日平均振幅必须小于
-              最近 20 日平均振幅的 80%，用来确认价格波动正在压缩。
-            </p>
-          </article>
-          <article class="rule-card">
-            <p class="item-label">阶梯收缩</p>
-            <h3>越到尾部越安静</h3>
-            <p>
-              最近 5 日再拆成前 2 日和后 3 日，要求后 3 日平均振幅小于前 2 日。
-              这个条件试图捕捉 VCP 末端更紧、更窄的整理状态。
+              以后每本交易书都可以是一张书架卡片，点进去看独立页面：
+              首页负责分流，详情页负责承载原文摘录、心得、AI 引导语和复习路线。
             </p>
           </article>
         </div>
       </section>
 
-      <section id="output" class="section-block">
+      <section id="structure" class="section-block compact-section">
         <div class="section-heading">
-          <p class="eyebrow">Script 03</p>
-          <h2>图表输出</h2>
-        </div>
-        <div class="output-panel">
-          <div class="chart-mock" aria-hidden="true">
-            <div class="mock-line line-a"></div>
-            <div class="mock-line line-b"></div>
-            <div class="mock-line line-c"></div>
-            <div class="mock-bars">
-              <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
-            </div>
-          </div>
-          <div>
-            <h3>一页完成“列表 + 图形复核”</h3>
-            <p>
-              生成页的标题会展示代码、名称、收盘价、回撤比例、<code>vol5/vol20</code> 和
-              <code>amp5/amp20</code>。主图包含 K 线、MA10、MA20、MA50 与 52 周高点虚线；
-              副图显示成交量柱，并按涨跌用红绿区分。
-            </p>
-            <p>
-              脚本还会去掉非交易日空隙，让 K 线横轴更贴近真实交易节奏。
-              如果某只股票数据拉取失败，它会被记录到失败列表并跳过，不影响其他图表生成。
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section class="section-block compact-section">
-        <div class="section-heading">
-          <p class="eyebrow">Script 04</p>
-          <h2>使用方式</h2>
+          <p class="eyebrow">Structure</p>
+          <h2>站点结构</h2>
         </div>
         <div class="code-panel">
-          <pre><code>python vcp_screener.py
-python vcp_plot.py</code></pre>
+          <pre><code>首页
+├─ 交易实战
+│  └─ 脚本筛选：vcp_plot.py
+└─ 阅读
+   └─ 缠论：reading.html</code></pre>
           <p>
-            第一行负责全市场扫描并保存 <code>vcp_result_YYYYMMDD.csv</code>；
-            第二行读取最新结果，生成可交互复盘页。这个流程更像“先筛，再看图”，
-            不替代交易判断，只把候选名单压缩到更值得人工观察的范围。
+            当前结构先把“实战”和“阅读”分层。脚本筛选是实战工具的一部分，
+            缠论是阅读书架中的第一本，后续内容会沿这个结构继续添加。
           </p>
         </div>
       </section>
@@ -384,7 +136,7 @@ python vcp_plot.py</code></pre>
 
     <footer class="site-footer">
       <span>chern_capital</span>
-      <span>vcp_plot.py notes</span>
+      <span>practice / reading</span>
     </footer>
 
     <script src="script.js"></script>
