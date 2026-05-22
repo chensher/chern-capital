@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="chern_capital: a small personal website for notes, links, and experiments."
+      content="chern_capital 对 vcp_plot.py 与 VCP 筛选规则的说明。"
     />
     <title>chern_capital</title>
     <link rel="stylesheet" href="styles.css" />
@@ -15,98 +15,186 @@
 
     <header class="site-header">
       <a class="brand" href="#top" aria-label="chern_capital home">chern_capital</a>
-      <nav class="nav-links" aria-label="Primary navigation">
-        <a href="#notes">Notes</a>
-        <a href="#projects">Projects</a>
-        <a href="#contact">Contact</a>
+      <nav class="nav-links" aria-label="页面导航">
+        <a href="#workflow">流程</a>
+        <a href="#rules">规则</a>
+        <a href="#output">输出</a>
       </nav>
     </header>
 
     <main id="top">
       <section class="hero" aria-labelledby="hero-title">
-        <div class="hero-copy">
-          <p class="eyebrow">Personal website</p>
-          <h1 id="hero-title">chern_capital</h1>
-          <p class="lede">
-            A quiet public room for notes, links, tiny experiments, and whatever becomes worth keeping.
-          </p>
-          <div class="hero-actions" aria-label="Site shortcuts">
-            <a class="button primary" href="#notes">Enter</a>
-            <a class="button ghost" href="#contact">Say hello</a>
-          </div>
-        </div>
-        <div class="status-strip" aria-label="Site status">
-          <span>online soon</span>
-          <span>static</span>
-          <span>zero-cost hosting ready</span>
+        <p class="eyebrow">VCP screening notes</p>
+        <h1 id="hero-title">vcp_plot.py</h1>
+        <p class="lede">
+          这是我用来复盘 VCP 候选股的可视化脚本：读取最新筛选结果，重新拉取前复权日线，
+          为每只股票生成 K 线、均线、52 周高点和成交量图，方便快速判断收缩形态是否值得继续跟踪。
+        </p>
+        <div class="metric-strip" aria-label="脚本关键参数">
+          <span><strong>180</strong> 图上交易日</span>
+          <span><strong>400</strong> 拉取历史天数</span>
+          <span><strong>8</strong> 并发线程</span>
+          <span><strong>4</strong> 网络重试</span>
         </div>
       </section>
 
-      <section id="notes" class="section-block">
+      <section id="workflow" class="section-block">
         <div class="section-heading">
           <p class="eyebrow">01</p>
-          <h2>Notes</h2>
+          <h2>脚本流程</h2>
         </div>
-        <div class="content-grid">
-          <article class="item">
-            <p class="item-label">Now</p>
-            <h3>Start with a blank page</h3>
-            <p>
-              This space can become a log of ideas, reading notes, market observations, or short essays.
-            </p>
+        <div class="flow-list">
+          <article class="flow-step">
+            <span>1</span>
+            <div>
+              <h3>读取最新结果</h3>
+              <p>
+                <code>find_latest_csv()</code> 会在当前目录寻找 <code>vcp_result_*.csv</code>，
+                按文件名排序后取最新一个。
+                这意味着画图脚本不重新全市场筛选，而是承接前一步筛选器的结果。
+              </p>
+            </div>
           </article>
-          <article class="item">
-            <p class="item-label">Later</p>
-            <h3>Keep only what compounds</h3>
-            <p>
-              Add entries slowly. The site is designed to feel complete even before it has a lot of content.
-            </p>
+          <article class="flow-step">
+            <span>2</span>
+            <div>
+              <h3>补充行情数据</h3>
+              <p>
+                对 CSV 中的每个代码调用 AkShare 的 <code>stock_zh_a_daily</code>，
+                使用新浪财经源拉取前复权日线。代码会被转换成新浪格式：
+                <code>60/68/11/51</code> 走上交所 <code>sh</code>，其他默认走深交所 <code>sz</code>。
+              </p>
+            </div>
+          </article>
+          <article class="flow-step">
+            <span>3</span>
+            <div>
+              <h3>并发与容错</h3>
+              <p>
+                <code>ThreadPoolExecutor</code> 默认 8 个线程并发拉取数据；每只股票最多重试 4 次，
+                等待时间按 1.2 秒递增，适合应对代理或数据源的短暂抖动。
+              </p>
+            </div>
+          </article>
+          <article class="flow-step">
+            <span>4</span>
+            <div>
+              <h3>生成复盘页面</h3>
+              <p>
+                每只股票生成一张 Plotly 交互图，最后输出 <code>vcp_charts_YYYYMMDD_HHMM.html</code>。
+                页面顶部有候选股汇总表，下面是逐个股票的日线图。
+              </p>
+            </div>
           </article>
         </div>
       </section>
 
-      <section id="projects" class="section-block">
+      <section id="rules" class="section-block">
         <div class="section-heading">
           <p class="eyebrow">02</p>
-          <h2>Projects</h2>
+          <h2>筛选规则</h2>
         </div>
-        <div class="content-grid">
-          <article class="item accent-green">
-            <p class="item-label">Build</p>
-            <h3>Small tools</h3>
+        <div class="rule-grid">
+          <article class="rule-card">
+            <p class="item-label">股票池</p>
+            <h3>先限定主板样本</h3>
             <p>
-              A place for scripts, visualizations, research notebooks, or anything useful enough to share.
+              筛选器从 A 股代码表开始，只保留 <code>60</code> 和 <code>00</code> 开头的沪深主板股票，
+              剔除 ST、退市相关名称，减少流动性和异常状态带来的噪声。
             </p>
           </article>
-          <article class="item accent-gold">
-            <p class="item-label">Archive</p>
-            <h3>Open questions</h3>
+          <article class="rule-card">
+            <p class="item-label">周线趋势</p>
+            <h3>先要求大级别向上</h3>
             <p>
-              Store questions before answers arrive. Good questions make a personal site feel alive.
+              最新周线必须满足 <code>Close &gt; 周 MA10 &gt; 周 MA30</code>，并且 MA10、MA30
+              相比 4 周前都在上行。这个规则把脚本限定在中期趋势仍然抬升的股票里。
+            </p>
+          </article>
+          <article class="rule-card">
+            <p class="item-label">回撤位置</p>
+            <h3>回调但不破坏结构</h3>
+            <p>
+              收盘价要站上日线 MA50；相对 52 周高点的回撤必须大于 3% 且不超过 25%；
+              同时收盘价要高于 52 周低点的 1.3 倍，避免选到离底部过近的弱势品种。
+            </p>
+          </article>
+          <article class="rule-card">
+            <p class="item-label">量能收缩</p>
+            <h3>近 5 日明显缩量</h3>
+            <p>
+              <code>vol5/vol20 &lt; 0.8</code>，也就是最近 5 日平均成交量低于最近 20 日均量的 80%。
+              这是 VCP 中“供应减少”的量化代理。
+            </p>
+          </article>
+          <article class="rule-card">
+            <p class="item-label">波动收缩</p>
+            <h3>振幅也要一起收窄</h3>
+            <p>
+              日振幅定义为 <code>(high - low) / pre_close</code>。最近 5 日平均振幅必须小于
+              最近 20 日平均振幅的 80%，用来确认价格波动正在压缩。
+            </p>
+          </article>
+          <article class="rule-card">
+            <p class="item-label">阶梯收缩</p>
+            <h3>越到尾部越安静</h3>
+            <p>
+              最近 5 日再拆成前 2 日和后 3 日，要求后 3 日平均振幅小于前 2 日。
+              这个条件试图捕捉 VCP 末端更紧、更窄的整理状态。
             </p>
           </article>
         </div>
       </section>
 
-      <section id="contact" class="section-block contact-section">
+      <section id="output" class="section-block">
         <div class="section-heading">
           <p class="eyebrow">03</p>
-          <h2>Contact</h2>
+          <h2>图表输出</h2>
         </div>
-        <div class="contact-panel">
+        <div class="output-panel">
+          <div class="chart-mock" aria-hidden="true">
+            <div class="mock-line line-a"></div>
+            <div class="mock-line line-b"></div>
+            <div class="mock-line line-c"></div>
+            <div class="mock-bars">
+              <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            </div>
+          </div>
+          <div>
+            <h3>一页完成“列表 + 图形复核”</h3>
+            <p>
+              生成页的标题会展示代码、名称、收盘价、回撤比例、<code>vol5/vol20</code> 和
+              <code>amp5/amp20</code>。主图包含 K 线、MA10、MA20、MA50 与 52 周高点虚线；
+              副图显示成交量柱，并按涨跌用红绿区分。
+            </p>
+            <p>
+              脚本还会去掉非交易日空隙，让 K 线横轴更贴近真实交易节奏。
+              如果某只股票数据拉取失败，它会被记录到失败列表并跳过，不影响其他图表生成。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-block compact-section">
+        <div class="section-heading">
+          <p class="eyebrow">04</p>
+          <h2>使用方式</h2>
+        </div>
+        <div class="code-panel">
+          <pre><code>python vcp_screener.py
+python vcp_plot.py</code></pre>
           <p>
-            Replace this line with an email, GitHub profile, X account, Telegram handle, or any link you trust.
+            第一行负责全市场扫描并保存 <code>vcp_result_YYYYMMDD.csv</code>；
+            第二行读取最新结果，生成可交互复盘页。这个流程更像“先筛，再看图”，
+            不替代交易判断，只把候选名单压缩到更值得人工观察的范围。
           </p>
-          <button class="copy-button" type="button" data-copy="hello@chern.capital">
-            Copy placeholder email
-          </button>
         </div>
       </section>
     </main>
 
     <footer class="site-footer">
       <span>chern_capital</span>
-      <span>static site, no backend</span>
+      <span>vcp_plot.py notes</span>
     </footer>
 
     <script src="script.js"></script>
