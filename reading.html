@@ -48,6 +48,94 @@
             </p>
           </div>
 
+          <div class="spatial-palace" aria-label="缠论记忆宫殿空间图">
+            <div class="palace-perspective">
+              <div class="palace-floor" aria-hidden="true"></div>
+              <a class="spatial-room room-foyer" href="#palace-foyer" data-room="foyer">
+                <span class="room-icon icon-gate" aria-hidden="true"></span>
+                <strong>门厅</strong>
+                <small>位次 / 未知</small>
+              </a>
+              <a class="spatial-room room-humanity" href="#palace-humanity" data-room="humanity">
+                <span class="room-icon icon-mirror" aria-hidden="true"></span>
+                <strong>镜室</strong>
+                <small>人性 / 不己知</small>
+              </a>
+              <a class="spatial-room room-market" href="#palace-market" data-room="market">
+                <span class="room-icon icon-candles" aria-hidden="true"></span>
+                <strong>交易厅</strong>
+                <small>趋势 / 安全线</small>
+              </a>
+              <a class="spatial-room room-systems" href="#palace-systems" data-room="systems">
+                <span class="room-icon icon-network" aria-hidden="true"></span>
+                <strong>筛选台</strong>
+                <small>独立程序</small>
+              </a>
+              <a class="spatial-room room-short" href="#palace-short" data-room="short">
+                <span class="room-icon icon-spiral" aria-hidden="true"></span>
+                <strong>短差室</strong>
+                <small>背驰 / 买点</small>
+              </a>
+              <a class="spatial-room room-raw" href="#palace-raw" data-room="raw">
+                <span class="room-icon icon-archive" aria-hidden="true"></span>
+                <strong>原文库</strong>
+                <small>完整文档</small>
+              </a>
+            </div>
+            <p class="spatial-caption">
+              记忆路线：从门厅确定“位次”，到镜室承认“不己知”，再进入交易厅观察趋势，
+              在筛选台组合系统，最后去短差室处理买点与卖点。
+            </p>
+          </div>
+
+          <div class="memory-graph" aria-label="缠论阅读节点关系图">
+            <svg viewBox="0 0 900 360" role="img" aria-labelledby="graph-title graph-desc">
+              <title id="graph-title">缠论阅读关系图</title>
+              <desc id="graph-desc">展示位次、人性、趋势、系统、买点和原文库之间的关系。</desc>
+              <defs>
+                <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 0 L 10 5 L 0 10 z"></path>
+                </marker>
+              </defs>
+              <path class="graph-edge" d="M145 105 C250 35 330 45 430 105"></path>
+              <path class="graph-edge" d="M145 105 C260 190 325 215 430 255"></path>
+              <path class="graph-edge" d="M430 105 C530 90 610 92 735 105"></path>
+              <path class="graph-edge" d="M430 255 C535 250 615 230 735 255"></path>
+              <path class="graph-edge graph-edge-soft" d="M430 105 C470 155 470 205 430 255"></path>
+              <path class="graph-edge graph-edge-soft" d="M735 105 C790 150 790 210 735 255"></path>
+              <a href="#palace-foyer" class="graph-node" data-room="foyer">
+                <circle cx="145" cy="105" r="48"></circle>
+                <text x="145" y="99">位次</text>
+                <text x="145" y="122" class="graph-sub">无位 / 能知</text>
+              </a>
+              <a href="#palace-humanity" class="graph-node" data-room="humanity">
+                <circle cx="430" cy="105" r="48"></circle>
+                <text x="430" y="99">人性</text>
+                <text x="430" y="122" class="graph-sub">不己知</text>
+              </a>
+              <a href="#palace-market" class="graph-node" data-room="market">
+                <circle cx="735" cy="105" r="48"></circle>
+                <text x="735" y="99">趋势</text>
+                <text x="735" y="122" class="graph-sub">安全线</text>
+              </a>
+              <a href="#palace-systems" class="graph-node" data-room="systems">
+                <circle cx="430" cy="255" r="48"></circle>
+                <text x="430" y="249">系统</text>
+                <text x="430" y="272" class="graph-sub">独立程序</text>
+              </a>
+              <a href="#palace-short" class="graph-node" data-room="short">
+                <circle cx="735" cy="255" r="48"></circle>
+                <text x="735" y="249">买点</text>
+                <text x="735" y="272" class="graph-sub">背驰 / 短差</text>
+              </a>
+              <a href="#palace-raw" class="graph-node graph-node-raw" data-room="raw">
+                <rect x="75" y="232" width="140" height="58" rx="8"></rect>
+                <text x="145" y="256">原文库</text>
+                <text x="145" y="277" class="graph-sub">完整转写</text>
+              </a>
+            </svg>
+          </div>
+
           <div class="palace-map" aria-label="阅读记忆宫殿路线">
             <a href="#palace-foyer">门厅：位次</a>
             <a href="#palace-humanity">镜室：人性</a>
@@ -60,6 +148,11 @@
           <div class="palace-room" id="palace-foyer">
             <div class="room-marker">门厅</div>
             <div class="room-body">
+              <div class="memory-object object-foyer" aria-hidden="true">
+                <span class="threshold"></span>
+                <span class="floating-key"></span>
+                <span class="empty-coordinate"></span>
+              </div>
               <p class="item-label">番外 / 20061113</p>
               <h3>重构位次，安顿人性</h3>
               <blockquote>子曰：“不患，无位；患，所以立。不患，莫己知求，为可知也。”</blockquote>
@@ -80,6 +173,11 @@
           <div class="palace-room" id="palace-humanity">
             <div class="room-marker">镜室</div>
             <div class="room-body">
+              <div class="memory-object object-humanity" aria-hidden="true">
+                <span class="mirror-plane"></span>
+                <span class="split-shadow"></span>
+                <span class="small-witness"></span>
+              </div>
               <p class="item-label">番外 / 20061117-20061124</p>
               <h3>人性不是改造对象，位次才是操作对象</h3>
               <blockquote>子曰：“不患人之不己知；患不知人也。”</blockquote>
@@ -104,6 +202,11 @@
           <div class="palace-room" id="palace-market">
             <div class="room-marker">交易厅</div>
             <div class="room-body">
+              <div class="memory-object object-market" aria-hidden="true">
+                <span class="price-stair"></span>
+                <span class="safety-line"></span>
+                <span class="pullback-path"></span>
+              </div>
               <p class="item-label">第 4 / 6 / 7 / 8 课</p>
               <h3>趋势、节奏与安全线</h3>
               <blockquote>对于市场来说，介入就是介入生死，无所依据地从容于各种模式之间，无所往而生其心，而心实无所生，方可于生死而从容。</blockquote>
@@ -120,6 +223,15 @@
           <div class="palace-room" id="palace-systems">
             <div class="room-marker">筛选台</div>
             <div class="room-body">
+              <div class="memory-object object-systems" aria-hidden="true">
+                <span class="node n1"></span>
+                <span class="node n2"></span>
+                <span class="node n3"></span>
+                <span class="node n4"></span>
+                <span class="system-link l1"></span>
+                <span class="system-link l2"></span>
+                <span class="system-link l3"></span>
+              </div>
               <p class="item-label">第 9 课</p>
               <h3>独立程序与轮动系统</h3>
               <blockquote>但问题不像表面所见那么糟，在数学中，有一个乘法原则可以完全解决这个问题。假设三个互相独立的程序分别为30%、40%、30%，这都是很普通的并不出色的程序。那么由这三个程序组成的程序组，就是30%40%30%=3.6%。</blockquote>
@@ -133,6 +245,13 @@
           <div class="palace-room" id="palace-short">
             <div class="room-marker">短差室</div>
             <div class="room-body">
+              <div class="memory-object object-short" aria-hidden="true">
+                <span class="macd-bar b1"></span>
+                <span class="macd-bar b2"></span>
+                <span class="macd-bar b3"></span>
+                <span class="divergence-line"></span>
+                <span class="buy-dot"></span>
+              </div>
               <p class="item-label">第 12 / 14 / 16 课</p>
               <h3>均线缠绕、背驰与买点</h3>
               <blockquote>综合上述，利用均线构成的买卖系统，首先要利用男上位最后一次缠绕后背弛构成的空头陷阱抄底进入，这是第一个值得买入的位置，而第二个值得买入或加码的位置，就是女上位后第一次缠绕形成的低位。站在该系统下，这两个买点的风险是最小的，准确地说，收益和风险之比是最大的，也是唯一值得买入的两个点。</blockquote>
@@ -147,6 +266,13 @@
           <div class="palace-room raw-room" id="palace-raw">
             <div class="room-marker">原文库</div>
             <div class="room-body">
+              <div class="memory-object object-raw" aria-hidden="true">
+                <span class="shelf s1"></span>
+                <span class="shelf s2"></span>
+                <span class="book book-a"></span>
+                <span class="book book-b"></span>
+                <span class="book book-c"></span>
+              </div>
               <p class="item-label">完整转写</p>
               <h3>chan.md 全文</h3>
               <pre><code>原文精读（第一轮）

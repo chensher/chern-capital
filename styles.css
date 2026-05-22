@@ -318,6 +318,324 @@ p {
   color: var(--ink);
 }
 
+.spatial-palace {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: clamp(1rem, 3vw, 1.5rem);
+  background: linear-gradient(180deg, rgba(18, 22, 27, 0.88), rgba(11, 13, 16, 0.82));
+  overflow: hidden;
+}
+
+.palace-perspective {
+  min-height: clamp(26rem, 48vw, 38rem);
+  position: relative;
+  perspective: 1000px;
+  display: grid;
+  place-items: center;
+}
+
+.palace-floor {
+  position: absolute;
+  width: min(82vw, 760px);
+  height: min(48vw, 430px);
+  transform: rotateX(62deg) rotateZ(-38deg);
+  transform-style: preserve-3d;
+  border: 1px solid rgba(217, 182, 92, 0.25);
+  background:
+    linear-gradient(rgba(247, 243, 232, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(247, 243, 232, 0.09) 1px, transparent 1px),
+    linear-gradient(135deg, rgba(217, 182, 92, 0.14), rgba(116, 167, 232, 0.1));
+  background-size: 44px 44px, 44px 44px, auto;
+  box-shadow:
+    0 30px 70px rgba(0, 0, 0, 0.35),
+    inset 0 0 80px rgba(116, 167, 232, 0.08);
+}
+
+.palace-floor::before,
+.palace-floor::after {
+  content: "";
+  position: absolute;
+  inset: 16%;
+  border: 1px solid rgba(247, 243, 232, 0.16);
+}
+
+.palace-floor::after {
+  inset: 32%;
+  border-color: rgba(217, 182, 92, 0.28);
+}
+
+.spatial-room {
+  --room-x: 0%;
+  --room-y: 0%;
+  position: absolute;
+  left: calc(50% + var(--room-x));
+  top: calc(50% + var(--room-y));
+  width: clamp(8.3rem, 14vw, 11.5rem);
+  min-height: clamp(7.4rem, 11vw, 9.2rem);
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 0.45rem;
+  padding: 0.9rem;
+  border: 1px solid rgba(247, 243, 232, 0.22);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(247, 243, 232, 0.1), rgba(18, 22, 27, 0.9)),
+    rgba(18, 22, 27, 0.9);
+  color: var(--ink);
+  text-align: center;
+  transform: translate(-50%, -50%) translateZ(0) rotateX(0deg);
+  box-shadow:
+    0 18px 34px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.spatial-room::after {
+  content: "";
+  position: absolute;
+  left: 14%;
+  right: 14%;
+  bottom: -1rem;
+  height: 1rem;
+  background: rgba(0, 0, 0, 0.26);
+  filter: blur(8px);
+  transform: skewX(-24deg);
+}
+
+.spatial-room:hover,
+.spatial-room:focus-visible,
+.spatial-room.is-active {
+  border-color: rgba(217, 182, 92, 0.62);
+  box-shadow:
+    0 24px 44px rgba(0, 0, 0, 0.36),
+    0 0 0 1px rgba(217, 182, 92, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transform: translate(-50%, -56%) translateZ(18px);
+}
+
+.spatial-room strong {
+  font-size: 1rem;
+}
+
+.spatial-room small {
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.room-foyer { --room-x: -28%; --room-y: -24%; }
+.room-humanity { --room-x: 0%; --room-y: -34%; }
+.room-market { --room-x: 28%; --room-y: -20%; }
+.room-systems { --room-x: -18%; --room-y: 20%; }
+.room-short { --room-x: 18%; --room-y: 22%; }
+.room-raw { --room-x: 0%; --room-y: 0%; }
+
+.room-icon {
+  width: 3.1rem;
+  height: 3.1rem;
+  position: relative;
+  display: block;
+  border: 1px solid rgba(247, 243, 232, 0.2);
+  border-radius: 8px;
+  background: rgba(247, 243, 232, 0.06);
+}
+
+.icon-gate::before,
+.icon-gate::after {
+  content: "";
+  position: absolute;
+  border: 2px solid var(--gold);
+}
+
+.icon-gate::before {
+  left: 0.65rem;
+  right: 0.65rem;
+  top: 0.62rem;
+  bottom: 0.45rem;
+  border-bottom: 0;
+  border-radius: 999px 999px 0 0;
+}
+
+.icon-gate::after {
+  left: 1.38rem;
+  top: 1.38rem;
+  width: 0.32rem;
+  height: 0.32rem;
+  border-radius: 999px;
+  background: var(--gold);
+}
+
+.icon-mirror::before {
+  content: "";
+  position: absolute;
+  inset: 0.5rem 0.8rem;
+  border: 2px solid var(--blue);
+  border-radius: 50%;
+  transform: rotate(-12deg);
+  box-shadow: inset 8px 0 0 rgba(116, 167, 232, 0.18);
+}
+
+.icon-candles::before,
+.icon-candles::after {
+  content: "";
+  position: absolute;
+  bottom: 0.62rem;
+  width: 0.45rem;
+  background: var(--green);
+  box-shadow:
+    0 -0.42rem 0 -0.18rem var(--green),
+    1rem 0.28rem 0 var(--red),
+    1rem -0.36rem 0 -0.18rem var(--red);
+}
+
+.icon-candles::before {
+  left: 0.78rem;
+  height: 1.55rem;
+}
+
+.icon-candles::after {
+  right: 0.86rem;
+  height: 2rem;
+  background: var(--gold);
+}
+
+.icon-network::before,
+.icon-network::after {
+  content: "";
+  position: absolute;
+}
+
+.icon-network::before {
+  inset: 0.75rem;
+  background:
+    radial-gradient(circle at 0 0, var(--blue) 0 0.24rem, transparent 0.26rem),
+    radial-gradient(circle at 100% 18%, var(--gold) 0 0.24rem, transparent 0.26rem),
+    radial-gradient(circle at 24% 100%, var(--green) 0 0.24rem, transparent 0.26rem),
+    radial-gradient(circle at 100% 100%, var(--red) 0 0.24rem, transparent 0.26rem);
+}
+
+.icon-network::after {
+  left: 0.9rem;
+  right: 0.9rem;
+  top: 1.55rem;
+  height: 1px;
+  background: var(--muted);
+  transform: rotate(22deg);
+  box-shadow:
+    0 0.72rem 0 rgba(247, 243, 232, 0.45),
+    0 -0.55rem 0 rgba(247, 243, 232, 0.36);
+}
+
+.icon-spiral::before {
+  content: "";
+  position: absolute;
+  inset: 0.6rem;
+  border: 2px solid var(--green);
+  border-left-color: transparent;
+  border-bottom-color: var(--gold);
+  border-radius: 50%;
+  transform: rotate(-35deg);
+}
+
+.icon-spiral::after {
+  content: "";
+  position: absolute;
+  left: 1.42rem;
+  top: 1.42rem;
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 50%;
+  background: var(--red);
+}
+
+.icon-archive::before {
+  content: "";
+  position: absolute;
+  left: 0.65rem;
+  right: 0.65rem;
+  top: 0.78rem;
+  height: 1.7rem;
+  border: 2px solid var(--gold);
+  box-shadow:
+    inset 0 0.48rem 0 rgba(217, 182, 92, 0.22),
+    0 0.55rem 0 -0.2rem rgba(247, 243, 232, 0.35);
+}
+
+.spatial-caption {
+  max-width: 900px;
+  margin: 0.8rem auto 0;
+  color: var(--muted);
+  line-height: 1.7;
+  text-align: center;
+}
+
+.memory-graph {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: clamp(0.4rem, 2vw, 1rem);
+  background: rgba(18, 22, 27, 0.76);
+  overflow: hidden;
+}
+
+.memory-graph svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.memory-graph marker path {
+  fill: rgba(217, 182, 92, 0.8);
+}
+
+.graph-edge {
+  fill: none;
+  stroke: rgba(217, 182, 92, 0.58);
+  stroke-width: 3;
+  marker-end: url(#arrow);
+}
+
+.graph-edge-soft {
+  stroke: rgba(116, 167, 232, 0.46);
+  stroke-dasharray: 8 8;
+}
+
+.graph-node circle,
+.graph-node rect {
+  fill: rgba(11, 13, 16, 0.92);
+  stroke: rgba(247, 243, 232, 0.28);
+  stroke-width: 2;
+  transition:
+    fill 160ms ease,
+    stroke 160ms ease;
+}
+
+.graph-node text {
+  fill: var(--ink);
+  font-size: 18px;
+  font-weight: 750;
+  text-anchor: middle;
+  pointer-events: none;
+}
+
+.graph-node .graph-sub {
+  fill: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.graph-node:hover circle,
+.graph-node:hover rect,
+.graph-node:focus-visible circle,
+.graph-node:focus-visible rect,
+.graph-node.is-active circle,
+.graph-node.is-active rect {
+  fill: rgba(217, 182, 92, 0.16);
+  stroke: rgba(217, 182, 92, 0.76);
+}
+
 .palace-room {
   display: grid;
   grid-template-columns: minmax(5.5rem, 0.26fr) minmax(0, 1fr);
@@ -342,6 +660,239 @@ p {
 .room-body {
   padding: clamp(1.05rem, 3vw, 1.65rem);
 }
+
+.memory-object {
+  height: clamp(9rem, 18vw, 13rem);
+  position: relative;
+  margin: 0 0 1.1rem;
+  overflow: hidden;
+  border-bottom: 1px solid var(--line);
+  background:
+    linear-gradient(rgba(247, 243, 232, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(247, 243, 232, 0.05) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.memory-object::before {
+  content: "";
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: 12%;
+  height: 24%;
+  border: 1px solid rgba(247, 243, 232, 0.16);
+  transform: skewX(-24deg);
+  background: rgba(247, 243, 232, 0.04);
+}
+
+.object-foyer .threshold {
+  position: absolute;
+  left: 14%;
+  bottom: 19%;
+  width: 30%;
+  height: 44%;
+  border: 3px solid var(--gold);
+  border-bottom: 0;
+  border-radius: 999px 999px 0 0;
+}
+
+.object-foyer .floating-key {
+  position: absolute;
+  left: 52%;
+  top: 32%;
+  width: 3rem;
+  height: 0.6rem;
+  border-radius: 999px;
+  background: var(--gold);
+  box-shadow: 1.55rem 0.02rem 0 -0.18rem var(--gold);
+}
+
+.object-foyer .floating-key::before {
+  content: "";
+  position: absolute;
+  left: -1rem;
+  top: -0.65rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 0.35rem solid var(--gold);
+  border-radius: 50%;
+}
+
+.object-foyer .empty-coordinate {
+  position: absolute;
+  right: 14%;
+  bottom: 27%;
+  width: 3.4rem;
+  height: 3.4rem;
+  border: 1px dashed rgba(247, 243, 232, 0.5);
+  transform: rotate(45deg);
+}
+
+.object-humanity .mirror-plane {
+  position: absolute;
+  left: 18%;
+  top: 18%;
+  width: 25%;
+  height: 58%;
+  border: 3px solid var(--blue);
+  border-radius: 50%;
+  transform: rotate(-14deg);
+  box-shadow: inset 18px 0 0 rgba(116, 167, 232, 0.16);
+}
+
+.object-humanity .split-shadow {
+  position: absolute;
+  left: 52%;
+  top: 24%;
+  width: 22%;
+  height: 52%;
+  background:
+    linear-gradient(90deg, var(--red) 0 49%, transparent 50%),
+    linear-gradient(90deg, transparent 0 49%, var(--green) 50%);
+  clip-path: polygon(50% 0, 100% 28%, 82% 100%, 18% 100%, 0 28%);
+  opacity: 0.75;
+}
+
+.object-humanity .small-witness {
+  position: absolute;
+  right: 14%;
+  bottom: 22%;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 1.25rem 0 0 rgba(217, 182, 92, 0.62);
+}
+
+.object-market .price-stair {
+  position: absolute;
+  left: 12%;
+  bottom: 20%;
+  width: 52%;
+  height: 46%;
+  background:
+    linear-gradient(90deg, transparent 0 18%, var(--green) 18% 22%, transparent 22% 38%, var(--green) 38% 42%, transparent 42% 58%, var(--green) 58% 62%, transparent 62%),
+    linear-gradient(180deg, transparent 0 70%, var(--green) 70% 74%, transparent 74%);
+  transform: skewY(-8deg);
+}
+
+.object-market .safety-line {
+  position: absolute;
+  left: 10%;
+  right: 12%;
+  top: 40%;
+  height: 2px;
+  background: var(--gold);
+  transform: rotate(-6deg);
+}
+
+.object-market .pullback-path {
+  position: absolute;
+  right: 14%;
+  top: 24%;
+  width: 22%;
+  height: 40%;
+  border-right: 3px solid var(--red);
+  border-bottom: 3px solid var(--red);
+  border-radius: 0 0 1.4rem 0;
+}
+
+.object-systems .node {
+  position: absolute;
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 50%;
+  background: var(--gold);
+  z-index: 2;
+}
+
+.object-systems .n1 { left: 18%; top: 28%; }
+.object-systems .n2 { left: 42%; top: 58%; background: var(--blue); }
+.object-systems .n3 { right: 24%; top: 28%; background: var(--green); }
+.object-systems .n4 { right: 16%; bottom: 22%; background: var(--red); }
+
+.object-systems .system-link {
+  position: absolute;
+  height: 2px;
+  background: rgba(247, 243, 232, 0.5);
+  transform-origin: left center;
+}
+
+.object-systems .l1 {
+  left: 22%;
+  top: 36%;
+  width: 26%;
+  transform: rotate(30deg);
+}
+
+.object-systems .l2 {
+  left: 46%;
+  top: 60%;
+  width: 30%;
+  transform: rotate(-36deg);
+}
+
+.object-systems .l3 {
+  right: 17%;
+  top: 40%;
+  width: 28%;
+  transform: rotate(76deg);
+}
+
+.object-short .macd-bar {
+  position: absolute;
+  bottom: 20%;
+  width: 1.1rem;
+  background: var(--green);
+}
+
+.object-short .b1 { left: 20%; height: 54%; }
+.object-short .b2 { left: 30%; height: 38%; }
+.object-short .b3 { left: 40%; height: 22%; }
+
+.object-short .divergence-line {
+  position: absolute;
+  left: 17%;
+  right: 18%;
+  top: 34%;
+  height: 2px;
+  background: var(--gold);
+  transform: rotate(-12deg);
+}
+
+.object-short .buy-dot {
+  position: absolute;
+  right: 20%;
+  bottom: 28%;
+  width: 1.3rem;
+  height: 1.3rem;
+  border-radius: 50%;
+  background: var(--red);
+  box-shadow: 0 0 0 0.75rem rgba(223, 91, 79, 0.14);
+}
+
+.object-raw .shelf {
+  position: absolute;
+  left: 14%;
+  right: 14%;
+  height: 2px;
+  background: rgba(247, 243, 232, 0.4);
+}
+
+.object-raw .s1 { top: 42%; }
+.object-raw .s2 { top: 66%; }
+
+.object-raw .book {
+  position: absolute;
+  bottom: 35%;
+  width: 1.2rem;
+  height: 3.6rem;
+  background: var(--gold);
+}
+
+.object-raw .book-a { left: 24%; }
+.object-raw .book-b { left: 30%; height: 4.5rem; background: var(--blue); }
+.object-raw .book-c { left: 37%; height: 3rem; background: var(--green); }
 
 .room-body h3 {
   margin: 0 0 0.9rem;
@@ -590,6 +1141,49 @@ pre {
 
   .section-heading {
     position: static;
+  }
+
+  .palace-perspective {
+    min-height: 44rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    place-items: stretch;
+  }
+
+  .palace-floor {
+    display: none;
+  }
+
+  .spatial-room {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: 100%;
+    min-height: 5.6rem;
+    grid-template-columns: 3.1rem 1fr;
+    justify-items: start;
+    align-content: center;
+    text-align: left;
+    transform: none;
+  }
+
+  .spatial-room:hover,
+  .spatial-room:focus-visible,
+  .spatial-room.is-active {
+    transform: translateY(-1px);
+  }
+
+  .spatial-room small {
+    grid-column: 2;
+  }
+
+  .memory-graph {
+    overflow-x: auto;
+  }
+
+  .memory-graph svg {
+    min-width: 760px;
   }
 }
 

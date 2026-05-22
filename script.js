@@ -80,5 +80,41 @@ window.addEventListener("resize", () => {
   draw();
 });
 
+const palaceTargets = [...document.querySelectorAll("[data-room]")];
+const palaceRooms = [...document.querySelectorAll(".palace-room[id]")];
+const roomBySection = {
+  "palace-foyer": "foyer",
+  "palace-humanity": "humanity",
+  "palace-market": "market",
+  "palace-systems": "systems",
+  "palace-short": "short",
+  "palace-raw": "raw",
+};
+
+function setActiveRoom(room) {
+  palaceTargets.forEach((target) => {
+    target.classList.toggle("is-active", target.dataset.room === room);
+  });
+}
+
+palaceTargets.forEach((target) => {
+  target.addEventListener("mouseenter", () => setActiveRoom(target.dataset.room));
+  target.addEventListener("focus", () => setActiveRoom(target.dataset.room));
+});
+
+if ("IntersectionObserver" in window && palaceRooms.length) {
+  const roomObserver = new IntersectionObserver(
+    (entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (visible) setActiveRoom(roomBySection[visible.target.id]);
+    },
+    { rootMargin: "-25% 0px -45% 0px", threshold: [0.18, 0.32, 0.48] },
+  );
+
+  palaceRooms.forEach((room) => roomObserver.observe(room));
+}
+
 resize();
 draw();
