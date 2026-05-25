@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="chern_capital 实盘：安洁科技 002635 持仓日线与盈亏记录。"
+    />
+    <title>实盘｜安洁科技｜chern_capital</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="position-page">
+    <canvas id="signal-canvas" aria-hidden="true"></canvas>
+
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="返回 chern_capital 首页">chern_capital</a>
+      <nav class="nav-links" aria-label="实盘导航">
+        <a href="index.html">首页</a>
+        <a href="#chart">日线</a>
+        <a href="#trade-note">记录</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="position-hero" aria-labelledby="position-title">
+        <div>
+          <p class="eyebrow">Live Position / 002635</p>
+          <h1 id="position-title">安洁科技</h1>
+          <p class="lede">
+            2026-05-12 建仓，成交价 <code>16.61</code> 元，持有 <code>500</code> 股。
+            这是一笔实际持仓的日线复盘记录。
+          </p>
+        </div>
+        <div class="refresh-panel">
+          <button class="refresh-button" id="refresh-position" type="button">刷新新浪行情</button>
+          <p class="quote-status" id="quote-status" aria-live="polite">
+            当前展示 2026-05-22 收盘快照；点击刷新获取最新数据。
+          </p>
+        </div>
+      </section>
+
+      <section class="position-dashboard" aria-label="持仓概览">
+        <div class="position-stat">
+          <p class="item-label">投入金额</p>
+          <strong id="cost-value">¥8,310.00</strong>
+          <small>含与成交金额差额 ¥5.00</small>
+        </div>
+        <div class="position-stat">
+          <p class="item-label">最新价格</p>
+          <strong id="last-price">¥18.90</strong>
+          <small id="price-time">收盘 / 2026-05-22</small>
+        </div>
+        <div class="position-stat">
+          <p class="item-label">持仓市值</p>
+          <strong id="market-value">¥9,450.00</strong>
+          <small>500 股</small>
+        </div>
+        <div class="position-stat pnl-positive" id="pnl-card">
+          <p class="item-label">浮动盈亏</p>
+          <strong id="pnl-value">+¥1,140.00</strong>
+          <small id="pnl-rate">+13.72%</small>
+        </div>
+        <div class="position-stat">
+          <p class="item-label">持仓天数</p>
+          <strong id="holding-days">--</strong>
+          <small id="trading-days">按自然日（含建仓日）</small>
+        </div>
+      </section>
+
+      <section class="position-content" id="chart">
+        <div class="position-chart-panel">
+          <div class="chart-header">
+            <div>
+              <p class="item-label">日线图 / Sina Finance</p>
+              <h2>价格、成交量与建仓位置</h2>
+            </div>
+            <div class="chart-legend" aria-label="图例">
+              <span class="legend-rise">上涨</span>
+              <span class="legend-fall">下跌</span>
+              <span class="legend-buy">建仓 ¥16.61</span>
+            </div>
+          </div>
+          <div class="trade-chart-wrap">
+            <canvas id="position-chart" aria-label="安洁科技日线图"></canvas>
+            <div class="chart-tooltip" id="chart-tooltip" hidden></div>
+          </div>
+        </div>
+
+        <aside class="trade-note" id="trade-note">
+          <p class="item-label">成交记录</p>
+          <h2>第一次建仓</h2>
+          <dl>
+            <dt>证券</dt>
+            <dd>安洁科技 <code>002635</code></dd>
+            <dt>日期</dt>
+            <dd>2026-05-12</dd>
+            <dt>价格</dt>
+            <dd>¥16.61 / 股</dd>
+            <dt>数量</dt>
+            <dd>500 股</dd>
+            <dt>成交金额</dt>
+            <dd>¥8,305.00</dd>
+            <dt>投入金额</dt>
+            <dd>¥8,310.00</dd>
+          </dl>
+          <p class="trade-explain">
+            盈亏以投入金额 ¥8,310.00 为成本口径计算；行情由访问者手动刷新，数据源为新浪财经。
+          </p>
+        </aside>
+      </section>
+
+      <p class="position-disclaimer">此页是个人持仓过程记录，不构成投资建议。</p>
+    </main>
+
+    <footer class="site-footer">
+      <span>chern_capital</span>
+      <span>live position / 002635</span>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="position.js"></script>
+  </body>
+</html>

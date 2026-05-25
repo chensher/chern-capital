@@ -27,13 +27,13 @@
         <p class="eyebrow">Trading workspace</p>
         <h1 id="hero-title">交易实战</h1>
         <p class="lede">
-          这里先放正在使用的交易工具、筛选脚本和阅读笔记。首页只保留入口与当前重点，
+          这里先放正在使用的交易工具、真实持仓和阅读笔记。首页只保留入口与当前重点，
           细节进入对应页面，避免把不同层级的内容混在一起。
         </p>
         <div class="metric-strip" aria-label="站点当前模块">
           <span><strong>01</strong> 脚本筛选</span>
-          <span><strong>02</strong> 阅读书架</span>
-          <span><strong>static</strong> 纯静态站</span>
+          <span><strong>01</strong> 实盘持仓</span>
+          <span><strong>01</strong> 阅读书架</span>
           <span><strong>Pages</strong> GitHub / Cloudflare</span>
         </div>
       </section>
@@ -44,46 +44,32 @@
           <h2>交易实战</h2>
         </div>
         <div class="home-stack">
-          <article class="feature-panel">
-            <p class="item-label">脚本筛选 / VCP</p>
-            <h3>vcp_plot.py：把候选股变成可复核图表</h3>
-            <p>
-              这个模块服务于“先筛，再看图”的实战流程：筛选器先压缩股票池，
-              <code>vcp_plot.py</code> 再读取最新 <code>vcp_result_*.csv</code>，
-              拉取前复权日线并生成带 K 线、均线、52 周高点和成交量的复盘页面。
-            </p>
-          </article>
+          <div class="practice-modules">
+            <article class="feature-panel practice-module">
+              <p class="item-label">脚本筛选 / VCP</p>
+              <h3>vcp_plot.py</h3>
+              <p>
+                承接筛选器输出的候选名单，生成带 K 线、均线、52 周高点与成交量的复盘页面，
+                用来快速复核收缩形态。
+              </p>
+              <div class="module-meta">
+                <span>候选图表</span>
+                <span>离线生成</span>
+              </div>
+            </article>
 
-          <div class="rule-grid compact-grid">
-            <article class="rule-card">
-              <p class="item-label">输入</p>
-              <h3>承接筛选结果</h3>
+            <article class="feature-panel practice-module live-module">
+              <p class="item-label">实盘 / 当前持仓 01</p>
+              <h3>安洁科技 <code>002635</code></h3>
               <p>
-                自动读取当前目录最新的 <code>vcp_result_*.csv</code>，
-                不在画图阶段重新全市场扫描。
+                2026-05-12 建仓，成交价 <code>16.61</code> 元，共 <code>500</code> 股，
+                投入金额 <code>8,310</code> 元。
               </p>
-            </article>
-            <article class="rule-card">
-              <p class="item-label">复盘</p>
-              <h3>图形验证形态</h3>
-              <p>
-                每只候选股生成交互图，重点观察趋势、回撤、缩量、振幅收缩和是否接近 52 周高位。
-              </p>
-            </article>
-            <article class="rule-card">
-              <p class="item-label">边界</p>
-              <h3>脚本不替代判断</h3>
-              <p>
-                规则只负责缩小观察范围；最终仍要人工确认市场环境、板块位置、流动性和买卖点。
-              </p>
-            </article>
-            <article class="rule-card">
-              <p class="item-label">命令</p>
-              <h3>本地离线生成</h3>
-              <p>
-                运行 <code>python vcp_screener.py</code> 后接
-                <code>python vcp_plot.py</code>，再把静态结果发布到网站。
-              </p>
+              <div class="module-meta live-meta">
+                <span>建仓 ¥16.61</span>
+                <span>500 股</span>
+              </div>
+              <a class="action-link" href="position.html">查看日线与盈亏</a>
             </article>
           </div>
         </div>
@@ -123,11 +109,12 @@
         <div class="code-panel">
           <pre><code>首页
 ├─ 交易实战
-│  └─ 脚本筛选：vcp_plot.py
+│  ├─ 脚本筛选：vcp_plot.py
+│  └─ 实盘：安洁科技 / position.html
 └─ 阅读
    └─ 缠论：reading.html</code></pre>
           <p>
-            当前结构先把“实战”和“阅读”分层。脚本筛选是实战工具的一部分，
+            当前结构先把“实战”和“阅读”分层。脚本筛选与真实持仓复盘都是实战的一部分，
             缠论是阅读书架中的第一本，后续内容会沿这个结构继续添加。
           </p>
         </div>
