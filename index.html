@@ -27,8 +27,8 @@
         <p class="eyebrow">Trading workspace</p>
         <h1 id="hero-title">交易实战</h1>
         <p class="lede">
-          这里先放正在使用的交易工具、真实持仓和阅读笔记。首页只保留入口与当前重点，
-          细节进入对应页面，避免把不同层级的内容混在一起。
+          这里放正在使用的交易工具、真实持仓和阅读笔记。筛选规则直接在首页展开，
+          持仓日线与阅读摘录进入各自页面，避免把不同层级的内容混在一起。
         </p>
         <div class="metric-strip" aria-label="站点当前模块">
           <span><strong>01</strong> 脚本筛选</span>
@@ -47,15 +47,18 @@
           <div class="practice-modules">
             <article class="feature-panel practice-module">
               <p class="item-label">脚本筛选 / VCP</p>
-              <h3>vcp_plot.py</h3>
+              <h3>vcp_plot.py：把候选股变成可复核图表</h3>
               <p>
-                承接筛选器输出的候选名单，生成带 K 线、均线、52 周高点与成交量的复盘页面，
-                用来快速复核收缩形态。
+                这个模块服务于“先筛，再看图”的实战流程：<code>vcp_screener.py</code>
+                先压缩股票池，<code>vcp_plot.py</code> 再读取最新结果，拉取前复权日线，
+                生成带 K 线、均线、52 周高点和成交量的复盘页面。
               </p>
               <div class="module-meta">
-                <span>候选图表</span>
-                <span>离线生成</span>
+                <span>180 个交易日</span>
+                <span>8 线程拉取</span>
+                <span>4 次重试</span>
               </div>
+              <a class="action-link" href="#screening-detail">查看流程与规则</a>
             </article>
 
             <article class="feature-panel practice-module live-module">
@@ -72,6 +75,166 @@
               <a class="action-link" href="position.html">查看日线与盈亏</a>
             </article>
           </div>
+
+          <section id="screening-detail" class="screening-detail" aria-labelledby="screening-title">
+            <header class="screening-intro">
+              <p class="item-label">脚本筛选 / 完整说明</p>
+              <h3 id="screening-title">候选名单如何产生，又如何被图形复核</h3>
+              <p>
+                准确地说，筛选条件写在 <code>vcp_screener.py</code> 中；
+                <code>vcp_plot.py</code> 不重新全市场筛选，而是把命中的股票做成可交互的日线复盘页。
+                两个脚本连在一起，才构成当前使用的 VCP 观察流程。
+              </p>
+            </header>
+
+            <div class="metric-strip script-metrics" aria-label="脚本关键参数">
+              <span><strong>400</strong> 历史天数</span>
+              <span><strong>180</strong> 图上交易日</span>
+              <span><strong>8</strong> 并发线程</span>
+              <span><strong>4</strong> 网络重试</span>
+            </div>
+
+            <div class="detail-heading" id="screening-workflow">
+              <p class="item-label">01 / Workflow</p>
+              <h3>脚本流程</h3>
+            </div>
+            <div class="flow-list">
+              <article class="flow-step">
+                <span>1</span>
+                <div>
+                  <h3>筛选器先生成名单</h3>
+                  <p>
+                    <code>vcp_screener.py</code> 扫描沪深主板，按趋势、回撤、量能与振幅收缩条件判断，
+                    将通过者保存为 <code>vcp_result_YYYYMMDD.csv</code>。
+                  </p>
+                </div>
+              </article>
+              <article class="flow-step">
+                <span>2</span>
+                <div>
+                  <h3>绘图脚本读取最新结果</h3>
+                  <p>
+                    <code>find_latest_csv()</code> 在当前目录寻找最新的
+                    <code>vcp_result_*.csv</code>。画图阶段只复核已命中候选，不重复扫描市场。
+                  </p>
+                </div>
+              </article>
+              <article class="flow-step">
+                <span>3</span>
+                <div>
+                  <h3>拉取前复权日线</h3>
+                  <p>
+                    通过 AkShare 的新浪财经源获取行情，代码转换为 <code>sh</code> 或
+                    <code>sz</code> 格式；默认 8 个线程并发，每只股票最多重试 4 次。
+                  </p>
+                </div>
+              </article>
+              <article class="flow-step">
+                <span>4</span>
+                <div>
+                  <h3>生成交互复盘页面</h3>
+                  <p>
+                    每只候选股输出 Plotly 日线图，最终生成
+                    <code>vcp_charts_YYYYMMDD_HHMM.html</code>：
+                    顶部为汇总表，下面逐只查看形态。
+                  </p>
+                </div>
+              </article>
+            </div>
+
+            <div class="detail-heading" id="screening-rules">
+              <p class="item-label">02 / Rules</p>
+              <h3>筛选规则</h3>
+              <p>以下条件来自当前使用中的 <code>vcp_screener.py</code>。</p>
+            </div>
+            <div class="rule-grid">
+              <article class="rule-card">
+                <p class="item-label">股票池</p>
+                <h3>限定沪深主板</h3>
+                <p>
+                  只保留代码以 <code>60</code> 或 <code>00</code> 开头的股票，
+                  并剔除名称含 ST 或退市标记的样本。
+                </p>
+              </article>
+              <article class="rule-card">
+                <p class="item-label">周线趋势</p>
+                <h3>大级别必须向上</h3>
+                <p>
+                  最新周线满足 <code>Close &gt; MA10 &gt; MA30</code>，
+                  且周 MA10、MA30 相比 4 周前均在上升。
+                </p>
+              </article>
+              <article class="rule-card">
+                <p class="item-label">回撤位置</p>
+                <h3>回调但不破趋势</h3>
+                <p>
+                  收盘价高于日线 MA50；距 52 周高点回撤位于
+                  <code>(3%, 25%]</code>；且高于 52 周低点的 <code>1.3</code> 倍。
+                </p>
+              </article>
+              <article class="rule-card">
+                <p class="item-label">量能收缩</p>
+                <h3>近 5 日明显缩量</h3>
+                <p>
+                  要求 <code>vol5 / vol20 &lt; 0.8</code>：
+                  最近 5 日平均成交量低于最近 20 日均量的 80%。
+                </p>
+              </article>
+              <article class="rule-card">
+                <p class="item-label">波动收缩</p>
+                <h3>振幅同步收窄</h3>
+                <p>
+                  日振幅按 <code>(high - low) / pre_close</code> 计算，
+                  并要求 <code>amp5 / amp20 &lt; 0.8</code>。
+                </p>
+              </article>
+              <article class="rule-card">
+                <p class="item-label">阶梯收缩</p>
+                <h3>尾端更安静</h3>
+                <p>
+                  将最近 5 日拆成前 2 日与后 3 日，要求后 3 日平均振幅更低，
+                  尝试捕捉整理尾端继续变紧的状态。
+                </p>
+              </article>
+            </div>
+
+            <div class="detail-heading" id="screening-output">
+              <p class="item-label">03 / Output</p>
+              <h3>图表输出与使用方式</h3>
+            </div>
+            <div class="output-panel">
+              <div class="chart-mock" aria-hidden="true">
+                <div class="mock-line line-a"></div>
+                <div class="mock-line line-b"></div>
+                <div class="mock-line line-c"></div>
+                <div class="mock-bars">
+                  <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                </div>
+              </div>
+              <div>
+                <h3>一页完成列表与图形复核</h3>
+                <p>
+                  图表标题展示代码、名称、收盘价、回撤比例、<code>vol5/vol20</code>
+                  与 <code>amp5/amp20</code>。主图包含 K 线、MA10、MA20、MA50 和
+                  52 周高点虚线，副图显示红涨绿跌的成交量柱。
+                </p>
+                <p>
+                  脚本会去掉非交易日空隙；单只股票拉取失败时将其记录并跳过，
+                  不妨碍其余候选继续生成复盘图。
+                </p>
+              </div>
+            </div>
+
+            <div class="code-panel script-command">
+              <p class="item-label">04 / Command</p>
+              <pre><code>python vcp_screener.py
+python vcp_plot.py</code></pre>
+              <p>
+                第一行负责筛选与保存候选 CSV，第二行读取最新结果并输出交互图表。
+                规则负责收窄观察范围，最终的买卖判断仍需要结合图形、环境和交易计划。
+              </p>
+            </div>
+          </section>
         </div>
       </section>
 
