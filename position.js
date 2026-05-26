@@ -284,7 +284,7 @@ function showTooltip(event) {
   chartTooltip.style.top = "12px";
 }
 
-async function refreshPosition() {
+async function refreshPosition({ automatic = false } = {}) {
   if (!refreshButton || !quoteStatus) return;
   refreshButton.disabled = true;
   refreshButton.textContent = "更新中...";
@@ -300,7 +300,9 @@ async function refreshPosition() {
     };
     renderMetrics();
     renderChart();
-    quoteStatus.textContent = `已更新：新浪财经 ${result.quote.date} ${result.quote.time}（手动刷新）`;
+    quoteStatus.textContent = automatic
+      ? `已自动更新：新浪财经 ${result.quote.date} ${result.quote.time}`
+      : `已更新：新浪财经 ${result.quote.date} ${result.quote.time}（手动刷新）`;
   } catch (error) {
     const onGitHubPages = location.hostname.endsWith("github.io");
     quoteStatus.textContent = onGitHubPages
@@ -316,8 +318,15 @@ chartCanvas?.addEventListener("pointermove", showTooltip);
 chartCanvas?.addEventListener("pointerleave", () => {
   if (chartTooltip) chartTooltip.hidden = true;
 });
-refreshButton?.addEventListener("click", refreshPosition);
+refreshButton?.addEventListener("click", () => refreshPosition());
 window.addEventListener("resize", renderChart);
 
 renderMetrics();
 renderChart();
+
+const staticOnlyHost = location.hostname.endsWith("github.io") || location.protocol === "file:";
+if (staticOnlyHost) {
+  quoteStatus.textContent = "当前显示静态快照；实时行情请访问 Cloudflare 站点。";
+} else {
+  refreshPosition({ automatic: true });
+}
