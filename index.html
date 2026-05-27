@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="chern_capital：交易实战工具与交易阅读笔记。"
+      content="chern_capital：交易实战工具、交易日志与交易阅读笔记。"
     />
     <title>chern_capital</title>
     <link rel="stylesheet" href="styles.css" />
@@ -17,8 +17,8 @@
       <a class="brand" href="#top" aria-label="chern_capital home">chern_capital</a>
       <nav class="nav-links" aria-label="页面导航">
         <a href="#practice">交易实战</a>
+        <a href="#journal">交易日志</a>
         <a href="#reading">阅读</a>
-        <a href="#structure">结构</a>
       </nav>
     </header>
 
@@ -27,14 +27,14 @@
         <p class="eyebrow">Trading workspace</p>
         <h1 id="hero-title">交易实战</h1>
         <p class="lede">
-          这里放正在使用的交易工具、真实持仓和阅读笔记。筛选规则直接在首页展开，
-          持仓日线与阅读摘录进入各自页面，避免把不同层级的内容混在一起。
+          这里放正在使用的交易工具、真实持仓和每日判断。交易日志落在中证 1000
+          的对应日线点位上，再从市场位置回看个股强弱与情绪变化。
         </p>
         <div class="metric-strip" aria-label="站点当前模块">
           <span><strong>01</strong> 脚本筛选</span>
           <span><strong>01</strong> 实盘记录</span>
+          <span><strong>01</strong> 交易日志</span>
           <span><strong>01</strong> 阅读书架</span>
-          <span><strong>Pages</strong> GitHub / Cloudflare</span>
         </div>
       </section>
 
@@ -75,7 +75,108 @@
               </div>
               <a class="action-link" href="position.html">查看交易复盘</a>
             </article>
+
+            <article class="feature-panel practice-module journal-module">
+              <p class="item-label">日志 / 市场坐标 01</p>
+              <h3>把判断放回中证 1000 的位置</h3>
+              <p>
+                每日记录锚定在指数对应的日线收盘点上，保留当下的空间感，
+                以后也能沿行情路径复盘情绪与强弱判断。
+              </p>
+              <div class="module-meta journal-meta">
+                <span>最新 2026.05.27</span>
+                <span>中证 1000</span>
+              </div>
+              <a class="action-link" href="#journal">阅读当天记录</a>
+            </article>
           </div>
+
+          <section id="journal" class="journal-detail" aria-labelledby="journal-title">
+            <header class="journal-intro">
+              <p class="item-label">交易日志 / CSI 1000</p>
+              <h3 id="journal-title">把观察钉在市场当日的位置上</h3>
+              <p>
+                以中证 1000 日线收盘点作为每日记录的坐标。图上保留行情路径，
+                文字保留当天对个股相对强弱与交易情绪的直接感受。
+              </p>
+            </header>
+
+            <div class="journal-grid">
+              <figure class="journal-chart">
+                <div class="journal-chart-top">
+                  <div>
+                    <p class="item-label">Market Context</p>
+                    <h4>中证 1000 <code>000852</code></h4>
+                  </div>
+                  <span class="journal-range">05.12 - 05.27</span>
+                </div>
+                <svg
+                  class="index-chart"
+                  viewBox="0 0 724 286"
+                  role="img"
+                  aria-labelledby="index-chart-title index-chart-desc"
+                >
+                  <title id="index-chart-title">中证 1000 近期收盘日线与 2026 年 5 月 27 日交易日志点位</title>
+                  <desc id="index-chart-desc">
+                    2026 年 5 月 12 日至 27 日的中证 1000 收盘路径，5 月 27 日收于 8546.51 点并标有一条交易日志。
+                  </desc>
+                  <g class="index-grid" aria-hidden="true">
+                    <line x1="44" y1="32" x2="684" y2="32"></line>
+                    <line x1="44" y1="128.4" x2="684" y2="128.4"></line>
+                    <line x1="44" y1="224.7" x2="684" y2="224.7"></line>
+                    <text x="0" y="36">9,000</text>
+                    <text x="0" y="132.4">8,750</text>
+                    <text x="0" y="228.7">8,500</text>
+                  </g>
+                  <polyline
+                    class="index-path"
+                    points="44,100.7 102.2,49.2 160.4,117.3 218.5,154.3 276.7,139.8 334.9,105.8 393.1,105.7 451.3,220.7 509.5,150.5 567.6,109.4 625.8,152.5 684,206.8"
+                  ></polyline>
+                  <g class="index-points" aria-hidden="true">
+                    <circle cx="44" cy="100.7" r="3"></circle>
+                    <circle cx="102.2" cy="49.2" r="3"></circle>
+                    <circle cx="160.4" cy="117.3" r="3"></circle>
+                    <circle cx="218.5" cy="154.3" r="3"></circle>
+                    <circle cx="276.7" cy="139.8" r="3"></circle>
+                    <circle cx="334.9" cy="105.8" r="3"></circle>
+                    <circle cx="393.1" cy="105.7" r="3"></circle>
+                    <circle cx="451.3" cy="220.7" r="3"></circle>
+                    <circle cx="509.5" cy="150.5" r="3"></circle>
+                    <circle cx="567.6" cy="109.4" r="3"></circle>
+                    <circle cx="625.8" cy="152.5" r="3"></circle>
+                  </g>
+                  <g class="entry-marker" aria-hidden="true">
+                    <line x1="684" y1="38" x2="684" y2="244"></line>
+                    <circle cx="684" cy="206.8" r="13"></circle>
+                    <circle class="entry-dot" cx="684" cy="206.8" r="5"></circle>
+                    <text x="670" y="194" text-anchor="end">日志 05.27</text>
+                  </g>
+                  <g class="index-dates" aria-hidden="true">
+                    <text x="44" y="268">05.12</text>
+                    <text x="334.9" y="268" text-anchor="middle">05.19</text>
+                    <text x="684" y="268" text-anchor="end">05.27</text>
+                  </g>
+                </svg>
+                <figcaption>
+                  日线收盘点位：2026.05.27 为 <strong>8,546.51</strong>。日志标记固定在对应交易日上。
+                </figcaption>
+              </figure>
+
+              <article class="journal-entry">
+                <div class="entry-meta">
+                  <time datetime="2026-05-27">2026.05.27</time>
+                  <span>中证 1000 / 8,546.51</span>
+                </div>
+                <p class="item-label">Daily Note 01</p>
+                <h4>相对强弱与情绪温度</h4>
+                <p class="entry-text">安洁科技跑输科瑞技术，当前情绪比较加速。</p>
+                <div class="entry-tags" aria-label="记录主题">
+                  <span>强弱对比</span>
+                  <span>情绪加速</span>
+                </div>
+              </article>
+            </div>
+          </section>
 
           <section id="screening-detail" class="screening-detail" aria-labelledby="screening-title">
             <header class="screening-intro">
@@ -274,12 +375,13 @@ python vcp_plot.py</code></pre>
           <pre><code>首页
 ├─ 交易实战
 │  ├─ 脚本筛选：vcp_plot.py
-│  └─ 实盘：安洁科技已结束交易 / position.html
+│  ├─ 实盘：安洁科技已结束交易 / position.html
+│  └─ 交易日志：中证 1000 点位记录
 └─ 阅读
    └─ 缠论：reading.html</code></pre>
           <p>
-            当前结构先把“实战”和“阅读”分层。脚本筛选与真实持仓复盘都是实战的一部分，
-            缠论是阅读书架中的第一本，后续内容会沿这个结构继续添加。
+            当前结构先把“实战”和“阅读”分层。实战区按工具、持仓与每日日志展开，
+            日志通过市场日线连接当天判断；阅读区继续承载独立的长期输入。
           </p>
         </div>
       </section>
@@ -287,7 +389,7 @@ python vcp_plot.py</code></pre>
 
     <footer class="site-footer">
       <span>chern_capital</span>
-      <span>practice / reading</span>
+      <span>practice / journal / reading</span>
     </footer>
 
     <script src="script.js"></script>
