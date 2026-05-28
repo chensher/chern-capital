@@ -2,8 +2,13 @@ const trade = {
   name: "安洁科技",
   code: "002635",
   symbol: "sz002635",
+  status: "closed",
   buyDate: "2026-05-12",
   buyPrice: 16.61,
+  buyFee: 5,
+  sellDate: "2026-05-28",
+  sellPrice: 17.57,
+  sellFee: 5,
   shares: 500,
   invested: 8310,
 };
@@ -31,12 +36,15 @@ const snapshotDaily = [
   { day: "2026-05-20", open: 17.66, high: 18.16, low: 17.4, close: 17.87, volume: 51598979 },
   { day: "2026-05-21", open: 17.87, high: 18.32, low: 17.37, close: 17.42, volume: 50185430 },
   { day: "2026-05-22", open: 17.45, high: 19.16, low: 17.27, close: 18.9, volume: 80123025 },
+  { day: "2026-05-25", open: 19.2, high: 19.25, low: 18.52, close: 18.97, volume: 51838182 },
+  { day: "2026-05-26", open: 18.71, high: 18.92, low: 18.15, close: 18.37, volume: 40142191 },
+  { day: "2026-05-27", open: 18.21, high: 18.67, low: 17.74, close: 18.02, volume: 34232561 },
 ];
 
 const snapshotQuote = {
-  price: 18.9,
-  date: "2026-05-22",
-  time: "收盘",
+  price: trade.sellPrice,
+  date: trade.sellDate,
+  time: "已卖出",
 };
 
 const money = new Intl.NumberFormat("zh-CN", {
@@ -51,6 +59,14 @@ const quoteStatus = document.querySelector("#quote-status");
 const chartCanvas = document.querySelector("#position-chart");
 const chartTooltip = document.querySelector("#chart-tooltip");
 const chartCtx = chartCanvas?.getContext("2d");
+
+const tradeResult = {
+  buyGross: trade.buyPrice * trade.shares,
+  sellGross: trade.sellPrice * trade.shares,
+  sellNet: trade.sellPrice * trade.shares - trade.sellFee,
+};
+tradeResult.realizedPnl = tradeResult.sellNet - trade.invested;
+tradeResult.realizedRate = tradeResult.realizedPnl / trade.invested;
 
 let viewState = {
   daily: snapshotDaily,
@@ -69,8 +85,12 @@ function inclusiveDays(start, end) {
   return Math.max(1, Math.round((endMs - startMs) / 86400000) + 1);
 }
 
-function quoteCandles(state) {
+function chartCandles(state) {
   const daily = state.daily.map((bar) => ({ ...bar }));
+  if (trade.status === "closed") {
+    return daily.filter((bar) => bar.day <= trade.sellDate).slice(-60);
+  }
+
   const quote = state.quote;
   if (!quote || !quote.date || !quote.price) return daily;
 
@@ -104,21 +124,20 @@ function setText(selector, value) {
 }
 
 function renderMetrics() {
-  const quote = viewState.quote;
-  const marketValue = quote.price * trade.shares;
-  const pnl = marketValue - trade.invested;
-  const pnlRate = pnl / trade.invested;
+  const pnl = tradeResult.realizedPnl;
+  const pnlRate = tradeResult.realizedRate;
   const positive = pnl >= 0;
-  const asOfDate = quote.date || shanghaiToday();
-  const sessions = quoteCandles(viewState).filter((bar) => bar.day >= trade.buyDate).length;
+  const sessions = chartCandles(viewState).filter((bar) => (
+    bar.day >= trade.buyDate && bar.day <= trade.sellDate
+  )).length;
 
-  setText("#last-price", money.format(quote.price));
-  setText("#price-time", `${quote.time || "收盘"} / ${asOfDate}`);
-  setText("#market-value", money.format(marketValue));
+  setText("#last-price", money.format(trade.sellPrice));
+  setText("#price-time", `${trade.sellDate} / ${trade.shares} 股`);
+  setText("#market-value", money.format(tradeResult.sellNet));
   setText("#pnl-value", `${positive ? "+" : "-"}${money.format(Math.abs(pnl))}`);
   setText("#pnl-rate", `${positive ? "+" : ""}${(pnlRate * 100).toFixed(2)}%`);
-  setText("#holding-days", `${inclusiveDays(trade.buyDate, shanghaiToday())} 天`);
-  setText("#trading-days", `${sessions} 个已展示交易日 / 含建仓日`);
+  setText("#holding-days", `${inclusiveDays(trade.buyDate, trade.sellDate)} 天`);
+  setText("#trading-days", `${sessions} 个已展示交易日 / 买入至卖出`);
 
   const pnlCard = document.querySelector("#pnl-card");
   pnlCard?.classList.toggle("pnl-positive", positive);
@@ -140,7 +159,7 @@ function drawLine(ctx, values, xFor, yFor, color) {
 
 function renderChart() {
   if (!chartCanvas || !chartCtx) return;
-  const bars = quoteCandles(viewState);
+  const bars = chartCandles(viewState);
   const bounds = chartCanvas.parentElement.getBoundingClientRect();
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
   const cssWidth = Math.max(280, Math.floor(bounds.width));
@@ -161,8 +180,8 @@ function renderChart() {
   const priceBottom = cssHeight - bottom - volumeHeight - gap;
   const volumeTop = priceBottom + gap;
   const plotWidth = cssWidth - left - right;
-  const high = Math.max(...bars.map((bar) => bar.high), trade.buyPrice) * 1.035;
-  const low = Math.min(...bars.map((bar) => bar.low), trade.buyPrice) * 0.98;
+  const high = Math.max(...bars.map((bar) => bar.high), trade.buyPrice, trade.sellPrice) * 1.035;
+  const low = Math.min(...bars.map((bar) => bar.low), trade.buyPrice, trade.sellPrice) * 0.98;
   const maxVolume = Math.max(...bars.map((bar) => bar.volume));
   const step = plotWidth / bars.length;
   const bodyWidth = Math.max(3, Math.min(14, step * 0.56));
@@ -199,6 +218,18 @@ function renderChart() {
   ctx.restore();
   ctx.fillStyle = "#d9b65c";
   ctx.fillText(`建仓 ${trade.buyPrice.toFixed(2)}`, left + 4, buyY - 12);
+
+  const sellY = yFor(trade.sellPrice);
+  ctx.save();
+  ctx.setLineDash([6, 4]);
+  ctx.strokeStyle = "#74a7e8";
+  ctx.beginPath();
+  ctx.moveTo(left, sellY);
+  ctx.lineTo(cssWidth - right, sellY);
+  ctx.stroke();
+  ctx.restore();
+  ctx.fillStyle = "#74a7e8";
+  ctx.fillText(`卖出 ${trade.sellPrice.toFixed(2)}`, left + 4, sellY + 14);
 
   const ma5 = bars.map((_, index) => {
     const from = Math.max(0, index - 4);
@@ -243,6 +274,10 @@ function renderChart() {
       ctx.fill();
     }
 
+    if (bar.day === trade.sellDate) {
+      drawSellMarker(ctx, x, sellY);
+    }
+
     if (bar.live) {
       ctx.strokeStyle = "#f7f3e8";
       ctx.strokeRect(x - bodyWidth / 2 - 2, bodyTop - 2, bodyWidth + 4, bodyHeight + 4);
@@ -250,6 +285,11 @@ function renderChart() {
 
     chartHitAreas.push({ x, bar });
   });
+
+  if (!bars.some((bar) => bar.day === trade.sellDate)) {
+    const fallbackX = Math.min(cssWidth - right - step / 2, xFor(bars.length - 1) + step * 0.85);
+    drawSellMarker(ctx, fallbackX, sellY);
+  }
 
   const labelEvery = Math.max(1, Math.ceil(bars.length / (cssWidth < 560 ? 3 : 7)));
   ctx.fillStyle = "rgba(185,181,170,0.9)";
@@ -262,6 +302,22 @@ function renderChart() {
   ctx.fillText("MA5", left + 4, top + 10);
   ctx.fillStyle = "rgba(185,181,170,0.9)";
   ctx.fillText("成交量", left + 4, volumeTop + 9);
+}
+
+function drawSellMarker(ctx, x, y) {
+  ctx.save();
+  ctx.fillStyle = "#74a7e8";
+  ctx.strokeStyle = "#0b0d10";
+  ctx.lineWidth = 1.4;
+  ctx.beginPath();
+  ctx.moveTo(x, y - 8);
+  ctx.lineTo(x + 8, y);
+  ctx.lineTo(x, y + 8);
+  ctx.lineTo(x - 8, y);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  ctx.restore();
 }
 
 function showTooltip(event) {
@@ -288,7 +344,7 @@ async function refreshPosition({ automatic = false } = {}) {
   if (!refreshButton || !quoteStatus) return;
   refreshButton.disabled = true;
   refreshButton.textContent = "更新中...";
-  quoteStatus.textContent = "正在向新浪财经请求最新行情...";
+  quoteStatus.textContent = "正在向新浪财经请求日线数据...";
   try {
     const response = await fetch("api/position", { cache: "no-store" });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -301,16 +357,16 @@ async function refreshPosition({ automatic = false } = {}) {
     renderMetrics();
     renderChart();
     quoteStatus.textContent = automatic
-      ? `已自动更新：新浪财经 ${result.quote.date} ${result.quote.time}`
-      : `已更新：新浪财经 ${result.quote.date} ${result.quote.time}（手动刷新）`;
+      ? `已自动更新日线：新浪财经 ${result.quote.date} ${result.quote.time}；交易结果按卖出记录固定。`
+      : `已更新日线：新浪财经 ${result.quote.date} ${result.quote.time}（手动刷新）；交易结果按卖出记录固定。`;
   } catch (error) {
     const onGitHubPages = location.hostname.endsWith("github.io");
     quoteStatus.textContent = onGitHubPages
-      ? "GitHub Pages 不支持实时接口，请在 Cloudflare 站点刷新；当前仍显示静态快照。"
-      : "行情更新暂时失败，当前仍显示静态快照，请稍后重试。";
+      ? "交易已结束，当前显示静态复盘；Cloudflare 站点可更新日线数据。"
+      : "日线更新暂时失败，当前仍显示静态复盘，请稍后重试。";
   } finally {
     refreshButton.disabled = false;
-    refreshButton.textContent = "刷新新浪行情";
+    refreshButton.textContent = "更新新浪日线";
   }
 }
 
@@ -326,7 +382,7 @@ renderChart();
 
 const staticOnlyHost = location.hostname.endsWith("github.io") || location.protocol === "file:";
 if (staticOnlyHost) {
-  quoteStatus.textContent = "当前显示静态快照；实时行情请访问 Cloudflare 站点。";
+  quoteStatus.textContent = "交易已结束，当前显示静态复盘；Cloudflare 站点可更新日线数据。";
 } else {
   refreshPosition({ automatic: true });
 }

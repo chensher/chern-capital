@@ -2,8 +2,13 @@ const POSITION = {
   name: "安洁科技",
   code: "002635",
   symbol: "sz002635",
+  status: "closed",
   buyDate: "2026-05-12",
   buyPrice: 16.61,
+  buyFee: 5,
+  sellDate: "2026-05-28",
+  sellPrice: 17.57,
+  sellFee: 5,
   shares: 500,
   invested: 8310,
 };

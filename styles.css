@@ -522,6 +522,11 @@ p {
   background: var(--gold);
 }
 
+.chart-legend .legend-sell::before {
+  border-radius: 50%;
+  background: var(--blue);
+}
+
 .trade-chart-wrap {
   position: relative;
   min-height: 370px;
