@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="chern_capital 实盘：长龄液压 605389 持仓跟踪。"
+    />
+    <title>实盘持仓｜长龄液压｜chern_capital</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="position-page">
+    <canvas id="signal-canvas" aria-hidden="true"></canvas>
+
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="返回 chern_capital 首页">chern_capital</a>
+      <nav class="nav-links" aria-label="实盘导航">
+        <a href="index.html">首页</a>
+        <a href="#chart">日线</a>
+        <a href="#trade-note">记录</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="position-hero" aria-labelledby="position-title">
+        <div>
+          <p class="eyebrow">Open Position / 605389</p>
+          <h1 id="position-title">长龄液压</h1>
+          <p class="lede">
+            2026-06-01 以 <code>85.00</code> 元买入 <code>100</code> 股，目前作为第二笔实盘持仓跟踪。
+          </p>
+        </div>
+        <div class="refresh-panel">
+          <button class="refresh-button" id="refresh-position" type="button">更新新浪行情</button>
+          <p class="quote-status" id="quote-status" aria-live="polite">
+            正在进入页面，准备自动获取新浪行情。
+          </p>
+        </div>
+      </section>
+
+      <section class="position-dashboard" aria-label="持仓概览">
+        <div class="position-stat">
+          <p class="item-label">投入金额</p>
+          <strong id="cost-value">¥8,500.00</strong>
+          <small>买入金额 ¥8,500.00；手续费暂未记录</small>
+        </div>
+        <div class="position-stat">
+          <p class="item-label">最新价格</p>
+          <strong id="last-price">¥83.73</strong>
+          <small id="price-time">2026-06-01 09:57:46 / 新浪快照</small>
+        </div>
+        <div class="position-stat">
+          <p class="item-label">持仓市值</p>
+          <strong id="market-value">¥8,373.00</strong>
+          <small>按最新价 × 100 股估算</small>
+        </div>
+        <div class="position-stat pnl-negative" id="pnl-card">
+          <p class="item-label">浮动盈亏</p>
+          <strong id="pnl-value">-¥127.00</strong>
+          <small id="pnl-rate">-1.49%</small>
+        </div>
+        <div class="position-stat">
+          <p class="item-label">持仓天数</p>
+          <strong id="holding-days">1 天</strong>
+          <small id="trading-days">按自然日 / 含买入日</small>
+        </div>
+      </section>
+
+      <section class="position-content" id="chart">
+        <div class="position-chart-panel">
+          <div class="chart-header">
+            <div>
+              <p class="item-label">日线图 / Sina Finance</p>
+              <h2>价格、成交量与建仓位置</h2>
+            </div>
+            <div class="chart-legend" aria-label="图例">
+              <span class="legend-rise">上涨</span>
+              <span class="legend-fall">下跌</span>
+              <span class="legend-buy">建仓 ¥85.00</span>
+            </div>
+          </div>
+          <div class="trade-chart-wrap">
+            <canvas id="position-chart" aria-label="长龄液压日线图"></canvas>
+            <div class="chart-tooltip" id="chart-tooltip" hidden></div>
+          </div>
+        </div>
+
+        <aside class="trade-note" id="trade-note">
+          <p class="item-label">成交记录</p>
+          <h2>当前持仓</h2>
+          <dl>
+            <dt>证券</dt>
+            <dd>长龄液压 <code>605389</code></dd>
+            <dt>状态</dt>
+            <dd>持仓中</dd>
+            <dt>买入日期</dt>
+            <dd>2026-06-01</dd>
+            <dt>买入价格</dt>
+            <dd>¥85.00 / 股</dd>
+            <dt>买入数量</dt>
+            <dd>100 股</dd>
+            <dt>买入成交</dt>
+            <dd>¥8,500.00</dd>
+            <dt>手续费</dt>
+            <dd>暂未记录</dd>
+            <dt>行情来源</dt>
+            <dd>新浪财经</dd>
+          </dl>
+          <p class="trade-explain">
+            这笔记录只按已明确的信息计算成本；若后续补充手续费或卖出记录，再把盈亏口径固定下来。
+            Cloudflare 页面进入时会自动刷新一次新浪接口，GitHub Pages 版本则显示静态快照。
+          </p>
+        </aside>
+      </section>
+
+      <p class="position-disclaimer">此页是个人持仓过程记录，不构成投资建议。</p>
+    </main>
+
+    <footer class="site-footer">
+      <span>chern_capital</span>
+      <span>open position / 605389</span>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="position-605389.js"></script>
+  </body>
+</html>

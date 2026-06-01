@@ -267,6 +267,60 @@ p {
   border-color: rgba(223, 91, 79, 0.32);
 }
 
+.position-list {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: auto;
+  padding-top: 1.25rem;
+}
+
+.position-row {
+  min-height: 4.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  padding: 0.8rem;
+  border: 1px solid rgba(247, 243, 232, 0.18);
+  border-radius: 8px;
+  background: rgba(11, 13, 16, 0.38);
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    transform 160ms ease;
+}
+
+.position-row:hover,
+.position-row:focus-visible {
+  border-color: rgba(217, 182, 92, 0.5);
+  background: rgba(247, 243, 232, 0.07);
+  transform: translateY(-1px);
+}
+
+.position-row span {
+  display: grid;
+  gap: 0.32rem;
+}
+
+.position-row strong {
+  font-size: 0.98rem;
+}
+
+.position-row small {
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.position-row em {
+  flex: none;
+  padding: 0.38rem 0.52rem;
+  border: 1px solid rgba(223, 91, 79, 0.32);
+  border-radius: 6px;
+  color: var(--ink);
+  font-style: normal;
+  font-size: 0.78rem;
+}
+
 .journal-meta span {
   color: var(--ink);
   border-color: rgba(116, 167, 232, 0.34);

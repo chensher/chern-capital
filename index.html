@@ -32,7 +32,7 @@
         </p>
         <div class="metric-strip" aria-label="站点当前模块">
           <span><strong>01</strong> 脚本筛选</span>
-          <span><strong>01</strong> 实盘记录</span>
+          <span><strong>02</strong> 实盘记录</span>
           <span><strong>01</strong> 交易日志</span>
           <span><strong>01</strong> 阅读书架</span>
         </div>
@@ -62,18 +62,28 @@
             </article>
 
             <article class="feature-panel practice-module live-module">
-              <p class="item-label">实盘 / 已结束 01</p>
-              <h3>安洁科技 <code>002635</code></h3>
+              <p class="item-label">实盘 / 记录 02</p>
+              <h3>实盘交易清单</h3>
               <p>
-                2026-05-12 以 <code>16.61</code> 元买入，2026-05-28 以
-                <code>17.57</code> 元卖出，共 <code>500</code> 股，已实现盈亏
-                <code>+470</code> 元。
+                把真实买卖拆成独立复盘页：已结束的交易固定盈亏，持仓中的交易进入详情页时自动拉取新浪行情，
+                用日线图继续观察建仓位置、持仓天数和浮动盈亏。
               </p>
-              <div class="module-meta live-meta">
-                <span>卖出 ¥17.57</span>
-                <span>+5.66%</span>
+              <div class="position-list" aria-label="实盘交易记录">
+                <a class="position-row" href="position-605389.html">
+                  <span>
+                    <strong>长龄液压 <code>605389</code></strong>
+                    <small>2026-06-01 建仓 ¥85.00 / 100 股</small>
+                  </span>
+                  <em>持仓中</em>
+                </a>
+                <a class="position-row" href="position.html">
+                  <span>
+                    <strong>安洁科技 <code>002635</code></strong>
+                    <small>2026-05-28 已结束，已实现 +¥470.00</small>
+                  </span>
+                  <em>已结束</em>
+                </a>
               </div>
-              <a class="action-link" href="position.html">查看交易复盘</a>
             </article>
 
             <article class="feature-panel practice-module journal-module">
@@ -375,6 +385,7 @@ python vcp_plot.py</code></pre>
           <pre><code>首页
 ├─ 交易实战
 │  ├─ 脚本筛选：vcp_plot.py
+│  ├─ 实盘：长龄液压持仓中 / position-605389.html
 │  ├─ 实盘：安洁科技已结束交易 / position.html
 │  └─ 交易日志：中证 1000 点位记录
 └─ 阅读
