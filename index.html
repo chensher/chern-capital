@@ -17,6 +17,7 @@
       <a class="brand" href="#top" aria-label="chern_capital home">chern_capital</a>
       <nav class="nav-links" aria-label="页面导航">
         <a href="#practice">交易实战</a>
+        <a href="#structure-library">结构库</a>
         <a href="#journal">交易日志</a>
         <a href="#reading">阅读</a>
       </nav>
@@ -33,6 +34,7 @@
         <div class="metric-strip" aria-label="站点当前模块">
           <span><strong>01</strong> 脚本筛选</span>
           <span><strong>02</strong> 实盘记录</span>
+          <span><strong>01</strong> 结构库</span>
           <span><strong>01</strong> 交易日志</span>
           <span><strong>01</strong> 阅读书架</span>
         </div>
@@ -86,6 +88,20 @@
               </div>
             </article>
 
+            <article class="feature-panel practice-module structure-module">
+              <p class="item-label">结构库 / Pattern Library</p>
+              <h3>结构图和判断标签</h3>
+              <p>
+                把可复用的行情结构单独收进库里，按 A 股与虚拟货币分区保存。
+                这里优先承载图片、标签和少量文字，避免混进实盘记录。
+              </p>
+              <div class="module-meta structure-meta">
+                <span>A 股 / A</span>
+                <span>虚拟货币 / B</span>
+              </div>
+              <a class="action-link" href="#structure-library">进入结构库</a>
+            </article>
+
             <article class="feature-panel practice-module journal-module">
               <p class="item-label">日志 / 市场坐标 01</p>
               <h3>把判断放回中证 1000 的位置</h3>
@@ -100,6 +116,53 @@
               <a class="action-link" href="#journal">阅读当天记录</a>
             </article>
           </div>
+
+          <section id="structure-library" class="structure-library" aria-labelledby="structure-library-title">
+            <header class="structure-library-intro">
+              <p class="item-label">结构库 / A + B</p>
+              <h3 id="structure-library-title">把图形结构从交易记录里独立出来</h3>
+              <p>
+                结构库和实盘交易并列：实盘记录具体买卖，结构库沉淀可反复对照的图形样本。
+                当前先分为 A 股（A）与虚拟货币（B）两个板块。
+              </p>
+            </header>
+
+            <div class="structure-sections">
+              <article class="structure-section is-empty">
+                <div class="structure-section-heading">
+                  <p class="item-label">A / A 股</p>
+                  <h4>A 股结构</h4>
+                </div>
+                <p class="empty-note">暂无结构样本。</p>
+              </article>
+
+              <article class="structure-section">
+                <div class="structure-section-heading">
+                  <p class="item-label">B / 虚拟货币</p>
+                  <h4>虚拟货币结构</h4>
+                </div>
+                <article class="structure-card">
+                  <figure class="structure-figure">
+                    <img
+                      src="assets/structure/b-1-hype.svg"
+                      alt="Hyperliquid / Tether 1D K 线结构图，标注 1、2、3、4 四段结构"
+                    />
+                  </figure>
+                  <div class="structure-card-body">
+                    <div>
+                      <p class="item-label">B / Crypto</p>
+                      <h5>B-1</h5>
+                    </div>
+                    <div class="structure-tags" aria-label="结构标签">
+                      <span>hype</span>
+                      <span>涨</span>
+                      <span>跌</span>
+                    </div>
+                  </div>
+                </article>
+              </article>
+            </div>
+          </section>
 
           <section id="journal" class="journal-detail" aria-labelledby="journal-title">
             <header class="journal-intro">
@@ -387,12 +450,13 @@ python vcp_plot.py</code></pre>
 │  ├─ 脚本筛选：vcp_plot.py
 │  ├─ 实盘：长龄液压持仓中 / position-605389.html
 │  ├─ 实盘：安洁科技已结束交易 / position.html
+│  ├─ 结构库：A 股 / 虚拟货币
 │  └─ 交易日志：中证 1000 点位记录
 └─ 阅读
    └─ 缠论：reading.html</code></pre>
           <p>
-            当前结构先把“实战”和“阅读”分层。实战区按工具、持仓与每日日志展开，
-            日志通过市场日线连接当天判断；阅读区继续承载独立的长期输入。
+            当前结构先把“实战”和“阅读”分层。实战区按工具、持仓、结构库与每日日志展开，
+            结构库沉淀图形样本，日志通过市场日线连接当天判断；阅读区继续承载独立的长期输入。
           </p>
         </div>
       </section>
@@ -400,7 +464,7 @@ python vcp_plot.py</code></pre>
 
     <footer class="site-footer">
       <span>chern_capital</span>
-      <span>practice / journal / reading</span>
+      <span>practice / structure / journal / reading</span>
     </footer>
 
     <script src="script.js"></script>
