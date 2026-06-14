@@ -17,6 +17,7 @@
       <a class="brand" href="#top" aria-label="chern_capital home">chern_capital</a>
       <nav class="nav-links" aria-label="页面导航">
         <a href="#practice">交易实战</a>
+        <a href="#memory-library">记忆库</a>
         <a href="#structure-library">结构库</a>
         <a href="#journal">交易日志</a>
         <a href="#reading">阅读</a>
@@ -36,6 +37,7 @@
           <span><strong>02</strong> 实盘记录</span>
           <span><strong>01</strong> 结构库</span>
           <span><strong>01</strong> 交易日志</span>
+          <span><strong>01</strong> 记忆库</span>
           <span><strong>01</strong> 阅读书架</span>
         </div>
       </section>
@@ -413,6 +415,193 @@ python vcp_plot.py</code></pre>
         </div>
       </section>
 
+      <section id="memory-library" class="section-block">
+        <div class="section-heading">
+          <p class="eyebrow">Memory</p>
+          <h2>记忆库</h2>
+        </div>
+        <div class="home-stack">
+          <article class="memory-library-panel" aria-labelledby="btc-memory-title">
+            <header class="memory-library-intro">
+              <p class="item-label">BTC / Trader Profile 01</p>
+              <h3 id="btc-memory-title">把交易员画像钉回 BTC 历史走势</h3>
+              <p>
+                这个板块用于保存“交易员样本 + 行情背景”的复盘记忆。当前 BTC 图采用 TradingView
+                式静态走势草图，把资料文件里提到的关键盈利、亏损和风险暴露区间标在价格路径上。
+                标记不是逐笔成交，只是基于资产曲线与 BTC 日 K 对齐后的策略推断。
+              </p>
+            </header>
+
+            <div class="btc-memory-grid">
+              <figure class="btc-chart-card">
+                <div class="btc-chart-top">
+                  <div>
+                    <p class="item-label">BTCUSDT / 1D Context</p>
+                    <h4>BTC 历史走势与关键交易窗口</h4>
+                  </div>
+                  <span class="btc-chart-range">2020.05.02 - 2026.06.14</span>
+                </div>
+                <svg
+                  class="btc-chart"
+                  viewBox="0 0 980 430"
+                  role="img"
+                  aria-labelledby="btc-chart-title btc-chart-desc"
+                >
+                  <title id="btc-chart-title">BTCUSDT 历史走势草图与交易员关键交易点</title>
+                  <desc id="btc-chart-desc">
+                    BTCUSDT 从 2020 年 5 月到 2026 年 6 月的静态复盘走势草图，标出交易员资产曲线中的关键盈利、亏损和做空推断区间。
+                  </desc>
+                  <defs>
+                    <linearGradient id="btc-area-fill" x1="0" x2="0" y1="0" y2="1">
+                      <stop offset="0%" stop-color="#d9b65c" stop-opacity="0.22" />
+                      <stop offset="100%" stop-color="#d9b65c" stop-opacity="0" />
+                    </linearGradient>
+                  </defs>
+                  <rect class="btc-chart-bg" x="0" y="0" width="980" height="430" rx="8"></rect>
+                  <g class="btc-grid" aria-hidden="true">
+                    <line x1="70" y1="46.4" x2="930" y2="46.4"></line>
+                    <line x1="70" y1="121" x2="930" y2="121"></line>
+                    <line x1="70" y1="195.7" x2="930" y2="195.7"></line>
+                    <line x1="70" y1="270.3" x2="930" y2="270.3"></line>
+                    <line x1="70" y1="42" x2="70" y2="338"></line>
+                    <line x1="304.4" y1="42" x2="304.4" y2="338"></line>
+                    <line x1="585.5" y1="42" x2="585.5" y2="338"></line>
+                    <line x1="866.9" y1="42" x2="866.9" y2="338"></line>
+                    <text x="944" y="50.4">120k</text>
+                    <text x="944" y="125">60k</text>
+                    <text x="944" y="199.7">30k</text>
+                    <text x="944" y="274.3">15k</text>
+                  </g>
+                  <polygon
+                    class="btc-area"
+                    points="70,325.6 163.5,199.5 203.6,114.9 284.4,106 369.1,245.4 390.7,217.9 396.8,238 429.2,265.4 514.2,194.2 585.1,158.9 613.6,99.9 669,132.4 704.8,96 711,67 717.1,64.5 723.3,67.3 778.7,62.8 784.9,60 797.2,55.8 803.3,46.8 809.5,49.8 864.9,118.4 871.1,114.3 877.3,116.6 880,117.5 880.3,133.8 895.7,104.4 901.9,115.2 914.2,111.1 920.4,114.3 930,114.3 930,338 70,338"
+                  ></polygon>
+                  <polyline
+                    class="btc-price-path"
+                    points="70,325.6 163.5,199.5 203.6,114.9 284.4,106 369.1,245.4 390.7,217.9 396.8,238 429.2,265.4 514.2,194.2 585.1,158.9 613.6,99.9 669,132.4 704.8,96 711,67 717.1,64.5 723.3,67.3 778.7,62.8 784.9,60 797.2,55.8 803.3,46.8 809.5,49.8 864.9,118.4 871.1,114.3 877.3,116.6 880,117.5 880.3,133.8 895.7,104.4 901.9,115.2 914.2,111.1 920.4,114.3 930,114.3"
+                  ></polyline>
+                  <g class="btc-volume" aria-hidden="true">
+                    <rect x="78" y="366" width="9" height="28"></rect>
+                    <rect x="162" y="354" width="9" height="40"></rect>
+                    <rect x="202" y="344" width="9" height="50"></rect>
+                    <rect x="367" y="350" width="9" height="44"></rect>
+                    <rect x="428" y="362" width="9" height="32"></rect>
+                    <rect x="613" y="348" width="9" height="46"></rect>
+                    <rect x="710" y="330" width="9" height="64"></rect>
+                    <rect x="722" y="326" width="9" height="68"></rect>
+                    <rect x="802" y="318" width="9" height="76"></rect>
+                    <rect x="870" y="356" width="9" height="38"></rect>
+                    <rect x="880" y="344" width="9" height="50"></rect>
+                    <rect x="920" y="362" width="9" height="32"></rect>
+                  </g>
+                  <g class="btc-events">
+                    <a href="#btc-memory-2022-short" data-memory-marker="btc-memory-2022-short">
+                      <g class="btc-marker is-short" transform="translate(396.8 238)">
+                        <circle r="9"></circle>
+                        <text x="0" y="-15">S1</text>
+                      </g>
+                    </a>
+                    <a href="#btc-memory-2024-breakout" data-memory-marker="btc-memory-2024-breakout">
+                      <g class="btc-marker is-gain" transform="translate(711 67)">
+                        <circle r="9"></circle>
+                        <text x="-12" y="-18">L1</text>
+                      </g>
+                    </a>
+                    <a href="#btc-memory-2024-boost" data-memory-marker="btc-memory-2024-boost">
+                      <g class="btc-marker is-gain" transform="translate(717.1 64.5)">
+                        <circle r="9"></circle>
+                        <text x="13" y="-18">L2</text>
+                      </g>
+                    </a>
+                    <a href="#btc-memory-2024-drawdown" data-memory-marker="btc-memory-2024-drawdown">
+                      <g class="btc-marker is-loss" transform="translate(723.3 67.3)">
+                        <circle r="9"></circle>
+                        <text x="28" y="5">X1</text>
+                      </g>
+                    </a>
+                    <a href="#btc-memory-2025-run" data-memory-marker="btc-memory-2025-run">
+                      <g class="btc-marker is-gain" transform="translate(803.3 46.8)">
+                        <circle r="9"></circle>
+                        <text x="0" y="-17">L3</text>
+                      </g>
+                    </a>
+                    <a href="#btc-memory-2025-peak" data-memory-marker="btc-memory-2025-peak">
+                      <g class="btc-marker is-loss" transform="translate(809.5 49.8)">
+                        <circle r="9"></circle>
+                        <text x="18" y="-4">R1</text>
+                      </g>
+                    </a>
+                    <a href="#btc-memory-2026-jan" data-memory-marker="btc-memory-2026-jan">
+                      <g class="btc-marker is-gain" transform="translate(871.1 114.3)">
+                        <circle r="9"></circle>
+                        <text x="0" y="-16">L4</text>
+                      </g>
+                    </a>
+                    <a href="#btc-memory-2026-short" data-memory-marker="btc-memory-2026-short">
+                      <g class="btc-marker is-short" transform="translate(901.9 115.2)">
+                        <circle r="9"></circle>
+                        <text x="0" y="-16">S2</text>
+                      </g>
+                    </a>
+                  </g>
+                  <g class="btc-dates" aria-hidden="true">
+                    <text x="70" y="418">2020</text>
+                    <text x="304.4" y="418" text-anchor="middle">2022</text>
+                    <text x="585.5" y="418" text-anchor="middle">2024</text>
+                    <text x="866.9" y="418" text-anchor="middle">2026</text>
+                    <text x="930" y="418" text-anchor="end">06.14</text>
+                  </g>
+                </svg>
+                <figcaption>
+                  关键区间来自本地交易员分析资料。价格路径是复盘草图，重点用于建立空间感和事件坐标。
+                </figcaption>
+              </figure>
+
+              <div class="btc-memory-notes" aria-label="BTC 关键交易点说明">
+                <details id="btc-memory-2022-short" class="btc-memory-event">
+                  <summary><span>S1</span> 2022.08 下跌中的收益</summary>
+                  <p>2022-08-13 至 2022-08-29，BTC 约 -17.0%，资产反而增加约 268.5 万 USDT。资料推断：可能具备做空能力，不是单边多头。</p>
+                </details>
+                <details id="btc-memory-2024-breakout" class="btc-memory-event" open>
+                  <summary><span>L1</span> 2024.11 突破段</summary>
+                  <p>2024-11-06 至 2024-11-22，BTC 约 +30.9%，资产增加约 556.8 万 USDT。更像是在突破行情中押对方向并放大仓位。</p>
+                </details>
+                <details id="btc-memory-2024-boost" class="btc-memory-event">
+                  <summary><span>L2</span> 2024.11-12 高弹性延续</summary>
+                  <p>2024-11-22 至 2024-12-08，BTC 仅约 +2.3%，资产增加约 617.1 万 USDT。资料将其归为高杠杆或仓位集中带来的高弹性。</p>
+                </details>
+                <details id="btc-memory-2024-drawdown" class="btc-memory-event is-warning">
+                  <summary><span>X1</span> 2024.12 风险暴露</summary>
+                  <p>2024-12-08 至 2024-12-24，BTC 约 -2.5%，资产减少约 1155.6 万 USDT，账户资产回撤接近 90%。这是整份资料里最重要的风险样本。</p>
+                </details>
+                <details id="btc-memory-2025-run" class="btc-memory-event">
+                  <summary><span>L3</span> 2025.05-07 趋势延续</summary>
+                  <p>2025-05-17 至 2025-06-02，资产增加约 478.9 万 USDT；2025-07-04 至 2025-07-20，资产再增加约 1253.6 万 USDT，并触及约 2457.7 万 USDT 峰值。</p>
+                </details>
+                <details id="btc-memory-2025-peak" class="btc-memory-event is-warning">
+                  <summary><span>R1</span> 2025.07 峰值后回撤</summary>
+                  <p>2025-07-20 至 2025-08-05，BTC 约 -2.7%，资产减少约 311.5 万 USDT。资料提示：可能是趋势末端未及时降仓。</p>
+                </details>
+                <details id="btc-memory-2026-jan" class="btc-memory-event">
+                  <summary><span>L4</span> 2026.01 再次快速增长</summary>
+                  <p>2025-12-27 至 2026-01-12，BTC 约 +3.9%，资产增加约 740.7 万 USDT；随后 2026-01-12 至 01-28 出现约 286.2 万 USDT 回撤。</p>
+                </details>
+                <details id="btc-memory-2026-short" class="btc-memory-event">
+                  <summary><span>S2</span> 2026.03-05 下跌区间获利</summary>
+                  <p>2026-03-17 至 2026-04-02，BTC 约 -9.5%，资产增加约 344.1 万 USDT；2026-05-04 至 05-20，BTC 约 -2.9%，资产增加约 286.0 万 USDT。</p>
+                </details>
+              </div>
+            </div>
+
+            <div class="memory-caveat">
+              <strong>阅读方式：</strong>
+              先看价格路径中的 L/S/X/R 标记，再展开右侧说明。这里保留“数据事实”和“策略推断”的边界：
+              资产曲线来自 SVG 反算抽样，不等同于 Binance 原始逐日账本，也不能证明具体仓位和杠杆。
+            </div>
+          </article>
+        </div>
+      </section>
+
       <section id="reading" class="section-block">
         <div class="section-heading">
           <p class="eyebrow">Reading</p>
@@ -452,11 +641,13 @@ python vcp_plot.py</code></pre>
 │  ├─ 实盘：安洁科技已结束交易 / position.html
 │  ├─ 结构库：A 股 / 虚拟货币
 │  └─ 交易日志：中证 1000 点位记录
+├─ 记忆库
+│  └─ BTC：交易员关键点与价格路径
 └─ 阅读
    └─ 缠论：reading.html</code></pre>
           <p>
-            当前结构先把“实战”和“阅读”分层。实战区按工具、持仓、结构库与每日日志展开，
-            结构库沉淀图形样本，日志通过市场日线连接当天判断；阅读区继续承载独立的长期输入。
+            当前结构把“实战”“记忆库”和“阅读”分层。实战区按工具、持仓、结构库与每日日志展开；
+            记忆库保存可反复回看的行情样本和交易员画像；阅读区继续承载独立的长期输入。
           </p>
         </div>
       </section>
@@ -464,7 +655,7 @@ python vcp_plot.py</code></pre>
 
     <footer class="site-footer">
       <span>chern_capital</span>
-      <span>practice / structure / journal / reading</span>
+      <span>practice / structure / journal / memory / reading</span>
     </footer>
 
     <script src="script.js"></script>

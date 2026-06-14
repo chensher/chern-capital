@@ -116,5 +116,19 @@ if ("IntersectionObserver" in window && palaceRooms.length) {
   palaceRooms.forEach((room) => roomObserver.observe(room));
 }
 
+document.addEventListener("click", (event) => {
+  const marker = event.target.closest("[data-memory-marker]");
+
+  if (!marker) return;
+
+  const target = document.getElementById(marker.dataset.memoryMarker);
+
+  if (!target) return;
+
+  event.preventDefault();
+  target.open = true;
+  target.scrollIntoView({ behavior: "smooth", block: "center" });
+});
+
 resize();
 draw();
