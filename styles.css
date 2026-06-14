@@ -543,6 +543,54 @@ p {
   font: 0.76rem/1 ui-monospace, SFMono-Regular, Consolas, monospace;
 }
 
+.btc-chart-actions {
+  display: inline-flex;
+  flex: none;
+  gap: 0.35rem;
+  padding: 0.28rem;
+  border: 1px solid rgba(217, 182, 92, 0.24);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.btc-timeframe-button {
+  min-height: 2.1rem;
+  border: 0;
+  border-radius: 6px;
+  padding: 0.45rem 0.72rem;
+  background: transparent;
+  color: var(--muted);
+  font: 0.78rem/1 ui-monospace, SFMono-Regular, Consolas, monospace;
+  cursor: pointer;
+  transition:
+    background 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.btc-timeframe-button:hover,
+.btc-timeframe-button:focus-visible {
+  color: var(--ink);
+  background: rgba(247, 243, 232, 0.07);
+}
+
+.btc-timeframe-button.is-active {
+  color: var(--ink);
+  background: rgba(217, 182, 92, 0.18);
+}
+
+.btc-tradingview-shell {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(247, 243, 232, 0.12);
+  border-radius: 8px;
+  background:
+    linear-gradient(rgba(247, 243, 232, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(247, 243, 232, 0.035) 1px, transparent 1px),
+    rgba(4, 6, 9, 0.72);
+  background-size: 100% 20%, 12.5% 100%, auto;
+}
+
 .btc-chart {
   width: 100%;
   height: auto;
@@ -552,7 +600,7 @@ p {
 }
 
 .btc-chart-bg {
-  fill: rgba(247, 243, 232, 0.025);
+  fill: rgba(8, 10, 13, 0.72);
   stroke: rgba(247, 243, 232, 0.1);
 }
 
@@ -566,29 +614,59 @@ p {
   fill: var(--muted);
 }
 
-.btc-area {
-  fill: url(#btc-area-fill);
+.btc-axis-label {
+  fill: var(--muted);
 }
 
-.btc-price-path {
-  fill: none;
-  stroke: var(--gold);
-  stroke-width: 2.6;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+.btc-last-price line {
+  stroke: rgba(217, 182, 92, 0.44);
+  stroke-dasharray: 5 5;
 }
 
-.btc-volume rect {
-  fill: rgba(116, 167, 232, 0.24);
+.btc-last-price text {
+  fill: var(--gold);
+  font-weight: 800;
 }
 
-.btc-events a {
-  outline: none;
+.btc-event-band {
+  fill: rgba(217, 182, 92, 0.07);
 }
 
-.btc-marker circle {
-  fill: rgba(11, 13, 16, 0.92);
-  stroke: var(--gold);
+.btc-event-band.is-short {
+  fill: rgba(116, 167, 232, 0.09);
+}
+
+.btc-candle-wick {
+  stroke: rgba(247, 243, 232, 0.52);
+  stroke-width: 1;
+}
+
+.btc-candle-body {
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.btc-candle.is-up .btc-candle-wick,
+.btc-candle.is-up .btc-candle-body {
+  stroke: var(--red);
+}
+
+.btc-candle.is-up .btc-candle-body {
+  fill: rgba(223, 91, 79, 0.72);
+}
+
+.btc-candle.is-down .btc-candle-wick,
+.btc-candle.is-down .btc-candle-body {
+  stroke: var(--green);
+}
+
+.btc-candle.is-down .btc-candle-body {
+  fill: rgba(87, 189, 137, 0.68);
+}
+
+.btc-profit-marker circle {
+  fill: rgba(11, 13, 16, 0.94);
+  stroke: var(--red);
   stroke-width: 2.4;
   transition:
     fill 160ms ease,
@@ -596,29 +674,37 @@ p {
     transform 160ms ease;
 }
 
-.btc-marker text {
+.btc-profit-marker.is-short circle {
+  stroke: var(--blue);
+}
+
+.btc-profit-marker text {
   fill: var(--ink);
   font-size: 13px;
   font-weight: 800;
   pointer-events: none;
 }
 
-.btc-marker.is-gain circle {
-  stroke: var(--red);
+.btc-profit-events a {
+  outline: none;
 }
 
-.btc-marker.is-loss circle {
-  stroke: var(--green);
-}
-
-.btc-marker.is-short circle {
-  stroke: var(--blue);
-}
-
-.btc-events a:hover .btc-marker circle,
-.btc-events a:focus-visible .btc-marker circle {
+.btc-profit-events a:hover .btc-profit-marker circle,
+.btc-profit-events a:focus-visible .btc-profit-marker circle {
   fill: rgba(217, 182, 92, 0.2);
   stroke: var(--ink);
+}
+
+.btc-candle-status {
+  position: absolute;
+  left: 0.85rem;
+  bottom: 0.7rem;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid rgba(247, 243, 232, 0.14);
+  border-radius: 6px;
+  background: rgba(11, 13, 16, 0.74);
+  color: var(--muted);
+  font: 0.72rem/1 ui-monospace, SFMono-Regular, Consolas, monospace;
 }
 
 .btc-chart-card figcaption {
@@ -648,11 +734,6 @@ p {
 .btc-memory-event[open] {
   border-color: rgba(217, 182, 92, 0.36);
   background: rgba(217, 182, 92, 0.07);
-}
-
-.btc-memory-event.is-warning[open] {
-  border-color: rgba(223, 91, 79, 0.38);
-  background: rgba(223, 91, 79, 0.075);
 }
 
 .btc-memory-event summary {
@@ -2179,6 +2260,10 @@ pre {
 
   .btc-chart-card {
     overflow-x: auto;
+  }
+
+  .btc-tradingview-shell {
+    min-width: 760px;
   }
 
   .btc-chart {
