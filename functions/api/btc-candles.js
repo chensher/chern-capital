@@ -132,14 +132,29 @@ async function fetchOkxCandles() {
 }
 
 async function loadCandles(provider) {
-  if (provider === "binance") return fetchBinanceCandles();
+  if (provider === "binance") {
+    try {
+      return await fetchBinanceCandles();
+    } catch (binanceError) {
+      console.warn("Binance BTC candles failed, trying OKX", binanceError);
+      const result = await fetchOkxCandles();
+      return {
+        ...result,
+        note: "Binance API 在当前部署环境暂不可达，已切换 OKX 真实日线。",
+      };
+    }
+  }
   if (provider === "okx") return fetchOkxCandles();
 
   try {
     return await fetchBinanceCandles();
   } catch (binanceError) {
     console.warn("Binance BTC candles failed, trying OKX", binanceError);
-    return fetchOkxCandles();
+    const result = await fetchOkxCandles();
+    return {
+      ...result,
+      note: "Binance API 在当前部署环境暂不可达，auto 已切换 OKX。",
+    };
   }
 }
 

@@ -746,7 +746,7 @@ function setupBtcMemoryChart() {
         state.daily = payload.candles;
         state.weekly = aggregateWeeklyCandles(state.daily);
         state.viewEndIndex = null;
-        state.note = manual ? "手动刷新" : "";
+        state.note = [manual ? "手动刷新" : "", payload.note || ""].filter(Boolean).join(" · ");
       }
     } catch (error) {
       console.warn("BTC exchange data failed", error);
