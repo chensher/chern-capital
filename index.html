@@ -36,9 +36,9 @@
           <span><strong>01</strong> 脚本筛选</span>
           <span><strong>02</strong> 实盘记录</span>
           <span><strong>01</strong> 结构库</span>
-          <span><strong>01</strong> 交易日志</span>
+          <span><strong>02</strong> 交易日志</span>
           <span><strong>01</strong> 记忆库</span>
-          <span><strong>01</strong> 阅读书架</span>
+          <span><strong>03</strong> 阅读书架</span>
         </div>
       </section>
 
@@ -112,10 +112,11 @@
                 以后也能沿行情路径复盘情绪与强弱判断。
               </p>
               <div class="module-meta journal-meta">
-                <span>最新 2026.05.27</span>
+                <span>最新 2026.06.18</span>
                 <span>中证 1000</span>
+                <span>交易随记</span>
               </div>
-              <a class="action-link" href="#journal">阅读当天记录</a>
+              <a class="action-link" href="#journal">阅读日志与随记</a>
             </article>
           </div>
 
@@ -164,6 +165,26 @@
                 </article>
               </article>
             </div>
+
+            <section class="journal-memo-board" aria-labelledby="journal-memo-title">
+              <div class="journal-memo-heading">
+                <p class="item-label">交易随记 / Notes</p>
+                <h4 id="journal-memo-title">不一定锚定指数点位，但保留当日比较</h4>
+              </div>
+              <article class="journal-memo-entry">
+                <div class="entry-meta">
+                  <time datetime="2026-06-18">2026.06.18</time>
+                  <span>四方股份 / 长龄液压 / 科瑞技术</span>
+                </div>
+                <p>
+                  四方股份、长龄液压、科瑞技术对比，可以看出，向下调整越猛烈，反弹效果越大。
+                </p>
+                <div class="entry-tags" aria-label="交易随记标签">
+                  <span>A</span>
+                  <span>VCP</span>
+                </div>
+              </article>
+            </section>
           </section>
 
           <section id="journal" class="journal-detail" aria-labelledby="journal-title">
@@ -515,15 +536,35 @@ python vcp_plot.py</code></pre>
           <h2>阅读</h2>
         </div>
         <div class="home-stack">
-          <article class="feature-panel reading-entry">
-            <p class="item-label">交易阅读 / 第一本</p>
-            <h3>缠论：原文精读（第一轮）</h3>
-            <p>
-              这本先做成“记忆宫殿”：把位次、人性、趋势、安全线、独立系统、背驰与短差分别放入不同房间。
-              首页只放入口，完整摘录和心得进入阅读页。
-            </p>
-            <a class="action-link" href="reading.html">进入阅读宫殿</a>
-          </article>
+          <div class="reading-shelf" aria-label="交易阅读书架">
+            <article class="feature-panel reading-entry">
+              <p class="item-label">交易阅读 / 第一本</p>
+              <h3>缠论：原文精读（第一轮）</h3>
+              <p>
+                这本先做成“记忆宫殿”：把位次、人性、趋势、安全线、独立系统、背驰与短差分别放入不同房间。
+                首页只放入口，完整摘录和心得进入阅读页。
+              </p>
+              <a class="action-link" href="reading.html">进入阅读宫殿</a>
+            </article>
+
+            <article class="feature-panel reading-entry reading-book-card">
+              <p class="item-label">交易阅读 / 第二本</p>
+              <h3>How to Make Money in Stocks</h3>
+              <p>
+                作为成长股与 CAN SLIM 体系的入口，后续可拆成选股、盈利增长、相对强度、突破买点与风险控制几组笔记。
+                当前先放入书架，等待摘录和复盘结构。
+              </p>
+            </article>
+
+            <article class="feature-panel reading-entry reading-book-card">
+              <p class="item-label">交易阅读 / 第三本</p>
+              <h3>Trade Like a Stock Market Wizard</h3>
+              <p>
+                作为 Minervini 风格的趋势模板入口，后续可承载 VCP、趋势模板、买点纪律、止损和仓位管理笔记。
+                当前先建立书架坐标。
+              </p>
+            </article>
+          </div>
 
           <article class="code-panel">
             <p class="item-label">后续扩展</p>
@@ -547,11 +588,14 @@ python vcp_plot.py</code></pre>
 │  ├─ 实盘：长龄液压持仓中 / position-605389.html
 │  ├─ 实盘：安洁科技已结束交易 / position.html
 │  ├─ 结构库：A 股 / 虚拟货币
-│  └─ 交易日志：中证 1000 点位记录
+│  ├─ 交易日志：中证 1000 点位记录
+│  └─ 交易随记：2026-06-18 个股对比
 ├─ 记忆库
 │  └─ BTC：交易员关键点与价格路径
 └─ 阅读
-   └─ 缠论：reading.html</code></pre>
+   ├─ 缠论：reading.html
+   ├─ How to Make Money in Stocks
+   └─ Trade Like a Stock Market Wizard</code></pre>
           <p>
             当前结构把“实战”“记忆库”和“阅读”分层。实战区按工具、持仓、结构库与每日日志展开；
             记忆库保存可反复回看的行情样本和交易员画像；阅读区继续承载独立的长期输入。
