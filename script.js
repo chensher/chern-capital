@@ -1095,7 +1095,8 @@ function setupCsi1000TradeOverlay() {
 
   button.addEventListener("click", async () => {
     button.disabled = true;
-    button.textContent = "正在加载中证 1000 日线...";
+    const originalHTML = button.innerHTML;
+    button.innerHTML = '<span><strong>中证 1000 <code>000852</code></strong><small>正在加载日线数据...</small></span><em>⏳</em>';
 
     try {
       await refreshCsi1000Data();
@@ -1105,8 +1106,7 @@ function setupCsi1000TradeOverlay() {
 
     renderCsi1000TradeChart();
 
-    button.textContent = "";
-    button.innerHTML = '<span class="csi1000-trade-button-icon" aria-hidden="true">◆</span> 在中证 1000 日线上标记买卖点';
+    button.innerHTML = originalHTML;
     button.disabled = false;
 
     if (journalSection) {

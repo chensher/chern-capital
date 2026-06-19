@@ -2409,21 +2409,18 @@ pre {
 /* ---- CSI 1000 实盘买卖标记按钮 ---- */
 
 .csi1000-trade-button {
-  width: 100%;
-  min-height: 3rem;
+  min-height: 4.75rem;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.52rem;
-  margin-top: 1.15rem;
+  justify-content: space-between;
+  gap: 0.8rem;
+  padding: 0.8rem;
   border: 1px solid rgba(217, 182, 92, 0.42);
   border-radius: 8px;
-  padding: 0.75rem 1rem;
-  background: rgba(217, 182, 92, 0.1);
+  background: rgba(217, 182, 92, 0.08);
   color: var(--ink);
   font: inherit;
-  font-weight: 700;
-  font-size: 0.92rem;
+  font-size: inherit;
   cursor: pointer;
   transition:
     border-color 180ms ease,
@@ -2431,21 +2428,42 @@ pre {
     transform 180ms ease;
 }
 
+.csi1000-trade-button span {
+  display: grid;
+  gap: 0.32rem;
+  text-align: left;
+}
+
+.csi1000-trade-button strong {
+  font-size: 0.98rem;
+}
+
+.csi1000-trade-button small {
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.csi1000-trade-button em {
+  flex: none;
+  padding: 0.38rem 0.52rem;
+  border: 1px solid rgba(217, 182, 92, 0.42);
+  border-radius: 6px;
+  color: var(--gold);
+  font-style: normal;
+  font-size: 0.78rem;
+}
+
 .csi1000-trade-button:hover,
 .csi1000-trade-button:focus-visible {
   border-color: var(--gold);
-  background: rgba(217, 182, 92, 0.18);
+  background: rgba(217, 182, 92, 0.15);
   transform: translateY(-1px);
 }
 
 .csi1000-trade-button:disabled {
   cursor: wait;
   opacity: 0.68;
-}
-
-.csi1000-trade-button-icon {
-  color: var(--gold);
-  font-size: 0.82rem;
+  transform: none;
 }
 
 /* ---- 日志图表操作区 ---- */
