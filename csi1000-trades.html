@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="chern_capital 实盘：在中证1000日线K线图上标记真实买入与卖出时间点。"
+    />
+    <title>中证1000实盘标记｜chern_capital</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="position-page csi1000-trade-page">
+    <canvas id="signal-canvas" aria-hidden="true"></canvas>
+
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="返回 chern_capital 首页">chern_capital</a>
+      <nav class="nav-links" aria-label="中证1000实盘标记导航">
+        <a href="index.html">首页</a>
+        <a href="#chart">日线</a>
+        <a href="#trade-events">买卖点</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="position-hero" aria-labelledby="csi1000-title">
+        <div>
+          <p class="eyebrow">CSI 1000 / Trade Marks</p>
+          <h1 id="csi1000-title">中证 1000</h1>
+          <p class="lede">
+            把实盘中各个股票的买入、卖出时间点，放回 <code>000852</code>
+            日线 K 线里观察。这里看的是市场背景中的行动位置，而不是单只股票自己的盈亏曲线。
+          </p>
+        </div>
+        <div class="refresh-panel">
+          <p class="item-label">数据说明</p>
+          <p class="quote-status" id="csi1000-trade-page-status" aria-live="polite">
+            正在准备中证 1000 日线图。
+          </p>
+        </div>
+      </section>
+
+      <section class="position-dashboard csi1000-dashboard" aria-label="中证1000数据概览">
+        <div class="position-stat">
+          <p class="item-label">指数代码</p>
+          <strong>000852</strong>
+          <small>中证 1000 / SH000852</small>
+        </div>
+        <div class="position-stat">
+          <p class="item-label">最新 K 线</p>
+          <strong id="csi1000-latest-close">加载中</strong>
+          <small>以日线收盘点位为准</small>
+        </div>
+        <div class="position-stat">
+          <p class="item-label">数据源</p>
+          <strong id="csi1000-data-source">加载中</strong>
+          <small>Cloudflare Pages 通过 Function 转发新浪行情</small>
+        </div>
+        <div class="position-stat">
+          <p class="item-label">标记数量</p>
+          <strong>3</strong>
+          <small>买入 2 / 卖出 1</small>
+        </div>
+      </section>
+
+      <section class="position-content csi1000-page-content" id="chart">
+        <div class="position-chart-panel csi1000-page-chart-panel">
+          <div class="chart-header">
+            <div>
+              <p class="item-label">日线图 / Sina Finance</p>
+              <h2>中证 1000 日线 K 线与实盘标记</h2>
+            </div>
+            <div class="chart-legend" aria-label="图例">
+              <span class="legend-rise">上涨</span>
+              <span class="legend-fall">下跌</span>
+              <span class="legend-buy">买入</span>
+              <span class="legend-sell">卖出</span>
+            </div>
+          </div>
+          <div class="trade-chart-wrap csi1000-page-chart-wrap" id="csi1000-trade-page-chart"></div>
+          <p class="csi1000-trade-caption" id="csi1000-trade-page-caption">
+            图表加载后会显示实盘买入 / 卖出日期标记。
+          </p>
+        </div>
+
+        <aside class="trade-note csi1000-event-panel" id="trade-events">
+          <p class="item-label">实盘事件</p>
+          <h2>买卖时间点</h2>
+          <ul class="csi1000-event-list" id="csi1000-event-list" aria-label="实盘买卖时间点"></ul>
+          <p class="trade-explain">
+            标记只记录真实买入 / 卖出发生的日期；若某个日期不是交易日，页面会锚定到最近一根中证 1000 日 K。
+          </p>
+        </aside>
+      </section>
+
+      <p class="position-disclaimer">
+        此页是个人实盘复盘的市场背景视图，不构成投资建议。指数行情以数据源返回结果为准；Cloudflare 不可用时使用静态快照。
+      </p>
+    </main>
+
+    <footer class="site-footer">
+      <span>chern_capital</span>
+      <a href="index.html#practice">back to practice</a>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

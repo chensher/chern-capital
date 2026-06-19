@@ -849,42 +849,34 @@ const csi1000TradeEvents = [
 ];
 
 const csi1000SnapshotDaily = [
-  { day: "2026-04-28", open: 8725, high: 8780, low: 8702, close: 8756, volume: 182340000 },
-  { day: "2026-04-29", open: 8758, high: 8795, low: 8708, close: 8724, volume: 175600000 },
-  { day: "2026-04-30", open: 8724, high: 8810, low: 8710, close: 8788, volume: 192100000 },
-  { day: "2026-05-06", open: 8760, high: 8825, low: 8745, close: 8802, volume: 168900000 },
-  { day: "2026-05-07", open: 8802, high: 8855, low: 8780, close: 8838, volume: 184300000 },
-  { day: "2026-05-08", open: 8840, high: 8862, low: 8790, close: 8812, volume: 172500000 },
-  { day: "2026-05-09", open: 8810, high: 8835, low: 8775, close: 8795, volume: 159800000 },
-  { day: "2026-05-12", open: 8750, high: 8860, low: 8730, close: 8822, volume: 205600000 },
-  { day: "2026-05-13", open: 8825, high: 8980, low: 8810, close: 8956, volume: 234100000 },
-  { day: "2026-05-14", open: 8958, high: 8975, low: 8750, close: 8780, volume: 221800000 },
-  { day: "2026-05-15", open: 8782, high: 8795, low: 8660, close: 8684, volume: 198700000 },
-  { day: "2026-05-16", open: 8684, high: 8750, low: 8665, close: 8722, volume: 186500000 },
-  { day: "2026-05-19", open: 8722, high: 8835, low: 8710, close: 8809, volume: 202300000 },
-  { day: "2026-05-20", open: 8810, high: 8840, low: 8770, close: 8809, volume: 176400000 },
-  { day: "2026-05-21", open: 8808, high: 8815, low: 8490, close: 8513, volume: 258900000 },
-  { day: "2026-05-22", open: 8510, high: 8720, low: 8500, close: 8694, volume: 245100000 },
-  { day: "2026-05-23", open: 8695, high: 8825, low: 8680, close: 8800, volume: 189200000 },
-  { day: "2026-05-26", open: 8800, high: 8820, low: 8665, close: 8689, volume: 177800000 },
-  { day: "2026-05-27", open: 8690, high: 8695, low: 8520, close: 8547, volume: 213400000 },
-  { day: "2026-05-28", open: 8550, high: 8610, low: 8540, close: 8586, volume: 181200000 },
-  { day: "2026-05-29", open: 8585, high: 8650, low: 8570, close: 8628, volume: 169500000 },
-  { day: "2026-05-30", open: 8630, high: 8645, low: 8575, close: 8602, volume: 165800000 },
-  { day: "2026-06-01", open: 8600, high: 8680, low: 8590, close: 8655, volume: 178900000 },
-  { day: "2026-06-02", open: 8655, high: 8710, low: 8640, close: 8688, volume: 182300000 },
-  { day: "2026-06-03", open: 8690, high: 8730, low: 8660, close: 8705, volume: 175100000 },
-  { day: "2026-06-04", open: 8705, high: 8720, low: 8640, close: 8662, volume: 170400000 },
-  { day: "2026-06-05", open: 8660, high: 8745, low: 8650, close: 8728, volume: 183600000 },
-  { day: "2026-06-06", open: 8730, high: 8780, low: 8710, close: 8755, volume: 190200000 },
-  { day: "2026-06-09", open: 8755, high: 8775, low: 8700, close: 8732, volume: 167400000 },
-  { day: "2026-06-10", open: 8730, high: 8745, low: 8680, close: 8708, volume: 162800000 },
-  { day: "2026-06-11", open: 8710, high: 8780, low: 8695, close: 8755, volume: 179500000 },
-  { day: "2026-06-12", open: 8755, high: 8825, low: 8740, close: 8805, volume: 201300000 },
-  { day: "2026-06-13", open: 8805, high: 8820, low: 8760, close: 8782, volume: 185600000 },
-  { day: "2026-06-16", open: 8780, high: 8845, low: 8770, close: 8828, volume: 194500000 },
-  { day: "2026-06-17", open: 8830, high: 8875, low: 8810, close: 8855, volume: 208100000 },
-  { day: "2026-06-18", open: 8855, high: 8870, low: 8815, close: 8837, volume: 186700000 },
+  { day: "2026-05-12", open: 8880.415, high: 8881.902, low: 8749.722, close: 8821.887, volume: 32084927800 },
+  { day: "2026-05-13", open: 8764.023, high: 8958.456, low: 8764.023, close: 8955.447, volume: 31915270600 },
+  { day: "2026-05-14", open: 8989.487, high: 8991.85, low: 8778.709, close: 8778.709, volume: 35634417700 },
+  { day: "2026-05-15", open: 8786.382, high: 8846.515, low: 8616.06, close: 8682.654, volume: 35570731700 },
+  { day: "2026-05-18", open: 8645.763, high: 8766.306, low: 8610.742, close: 8720.213, volume: 30042067200 },
+  { day: "2026-05-19", open: 8691.384, high: 8812.031, low: 8602.046, close: 8808.645, volume: 29921984500 },
+  { day: "2026-05-20", open: 8769.097, high: 8823.684, low: 8697.4, close: 8808.91, volume: 30671918800 },
+  { day: "2026-05-21", open: 8852.434, high: 8896.6, low: 8500.92, close: 8510.496, volume: 35003795100 },
+  { day: "2026-05-22", open: 8578.9, high: 8719.387, low: 8521.695, close: 8692.666, volume: 28681240700 },
+  { day: "2026-05-25", open: 8756.458, high: 8802.946, low: 8670.716, close: 8799.312, volume: 30289600600 },
+  { day: "2026-05-26", open: 8755.908, high: 8756.463, low: 8560.804, close: 8687.253, volume: 31437355100 },
+  { day: "2026-05-27", open: 8679.536, high: 8737.055, low: 8495.723, close: 8546.514, volume: 31311235400 },
+  { day: "2026-05-28", open: 8527.909, high: 8659.61, low: 8459.949, close: 8637.743, volume: 30074765000 },
+  { day: "2026-05-29", open: 8673.798, high: 8680.266, low: 8357.801, close: 8408.736, volume: 33278021700 },
+  { day: "2026-06-01", open: 8393.518, high: 8504.983, low: 8339.353, close: 8345.129, volume: 30570642300 },
+  { day: "2026-06-02", open: 8360.807, high: 8440.232, low: 8219.153, close: 8384.781, volume: 29277785300 },
+  { day: "2026-06-03", open: 8386.858, high: 8549.249, low: 8357.464, close: 8432.679, volume: 31829116600 },
+  { day: "2026-06-04", open: 8338.854, high: 8456.017, low: 8338.854, close: 8420.095, volume: 28617360900 },
+  { day: "2026-06-05", open: 8380.852, high: 8500.1, low: 8305.396, close: 8340.963, volume: 31495357600 },
+  { day: "2026-06-08", open: 8069.482, high: 8260.192, low: 7987.396, close: 8081.261, volume: 30353698500 },
+  { day: "2026-06-09", open: 8178.823, high: 8322.109, low: 8096.577, close: 8318.698, volume: 29309759700 },
+  { day: "2026-06-10", open: 8232.024, high: 8285.286, low: 8103.01, close: 8198.723, volume: 28684456600 },
+  { day: "2026-06-11", open: 8158.46, high: 8223.527, low: 8084.9, close: 8159.455, volume: 27116395300 },
+  { day: "2026-06-12", open: 8294.897, high: 8348.786, low: 8181.417, close: 8202.799, volume: 32859908500 },
+  { day: "2026-06-15", open: 8269.397, high: 8521.233, low: 8269.397, close: 8521.233, volume: 29601206700 },
+  { day: "2026-06-16", open: 8534.27, high: 8684.65, low: 8508.908, close: 8646.403, volume: 29802260700 },
+  { day: "2026-06-17", open: 8581.65, high: 8705.403, low: 8581.65, close: 8704.468, volume: 28222793700 },
+  { day: "2026-06-18", open: 8666.638, high: 8796.485, low: 8664.278, close: 8771.024, volume: 29006243500 },
 ];
 
 let csi1000LiveDaily = null;
@@ -1006,6 +998,7 @@ function renderCsi1000TradeChart(options = {}) {
     svgId = "journal-index-chart",
     titleId = "csi1000-chart-title",
     descId = "csi1000-chart-desc",
+    box = { width: 840, height: 380, left: 64, right: 52, top: 28, bottom: 54 },
   } = options;
   const chartWrap = document.getElementById(targetId);
   const figcaption = document.getElementById(captionId);
@@ -1013,11 +1006,9 @@ function renderCsi1000TradeChart(options = {}) {
   const labelEl = updateJournalUi ? document.getElementById("journal-chart-label") : null;
   const resetBtn = updateJournalUi ? document.getElementById("journal-chart-reset") : null;
 
-  if (!chartWrap) return;
+  if (!chartWrap) return [];
 
   const candles = csi1000GetCandles();
-
-  const box = { width: 840, height: 380, left: 64, right: 52, top: 28, bottom: 54 };
 
   const svgString = csi1000BuildSvg(candles, box, { svgId, titleId, descId });
   chartWrap.innerHTML = svgString;
@@ -1044,6 +1035,8 @@ function renderCsi1000TradeChart(options = {}) {
   if (updateJournalUi) {
     csi1000ChartMode = "trade";
   }
+
+  return candles;
 }
 
 function resetCsi1000JournalChart() {
@@ -1081,7 +1074,7 @@ async function refreshCsi1000Data() {
   const { protocol, hostname } = window.location;
   if (protocol === "file:" || hostname === "chensher.github.io") {
     console.log("CSI 1000: using snapshot data (static host)");
-    return;
+    return { ok: false, provider: "静态快照", reason: "static-host" };
   }
 
   try {
@@ -1093,10 +1086,90 @@ async function refreshCsi1000Data() {
     if (data.daily && data.daily.length) {
       csi1000LiveDaily = data.daily;
       console.log(`CSI 1000: loaded ${data.daily.length} daily bars from ${data.provider}`);
+      return {
+        ok: true,
+        provider: data.provider || "新浪财经",
+        refreshedAt: data.refreshedAt,
+        quote: data.quote || null,
+      };
     }
+    return { ok: false, provider: "静态快照", reason: "empty-response" };
   } catch (err) {
     console.warn("CSI 1000 live data unavailable, using snapshot", err.message || err);
+    return { ok: false, provider: "静态快照", reason: err.message || "request-failed" };
   }
+}
+
+function csi1000TradeTypeText(type) {
+  return type === "buy" ? "买入" : "卖出";
+}
+
+function csi1000RenderEventList(candles) {
+  const list = document.getElementById("csi1000-event-list");
+  if (!list) return;
+
+  list.innerHTML = "";
+  csi1000TradeEvents.forEach((evt) => {
+    const idx = csi1000NearestIndex(candles, evt.date);
+    const candle = candles[idx];
+    const item = document.createElement("li");
+    item.className = `csi1000-event-row is-${evt.type}`;
+
+    const body = document.createElement("span");
+    const title = document.createElement("strong");
+    title.textContent = `${csi1000TradeTypeText(evt.type)} ${evt.stock} ${evt.code}`;
+    const detail = document.createElement("small");
+    detail.textContent = `${evt.date} / 成交 ¥${evt.price.toFixed(2)} / 对应指数收盘 ${csi1000FormatPrice(candle.close)}`;
+    body.append(title, detail);
+
+    const tag = document.createElement("em");
+    tag.textContent = evt.type === "buy" ? "B" : "S";
+
+    item.append(body, tag);
+    list.append(item);
+  });
+}
+
+function setupCsi1000TradePage() {
+  const chartWrap = document.getElementById("csi1000-trade-page-chart");
+  if (!chartWrap) return;
+
+  const status = document.getElementById("csi1000-trade-page-status");
+  const latest = document.getElementById("csi1000-latest-close");
+  const source = document.getElementById("csi1000-data-source");
+
+  async function renderPage() {
+    if (status) status.textContent = "正在拉取中证 1000 日线数据...";
+
+    const refreshResult = await refreshCsi1000Data();
+    const candles = renderCsi1000TradeChart({
+      targetId: "csi1000-trade-page-chart",
+      captionId: "csi1000-trade-page-caption",
+      updateJournalUi: false,
+      svgId: "csi1000-trade-page-index-chart",
+      titleId: "csi1000-trade-page-chart-title",
+      descId: "csi1000-trade-page-chart-desc",
+      box: { width: 1120, height: 520, left: 72, right: 68, top: 34, bottom: 68 },
+    });
+
+    csi1000RenderEventList(candles);
+
+    const last = candles[candles.length - 1];
+    if (latest && last) {
+      latest.textContent = `${last.day} / ${csi1000FormatPrice(last.close)}`;
+    }
+    if (source) {
+      source.textContent = refreshResult?.ok ? `${refreshResult.provider} / Cloudflare Function` : "静态快照 / GitHub Pages fallback";
+    }
+    if (status && last) {
+      const range = `${candles[0].day} 至 ${last.day}`;
+      status.textContent = refreshResult?.ok
+        ? `已使用 ${refreshResult.provider} 日 K 数据，区间 ${range}。`
+        : `当前使用静态快照，区间 ${range}。${refreshResult?.reason ? `原因：${refreshResult.reason}` : ""}`;
+    }
+  }
+
+  renderPage();
 }
 
 function setupCsi1000TradeOverlay() {
@@ -1105,7 +1178,11 @@ function setupCsi1000TradeOverlay() {
   const closeBtn = document.getElementById("csi1000-trade-close");
   const resetBtn = document.getElementById("journal-chart-reset");
 
-  if (!button) return;
+  if (!button || !panel) {
+    setupCsi1000TradePage();
+    return;
+  }
+
   const originalHTML = button.innerHTML;
 
   function hidePanel() {
