@@ -88,6 +88,10 @@
                   <em>已结束</em>
                 </a>
               </div>
+              <button class="csi1000-trade-button" id="csi1000-trade-button" type="button" aria-label="在中证1000日线上查看买卖标记">
+                <span class="csi1000-trade-button-icon" aria-hidden="true">◆</span>
+                在中证 1000 日线上标记买卖点
+              </button>
             </article>
 
             <article class="feature-panel practice-module structure-module">
@@ -198,62 +202,69 @@
             </header>
 
             <div class="journal-grid">
-              <figure class="journal-chart">
+              <figure class="journal-chart" id="journal-chart-figure">
                 <div class="journal-chart-top">
                   <div>
-                    <p class="item-label">Market Context</p>
+                    <p class="item-label" id="journal-chart-label">Market Context</p>
                     <h4>中证 1000 <code>000852</code></h4>
                   </div>
-                  <span class="journal-range">05.12 - 05.27</span>
+                  <div class="journal-chart-actions">
+                    <span class="journal-range" id="journal-range-text">05.12 - 05.27</span>
+                    <button class="journal-chart-reset-button" id="journal-chart-reset" type="button" style="display:none" aria-label="恢复原始日志图表">← 返回日志图</button>
+                  </div>
                 </div>
-                <svg
-                  class="index-chart"
-                  viewBox="0 0 724 286"
-                  role="img"
-                  aria-labelledby="index-chart-title index-chart-desc"
-                >
-                  <title id="index-chart-title">中证 1000 近期收盘日线与 2026 年 5 月 27 日交易日志点位</title>
-                  <desc id="index-chart-desc">
-                    2026 年 5 月 12 日至 27 日的中证 1000 收盘路径，5 月 27 日收于 8546.51 点并标有一条交易日志。
-                  </desc>
-                  <g class="index-grid" aria-hidden="true">
-                    <line x1="44" y1="32" x2="684" y2="32"></line>
-                    <line x1="44" y1="128.4" x2="684" y2="128.4"></line>
-                    <line x1="44" y1="224.7" x2="684" y2="224.7"></line>
-                    <text x="0" y="36">9,000</text>
-                    <text x="0" y="132.4">8,750</text>
-                    <text x="0" y="228.7">8,500</text>
-                  </g>
-                  <polyline
-                    class="index-path"
-                    points="44,100.7 102.2,49.2 160.4,117.3 218.5,154.3 276.7,139.8 334.9,105.8 393.1,105.7 451.3,220.7 509.5,150.5 567.6,109.4 625.8,152.5 684,206.8"
-                  ></polyline>
-                  <g class="index-points" aria-hidden="true">
-                    <circle cx="44" cy="100.7" r="3"></circle>
-                    <circle cx="102.2" cy="49.2" r="3"></circle>
-                    <circle cx="160.4" cy="117.3" r="3"></circle>
-                    <circle cx="218.5" cy="154.3" r="3"></circle>
-                    <circle cx="276.7" cy="139.8" r="3"></circle>
-                    <circle cx="334.9" cy="105.8" r="3"></circle>
-                    <circle cx="393.1" cy="105.7" r="3"></circle>
-                    <circle cx="451.3" cy="220.7" r="3"></circle>
-                    <circle cx="509.5" cy="150.5" r="3"></circle>
-                    <circle cx="567.6" cy="109.4" r="3"></circle>
-                    <circle cx="625.8" cy="152.5" r="3"></circle>
-                  </g>
-                  <g class="entry-marker" aria-hidden="true">
-                    <line x1="684" y1="38" x2="684" y2="244"></line>
-                    <circle cx="684" cy="206.8" r="13"></circle>
-                    <circle class="entry-dot" cx="684" cy="206.8" r="5"></circle>
-                    <text x="670" y="194" text-anchor="end">日志 05.27</text>
-                  </g>
-                  <g class="index-dates" aria-hidden="true">
-                    <text x="44" y="268">05.12</text>
-                    <text x="334.9" y="268" text-anchor="middle">05.19</text>
-                    <text x="684" y="268" text-anchor="end">05.27</text>
-                  </g>
-                </svg>
-                <figcaption>
+                <div class="trade-chart-wrap" id="journal-chart-wrap">
+                  <svg
+                    id="journal-index-chart"
+                    class="index-chart"
+                    viewBox="0 0 724 286"
+                    role="img"
+                    aria-labelledby="index-chart-title index-chart-desc"
+                  >
+                    <title id="index-chart-title">中证 1000 近期收盘日线与 2026 年 5 月 27 日交易日志点位</title>
+                    <desc id="index-chart-desc">
+                      2026 年 5 月 12 日至 27 日的中证 1000 收盘路径，5 月 27 日收于 8546.51 点并标有一条交易日志。
+                    </desc>
+                    <g class="index-grid" aria-hidden="true">
+                      <line x1="44" y1="32" x2="684" y2="32"></line>
+                      <line x1="44" y1="128.4" x2="684" y2="128.4"></line>
+                      <line x1="44" y1="224.7" x2="684" y2="224.7"></line>
+                      <text x="0" y="36">9,000</text>
+                      <text x="0" y="132.4">8,750</text>
+                      <text x="0" y="228.7">8,500</text>
+                    </g>
+                    <polyline
+                      class="index-path"
+                      points="44,100.7 102.2,49.2 160.4,117.3 218.5,154.3 276.7,139.8 334.9,105.8 393.1,105.7 451.3,220.7 509.5,150.5 567.6,109.4 625.8,152.5 684,206.8"
+                    ></polyline>
+                    <g class="index-points" aria-hidden="true">
+                      <circle cx="44" cy="100.7" r="3"></circle>
+                      <circle cx="102.2" cy="49.2" r="3"></circle>
+                      <circle cx="160.4" cy="117.3" r="3"></circle>
+                      <circle cx="218.5" cy="154.3" r="3"></circle>
+                      <circle cx="276.7" cy="139.8" r="3"></circle>
+                      <circle cx="334.9" cy="105.8" r="3"></circle>
+                      <circle cx="393.1" cy="105.7" r="3"></circle>
+                      <circle cx="451.3" cy="220.7" r="3"></circle>
+                      <circle cx="509.5" cy="150.5" r="3"></circle>
+                      <circle cx="567.6" cy="109.4" r="3"></circle>
+                      <circle cx="625.8" cy="152.5" r="3"></circle>
+                    </g>
+                    <g class="entry-marker" aria-hidden="true">
+                      <line x1="684" y1="38" x2="684" y2="244"></line>
+                      <circle cx="684" cy="206.8" r="13"></circle>
+                      <circle class="entry-dot" cx="684" cy="206.8" r="5"></circle>
+                      <text x="670" y="194" text-anchor="end">日志 05.27</text>
+                    </g>
+                    <g class="index-dates" aria-hidden="true">
+                      <text x="44" y="268">05.12</text>
+                      <text x="334.9" y="268" text-anchor="middle">05.19</text>
+                      <text x="684" y="268" text-anchor="end">05.27</text>
+                    </g>
+                  </svg>
+                  <div class="chart-tooltip" id="journal-chart-tooltip" style="display:none" aria-live="polite"></div>
+                </div>
+                <figcaption id="journal-chart-caption">
                   日线收盘点位：2026.05.27 为 <strong>8,546.51</strong>。日志标记固定在对应交易日上。
                 </figcaption>
               </figure>
