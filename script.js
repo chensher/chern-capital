@@ -920,7 +920,10 @@ function csi1000NearestIndex(candles, date) {
   return best;
 }
 
-function csi1000BuildSvg(candles, box) {
+function csi1000BuildSvg(candles, box, ids = {}) {
+  const svgId = ids.svgId || "journal-index-chart";
+  const titleId = ids.titleId || "csi1000-chart-title";
+  const descId = ids.descId || "csi1000-chart-desc";
   const plotWidth = box.width - box.left - box.right;
   const plotHeight = box.height - box.top - box.bottom;
 
@@ -992,15 +995,23 @@ function csi1000BuildSvg(candles, box) {
   const lastY = yForPrice(lastCandle.close).toFixed(1);
   const lastPriceLine = `<g class="csi1000-last-price"><line x1="${box.left}" y1="${lastY}" x2="${box.width - box.right}" y2="${lastY}"></line><text x="${box.width - 28}" y="${Number(lastY) - 6}">${csi1000FormatPrice(lastCandle.close)}</text></g>`;
 
-  return `<svg xmlns="${csi1000ChartSvgNs}" id="journal-index-chart" class="index-chart csi1000-candle-chart" viewBox="0 0 ${box.width} ${box.height}" role="img" aria-labelledby="csi1000-chart-title csi1000-chart-desc"><title id="csi1000-chart-title">中证 1000 日线蜡烛图与实盘买卖标记</title><desc id="csi1000-chart-desc">中证 1000 日线 K 线图，标记实盘中各股票的买入和卖出时间点。</desc><rect class="csi1000-chart-bg" x="${box.left}" y="${box.top}" width="${plotWidth}" height="${plotHeight}" rx="4"></rect><g class="csi1000-grid" aria-hidden="true">${yTickLines}${xTickLines}</g><g class="csi1000-candles" aria-hidden="true">${candleNodes}</g>${lastPriceLine}<g class="csi1000-trade-markers">${tradeMarkers}</g></svg>`;
+  return `<svg xmlns="${csi1000ChartSvgNs}" id="${svgId}" class="index-chart csi1000-candle-chart" viewBox="0 0 ${box.width} ${box.height}" role="img" aria-labelledby="${titleId} ${descId}"><title id="${titleId}">中证 1000 日线蜡烛图与实盘买卖标记</title><desc id="${descId}">中证 1000 日线 K 线图，标记实盘中各股票的买入和卖出时间点。</desc><rect class="csi1000-chart-bg" x="${box.left}" y="${box.top}" width="${plotWidth}" height="${plotHeight}" rx="4"></rect><g class="csi1000-grid" aria-hidden="true">${yTickLines}${xTickLines}</g><g class="csi1000-candles" aria-hidden="true">${candleNodes}</g>${lastPriceLine}<g class="csi1000-trade-markers">${tradeMarkers}</g></svg>`;
 }
 
-function renderCsi1000TradeChart() {
-  const chartWrap = document.getElementById("journal-chart-wrap");
-  const figcaption = document.getElementById("journal-chart-caption");
-  const rangeText = document.getElementById("journal-range-text");
-  const labelEl = document.getElementById("journal-chart-label");
-  const resetBtn = document.getElementById("journal-chart-reset");
+function renderCsi1000TradeChart(options = {}) {
+  const {
+    targetId = "journal-chart-wrap",
+    captionId = "journal-chart-caption",
+    updateJournalUi = true,
+    svgId = "journal-index-chart",
+    titleId = "csi1000-chart-title",
+    descId = "csi1000-chart-desc",
+  } = options;
+  const chartWrap = document.getElementById(targetId);
+  const figcaption = document.getElementById(captionId);
+  const rangeText = updateJournalUi ? document.getElementById("journal-range-text") : null;
+  const labelEl = updateJournalUi ? document.getElementById("journal-chart-label") : null;
+  const resetBtn = updateJournalUi ? document.getElementById("journal-chart-reset") : null;
 
   if (!chartWrap) return;
 
@@ -1008,7 +1019,7 @@ function renderCsi1000TradeChart() {
 
   const box = { width: 840, height: 380, left: 64, right: 52, top: 28, bottom: 54 };
 
-  const svgString = csi1000BuildSvg(candles, box);
+  const svgString = csi1000BuildSvg(candles, box, { svgId, titleId, descId });
   chartWrap.innerHTML = svgString;
 
   if (figcaption) {
@@ -1030,7 +1041,9 @@ function renderCsi1000TradeChart() {
     resetBtn.style.display = "";
   }
 
-  csi1000ChartMode = "trade";
+  if (updateJournalUi) {
+    csi1000ChartMode = "trade";
+  }
 }
 
 function resetCsi1000JournalChart() {
@@ -1088,31 +1101,70 @@ async function refreshCsi1000Data() {
 
 function setupCsi1000TradeOverlay() {
   const button = document.getElementById("csi1000-trade-button");
+  const panel = document.getElementById("csi1000-trade-panel");
+  const closeBtn = document.getElementById("csi1000-trade-close");
   const resetBtn = document.getElementById("journal-chart-reset");
-  const journalSection = document.getElementById("journal");
 
   if (!button) return;
+  const originalHTML = button.innerHTML;
+
+  function hidePanel() {
+    if (!panel) return;
+    panel.hidden = true;
+    button.setAttribute("aria-expanded", "false");
+    button.innerHTML = originalHTML;
+  }
 
   button.addEventListener("click", async () => {
+    if (panel && !panel.hidden) {
+      hidePanel();
+      return;
+    }
+
     button.disabled = true;
-    const originalHTML = button.innerHTML;
     button.innerHTML = '<span><strong>中证 1000 <code>000852</code></strong><small>正在加载日线数据...</small></span><em>⏳</em>';
 
     try {
-      await refreshCsi1000Data();
-    } catch (_) {
-      /* fallback to snapshot */
-    }
+      try {
+        await refreshCsi1000Data();
+      } catch (_) {
+        /* fallback to snapshot */
+      }
 
-    renderCsi1000TradeChart();
+      renderCsi1000TradeChart({
+        targetId: "csi1000-trade-chart",
+        captionId: "csi1000-trade-caption",
+        updateJournalUi: false,
+        svgId: "csi1000-trade-index-chart",
+        titleId: "csi1000-trade-chart-title",
+        descId: "csi1000-trade-chart-desc",
+      });
 
-    button.innerHTML = originalHTML;
-    button.disabled = false;
+      if (panel) {
+        panel.hidden = false;
+        if (typeof panel.scrollIntoView === "function") {
+          panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
+      }
 
-    if (journalSection) {
-      journalSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      button.innerHTML = '<span><strong>中证 1000 <code>000852</code></strong><small>已展开买入 / 卖出时间点标记</small></span><em>收起</em>';
+      button.setAttribute("aria-expanded", "true");
+    } catch (err) {
+      console.warn("CSI 1000 trade overlay failed to render", err);
+      if (panel) {
+        panel.hidden = false;
+        const cap = document.getElementById("csi1000-trade-caption");
+        if (cap) cap.textContent = "标记图暂时加载失败，请刷新页面后再试。";
+      }
+      button.innerHTML = originalHTML;
+    } finally {
+      button.disabled = false;
     }
   });
+
+  button.setAttribute("aria-controls", "csi1000-trade-panel");
+  button.setAttribute("aria-expanded", "false");
+  closeBtn?.addEventListener("click", hidePanel);
 
   if (resetBtn) {
     resetBtn.addEventListener("click", () => {
