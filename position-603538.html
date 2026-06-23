@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="chern_capital 实盘：美诺华 603538 持仓跟踪。"
+    />
+    <title>实盘持仓｜美诺华｜chern_capital</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="position-page">
+    <canvas id="signal-canvas" aria-hidden="true"></canvas>
+
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="返回 chern_capital 首页">chern_capital</a>
+      <nav class="nav-links" aria-label="实盘导航">
+        <a href="index.html">首页</a>
+        <a href="#chart">日线</a>
+        <a href="#trade-note">记录</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="position-hero" aria-labelledby="position-title">
+        <div>
+          <p class="eyebrow">Open Position / 603538</p>
+          <h1 id="position-title">美诺华</h1>
+          <p class="lede">
+            2026-06-24 以 <code>38.73</code> 元买入 <code>200</code> 股，作为第三笔实盘持仓跟踪。
+          </p>
+        </div>
+        <div class="refresh-panel">
+          <button class="refresh-button" id="refresh-position" type="button">更新新浪行情</button>
+          <p class="quote-status" id="quote-status" aria-live="polite">
+            正在进入页面，准备自动获取新浪行情。
+          </p>
+        </div>
+      </section>
+
+      <section class="position-dashboard" aria-label="持仓概览">
+        <div class="position-stat">
+          <p class="item-label">投入金额</p>
+          <strong id="cost-value">¥7,751.00</strong>
+          <small>买入金额 ¥7,746.00 + 手续费 ¥5.00</small>
+        </div>
+        <div class="position-stat">
+          <p class="item-label">最新价格</p>
+          <strong id="last-price">¥38.73</strong>
+          <small id="price-time">2026-06-24 / 成交价快照</small>
+        </div>
+        <div class="position-stat">
+          <p class="item-label">持仓市值</p>
+          <strong id="market-value">¥7,746.00</strong>
+          <small>按最新价 × 200 股估算</small>
+        </div>
+        <div class="position-stat pnl-negative" id="pnl-card">
+          <p class="item-label">浮动盈亏</p>
+          <strong id="pnl-value">-¥5.00</strong>
+          <small id="pnl-rate">-0.06%</small>
+        </div>
+        <div class="position-stat">
+          <p class="item-label">持仓天数</p>
+          <strong id="holding-days">1 天</strong>
+          <small id="trading-days">按自然日 / 含买入日</small>
+        </div>
+      </section>
+
+      <section class="position-content" id="chart">
+        <div class="position-chart-panel">
+          <div class="chart-header">
+            <div>
+              <p class="item-label">日线图 / Sina Finance</p>
+              <h2>价格、成交量与建仓位置</h2>
+            </div>
+            <div class="chart-legend" aria-label="图例">
+              <span class="legend-rise">上涨</span>
+              <span class="legend-fall">下跌</span>
+              <span class="legend-buy">建仓 ¥38.73</span>
+            </div>
+          </div>
+          <div class="trade-chart-wrap">
+            <canvas id="position-chart" aria-label="美诺华日线图"></canvas>
+            <div class="chart-tooltip" id="chart-tooltip" hidden></div>
+          </div>
+        </div>
+
+        <aside class="trade-note" id="trade-note">
+          <p class="item-label">成交记录</p>
+          <h2>当前持仓</h2>
+          <dl>
+            <dt>证券</dt>
+            <dd>美诺华 <code>603538</code></dd>
+            <dt>状态</dt>
+            <dd>持仓中</dd>
+            <dt>买入日期</dt>
+            <dd>2026-06-24</dd>
+            <dt>买入价格</dt>
+            <dd>¥38.73 / 股</dd>
+            <dt>买入数量</dt>
+            <dd>200 股</dd>
+            <dt>买入成交</dt>
+            <dd>¥7,746.00</dd>
+            <dt>买入手续费</dt>
+            <dd>¥5.00</dd>
+            <dt>投入金额</dt>
+            <dd>¥7,751.00</dd>
+            <dt>行情来源</dt>
+            <dd>新浪财经</dd>
+          </dl>
+          <p class="trade-explain">
+            持仓盈亏以投入金额 ¥7,751.00 为成本口径计算。若新浪最新行情日期早于买入日，
+            页面会暂时保留成交价快照，等日线更新后再自动切换到行情价。
+          </p>
+        </aside>
+      </section>
+
+      <p class="position-disclaimer">此页是个人持仓过程记录，不构成投资建议。</p>
+    </main>
+
+    <footer class="site-footer">
+      <span>chern_capital</span>
+      <span>open position / 603538</span>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="position-603538.js"></script>
+  </body>
+</html>

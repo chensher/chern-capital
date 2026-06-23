@@ -1,16 +1,13 @@
 const POSITION = {
-  name: "长龄液压",
-  code: "605389",
-  symbol: "sh605389",
-  status: "closed",
-  buyDate: "2026-06-01",
-  buyPrice: 85,
+  name: "美诺华",
+  code: "603538",
+  symbol: "sh603538",
+  status: "open",
+  buyDate: "2026-06-24",
+  buyPrice: 38.73,
   buyFee: 5,
-  sellDate: "2026-06-24",
-  sellPrice: 92.34,
-  sellFee: 5,
-  shares: 100,
-  invested: 8505,
+  shares: 200,
+  invested: 7751,
 };
 
 const JSON_HEADERS = {
@@ -42,7 +39,7 @@ function parseQuote(text) {
   if (!match) throw new Error("Unable to parse Sina quote");
   const fields = match[1].split(",");
   const price = numeric(fields[3]);
-  if (!price) throw new Error("Sina quote has no current price");
+  if (price === null) throw new Error("Sina quote has no current price");
   return {
     name: POSITION.name,
     price,
@@ -59,14 +56,22 @@ function parseQuote(text) {
 
 function parseDaily(text) {
   const rows = JSON.parse(text);
-  return rows.map((row) => ({
-    day: row.day,
-    open: numeric(row.open),
-    high: numeric(row.high),
-    low: numeric(row.low),
-    close: numeric(row.close),
-    volume: numeric(row.volume),
-  }));
+  return rows
+    .map((row) => ({
+      day: row.day,
+      open: numeric(row.open),
+      high: numeric(row.high),
+      low: numeric(row.low),
+      close: numeric(row.close),
+      volume: numeric(row.volume),
+    }))
+    .filter((row) => (
+      row.day &&
+      row.open !== null &&
+      row.high !== null &&
+      row.low !== null &&
+      row.close !== null
+    ));
 }
 
 export async function onRequestGet() {

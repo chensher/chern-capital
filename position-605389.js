@@ -2,11 +2,15 @@ const trade = {
   name: "长龄液压",
   code: "605389",
   symbol: "sh605389",
-  status: "open",
+  status: "closed",
   buyDate: "2026-06-01",
   buyPrice: 85,
+  buyFee: 5,
+  sellDate: "2026-06-24",
+  sellPrice: 92.34,
+  sellFee: 5,
   shares: 100,
-  invested: 8500,
+  invested: 8505,
 };
 
 const snapshotDaily = [
@@ -70,17 +74,28 @@ const snapshotDaily = [
   { day: "2026-05-27", open: 90, high: 91, low: 86.28, close: 86.68, volume: 2252358 },
   { day: "2026-05-28", open: 86, high: 87, low: 84.2, close: 85.87, volume: 1856714 },
   { day: "2026-05-29", open: 86.13, high: 88.8, low: 83.33, close: 85.14, volume: 2503012 },
+  { day: "2026-06-01", open: 86.34, high: 87.08, low: 82.28, close: 82.92, volume: 2503990 },
+  { day: "2026-06-02", open: 82.18, high: 85, low: 80, close: 81.62, volume: 1910424 },
+  { day: "2026-06-03", open: 81.62, high: 86.98, low: 80, close: 83.51, volume: 2216737 },
+  { day: "2026-06-04", open: 82.7, high: 84, low: 82.05, close: 82.9, volume: 1290976 },
+  { day: "2026-06-05", open: 82.75, high: 85.3, low: 81.2, close: 84.96, volume: 1657637 },
+  { day: "2026-06-08", open: 82.19, high: 85.68, low: 82.19, close: 83.3, volume: 2493332 },
+  { day: "2026-06-09", open: 84.53, high: 84.63, low: 81.51, close: 83.58, volume: 1402764 },
+  { day: "2026-06-10", open: 83.05, high: 85.19, low: 81.2, close: 84.4, volume: 1570630 },
+  { day: "2026-06-11", open: 84.38, high: 84.84, low: 81.6, close: 82.25, volume: 1260170 },
+  { day: "2026-06-12", open: 83.73, high: 85.99, low: 81.8, close: 82.08, volume: 1709500 },
+  { day: "2026-06-15", open: 82.19, high: 88.8, low: 81.97, close: 87.04, volume: 2319430 },
+  { day: "2026-06-16", open: 87.33, high: 89.7, low: 85.66, close: 88.6, volume: 2470753 },
+  { day: "2026-06-17", open: 87.47, high: 89.9, low: 86.2, close: 87.99, volume: 1990836 },
+  { day: "2026-06-18", open: 88.19, high: 91.5, low: 87.01, close: 91.42, volume: 2605883 },
+  { day: "2026-06-22", open: 92.04, high: 95, low: 88.89, close: 93.61, volume: 4169104 },
+  { day: "2026-06-23", open: 92.68, high: 96.16, low: 89.6, close: 94.52, volume: 2555948 },
 ];
 
 const snapshotQuote = {
-  price: 83.73,
-  open: 86.34,
-  previousClose: 85.14,
-  high: 86.34,
-  low: 83.2,
-  volume: 645120,
-  date: "2026-06-01",
-  time: "09:57:46",
+  price: trade.sellPrice,
+  date: trade.sellDate,
+  time: "已卖出",
 };
 
 const money = new Intl.NumberFormat("zh-CN", {
@@ -103,6 +118,14 @@ let viewState = {
 };
 let chartHitAreas = [];
 
+const tradeResult = {
+  buyGross: trade.buyPrice * trade.shares,
+  sellGross: trade.sellPrice * trade.shares,
+  sellNet: trade.sellPrice * trade.shares - trade.sellFee,
+};
+tradeResult.realizedPnl = tradeResult.sellNet - trade.invested;
+tradeResult.realizedRate = tradeResult.realizedPnl / trade.invested;
+
 function shanghaiToday() {
   return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Shanghai" }).format(new Date());
 }
@@ -115,6 +138,10 @@ function inclusiveDays(start, end) {
 
 function chartCandles(state) {
   const daily = state.daily.map((bar) => ({ ...bar }));
+  if (trade.status === "closed") {
+    return daily.filter((bar) => bar.day <= trade.sellDate).slice(-60);
+  }
+
   const quote = state.quote;
   if (!quote || !quote.date || !quote.price) return daily.slice(-60);
 
@@ -139,22 +166,20 @@ function setText(selector, value) {
 }
 
 function renderMetrics() {
-  const quote = viewState.quote || snapshotQuote;
-  const lastPrice = quote.price || snapshotQuote.price;
-  const marketValue = lastPrice * trade.shares;
-  const pnl = marketValue - trade.invested;
-  const pnlRate = pnl / trade.invested;
+  const pnl = tradeResult.realizedPnl;
+  const pnlRate = tradeResult.realizedRate;
   const positive = pnl >= 0;
-  const dateForDays = quote.date || shanghaiToday();
-  const sessions = chartCandles(viewState).filter((bar) => bar.day >= trade.buyDate).length;
+  const sessions = chartCandles(viewState).filter((bar) => (
+    bar.day >= trade.buyDate && bar.day <= trade.sellDate
+  )).length;
 
-  setText("#last-price", money.format(lastPrice));
-  setText("#price-time", `${quote.date || "静态快照"} ${quote.time || ""} / 新浪行情`);
-  setText("#market-value", money.format(marketValue));
+  setText("#last-price", money.format(trade.sellPrice));
+  setText("#price-time", `${trade.sellDate} / ${trade.shares} 股`);
+  setText("#market-value", money.format(tradeResult.sellNet));
   setText("#pnl-value", `${positive ? "+" : "-"}${money.format(Math.abs(pnl))}`);
   setText("#pnl-rate", `${positive ? "+" : ""}${(pnlRate * 100).toFixed(2)}%`);
-  setText("#holding-days", `${inclusiveDays(trade.buyDate, dateForDays)} 天`);
-  setText("#trading-days", `${sessions} 个已展示交易日 / 建仓至今`);
+  setText("#holding-days", `${inclusiveDays(trade.buyDate, trade.sellDate)} 天`);
+  setText("#trading-days", `${sessions} 个已展示交易日 / 买入至卖出`);
 
   const pnlCard = document.querySelector("#pnl-card");
   pnlCard?.classList.toggle("pnl-positive", positive);
@@ -197,8 +222,8 @@ function renderChart() {
   const priceBottom = cssHeight - bottom - volumeHeight - gap;
   const volumeTop = priceBottom + gap;
   const plotWidth = cssWidth - left - right;
-  const high = Math.max(...bars.map((bar) => bar.high), trade.buyPrice) * 1.035;
-  const low = Math.min(...bars.map((bar) => bar.low), trade.buyPrice) * 0.98;
+  const high = Math.max(...bars.map((bar) => bar.high), trade.buyPrice, trade.sellPrice) * 1.035;
+  const low = Math.min(...bars.map((bar) => bar.low), trade.buyPrice, trade.sellPrice) * 0.98;
   const maxVolume = Math.max(...bars.map((bar) => bar.volume || 1));
   const step = plotWidth / bars.length;
   const bodyWidth = Math.max(3, Math.min(14, step * 0.56));
@@ -235,6 +260,18 @@ function renderChart() {
   ctx.restore();
   ctx.fillStyle = "#d9b65c";
   ctx.fillText(`建仓 ${trade.buyPrice.toFixed(2)}`, left + 4, buyY - 12);
+
+  const sellY = yFor(trade.sellPrice);
+  ctx.save();
+  ctx.setLineDash([6, 4]);
+  ctx.strokeStyle = "#74a7e8";
+  ctx.beginPath();
+  ctx.moveTo(left, sellY);
+  ctx.lineTo(cssWidth - right, sellY);
+  ctx.stroke();
+  ctx.restore();
+  ctx.fillStyle = "#74a7e8";
+  ctx.fillText(`卖出 ${trade.sellPrice.toFixed(2)}`, left + 4, sellY + 14);
 
   const ma5 = bars.map((_, index) => {
     const from = Math.max(0, index - 4);
@@ -279,6 +316,10 @@ function renderChart() {
       ctx.fill();
     }
 
+    if (bar.day === trade.sellDate) {
+      drawSellMarker(ctx, x, sellY);
+    }
+
     if (bar.live) {
       ctx.strokeStyle = "#f7f3e8";
       ctx.strokeRect(x - bodyWidth / 2 - 2, bodyTop - 2, bodyWidth + 4, bodyHeight + 4);
@@ -295,6 +336,11 @@ function renderChart() {
     ctx.fill();
   }
 
+  if (!bars.some((bar) => bar.day === trade.sellDate)) {
+    const fallbackX = Math.min(cssWidth - right - step / 2, xFor(bars.length - 1) + step * 0.85);
+    drawSellMarker(ctx, fallbackX, sellY);
+  }
+
   const labelEvery = Math.max(1, Math.ceil(bars.length / (cssWidth < 560 ? 3 : 7)));
   ctx.fillStyle = "rgba(185,181,170,0.9)";
   bars.forEach((bar, index) => {
@@ -306,6 +352,22 @@ function renderChart() {
   ctx.fillText("MA5", left + 4, top + 10);
   ctx.fillStyle = "rgba(185,181,170,0.9)";
   ctx.fillText("成交量", left + 4, volumeTop + 9);
+}
+
+function drawSellMarker(ctx, x, y) {
+  ctx.save();
+  ctx.fillStyle = "#74a7e8";
+  ctx.strokeStyle = "#0b0d10";
+  ctx.lineWidth = 1.4;
+  ctx.beginPath();
+  ctx.moveTo(x, y - 8);
+  ctx.lineTo(x + 8, y);
+  ctx.lineTo(x, y + 8);
+  ctx.lineTo(x - 8, y);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  ctx.restore();
 }
 
 function showTooltip(event) {
@@ -332,7 +394,7 @@ async function refreshPosition({ automatic = false } = {}) {
   if (!refreshButton || !quoteStatus) return;
   refreshButton.disabled = true;
   refreshButton.textContent = "更新中...";
-  quoteStatus.textContent = "正在向新浪财经请求最新行情...";
+  quoteStatus.textContent = "正在向新浪财经请求日线数据...";
   try {
     const response = await fetch("api/position-605389", { cache: "no-store" });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -345,16 +407,16 @@ async function refreshPosition({ automatic = false } = {}) {
     renderMetrics();
     renderChart();
     quoteStatus.textContent = automatic
-      ? `已自动刷新：新浪财经 ${result.quote.date} ${result.quote.time}，当前价 ${money.format(result.quote.price)}。`
-      : `已手动刷新：新浪财经 ${result.quote.date} ${result.quote.time}，当前价 ${money.format(result.quote.price)}。`;
+      ? `已自动更新日线：新浪财经 ${result.quote.date} ${result.quote.time}；交易结果按卖出记录固定。`
+      : `已更新日线：新浪财经 ${result.quote.date} ${result.quote.time}（手动刷新）；交易结果按卖出记录固定。`;
   } catch (error) {
     const onGitHubPages = location.hostname.endsWith("github.io");
     quoteStatus.textContent = onGitHubPages
-      ? "当前显示静态快照；Cloudflare 站点可通过接口刷新新浪行情。"
-      : "行情更新暂时失败，当前仍显示静态快照，请稍后重试。";
+      ? "交易已结束，当前显示静态复盘；Cloudflare 站点可更新日线数据。"
+      : "日线更新暂时失败，当前仍显示静态复盘，请稍后重试。";
   } finally {
     refreshButton.disabled = false;
-    refreshButton.textContent = "更新新浪行情";
+    refreshButton.textContent = "更新新浪日线";
   }
 }
 
@@ -370,7 +432,7 @@ renderChart();
 
 const staticOnlyHost = location.hostname.endsWith("github.io") || location.protocol === "file:";
 if (staticOnlyHost) {
-  quoteStatus.textContent = "当前显示静态快照；Cloudflare 站点可自动刷新新浪行情。";
+  quoteStatus.textContent = "交易已结束，当前显示静态复盘；Cloudflare 站点可更新日线数据。";
 } else {
   refreshPosition({ automatic: true });
 }

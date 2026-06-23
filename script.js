@@ -846,6 +846,20 @@ const csi1000TradeEvents = [
     date: "2026-06-01",
     price: 85.00,
   },
+  {
+    stock: "长龄液压",
+    code: "605389",
+    type: "sell",
+    date: "2026-06-24",
+    price: 92.34,
+  },
+  {
+    stock: "美诺华",
+    code: "603538",
+    type: "buy",
+    date: "2026-06-24",
+    price: 38.73,
+  },
 ];
 
 const csi1000SnapshotDaily = [
@@ -877,6 +891,8 @@ const csi1000SnapshotDaily = [
   { day: "2026-06-16", open: 8534.27, high: 8684.65, low: 8508.908, close: 8646.403, volume: 29802260700 },
   { day: "2026-06-17", open: 8581.65, high: 8705.403, low: 8581.65, close: 8704.468, volume: 28222793700 },
   { day: "2026-06-18", open: 8666.638, high: 8796.485, low: 8664.278, close: 8771.024, volume: 29006243500 },
+  { day: "2026-06-22", open: 8813.725, high: 8865.815, low: 8609.611, close: 8865.676, volume: 33571821000 },
+  { day: "2026-06-23", open: 8838.763, high: 8862.719, low: 8626.101, close: 8680.039, volume: 30395487800 },
 ];
 
 let csi1000LiveDaily = null;
@@ -969,11 +985,24 @@ function csi1000BuildSvg(candles, box, ids = {}) {
     })
     .join("");
 
-  const tradeMarkers = csi1000TradeEvents
-    .map((evt) => {
-      const idx = csi1000NearestIndex(candles, evt.date);
+  const positionedEvents = csi1000TradeEvents.map((evt) => ({
+    evt,
+    idx: csi1000NearestIndex(candles, evt.date),
+  }));
+  const markerGroups = positionedEvents.reduce((groups, item) => {
+    const key = String(item.idx);
+    groups[key] = (groups[key] || 0) + 1;
+    return groups;
+  }, {});
+  const markerSeen = {};
+  const tradeMarkers = positionedEvents
+    .map(({ evt, idx }) => {
+      const groupKey = String(idx);
+      const groupSize = markerGroups[groupKey] || 1;
+      const groupOrder = markerSeen[groupKey] || 0;
+      markerSeen[groupKey] = groupOrder + 1;
       const candle = candles[idx];
-      const x = xForIndex(idx);
+      const x = xForIndex(idx) + (groupOrder - (groupSize - 1) / 2) * 18;
       const y = yForPrice(candle.close);
       const isBuy = evt.type === "buy";
       const offsetY = isBuy ? -18 : 22;
