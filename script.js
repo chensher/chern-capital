@@ -860,6 +860,27 @@ const csi1000TradeEvents = [
     date: "2026-06-24",
     price: 38.73,
   },
+  {
+    stock: "美诺华",
+    code: "603538",
+    type: "sell",
+    date: "2026-06-25",
+    price: 34.90,
+  },
+  {
+    stock: "健麾信息",
+    code: "605186",
+    type: "buy",
+    date: "2026-06-25",
+    price: 36.14,
+  },
+  {
+    stock: "健麾信息",
+    code: "605186",
+    type: "sell",
+    date: "2026-06-26",
+    price: 33.01,
+  },
 ];
 
 const csi1000SnapshotDaily = [
@@ -893,6 +914,9 @@ const csi1000SnapshotDaily = [
   { day: "2026-06-18", open: 8666.638, high: 8796.485, low: 8664.278, close: 8771.024, volume: 29006243500 },
   { day: "2026-06-22", open: 8813.725, high: 8865.815, low: 8609.611, close: 8865.676, volume: 33571821000 },
   { day: "2026-06-23", open: 8838.763, high: 8862.719, low: 8626.101, close: 8680.039, volume: 30395487800 },
+  { day: "2026-06-24", open: 8650.816, high: 8803.501, low: 8581.751, close: 8793.487, volume: 28686714500 },
+  { day: "2026-06-25", open: 8806.071, high: 8872.123, low: 8743.249, close: 8825.92, volume: 30544263800 },
+  { day: "2026-06-26", open: 8771.598, high: 8797.282, low: 8563.695, close: 8601.408, volume: 32122765600 },
 ];
 
 let csi1000LiveDaily = null;

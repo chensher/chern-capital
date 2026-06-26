@@ -1,16 +1,16 @@
 const POSITION = {
-  name: "美诺华",
-  code: "603538",
-  symbol: "sh603538",
+  name: "健麾信息",
+  code: "605186",
+  symbol: "sh605186",
   status: "closed",
-  buyDate: "2026-06-24",
-  buyPrice: 38.73,
+  buyDate: "2026-06-25",
+  buyPrice: 36.14,
   buyFee: 5,
-  sellDate: "2026-06-25",
-  sellPrice: 34.9,
+  sellDate: "2026-06-26",
+  sellPrice: 33.01,
   sellFee: 5,
   shares: 200,
-  invested: 7751,
+  invested: 7233,
 };
 
 const JSON_HEADERS = {

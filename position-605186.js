@@ -1,67 +1,53 @@
 const trade = {
-  name: "美诺华",
-  code: "603538",
-  symbol: "sh603538",
+  name: "健麾信息",
+  code: "605186",
+  symbol: "sh605186",
   status: "closed",
-  buyDate: "2026-06-24",
-  buyPrice: 38.73,
+  buyDate: "2026-06-25",
+  buyPrice: 36.14,
   buyFee: 5,
-  sellDate: "2026-06-25",
-  sellPrice: 34.9,
+  sellDate: "2026-06-26",
+  sellPrice: 33.01,
   sellFee: 5,
   shares: 200,
-  invested: 7751,
+  invested: 7233,
 };
 
 const snapshotDaily = [
-  { day: "2026-04-16", open: 55.5, high: 57.29, low: 54.21, close: 56, volume: 65720269 },
-  { day: "2026-04-17", open: 56, high: 56.19, low: 52.3, close: 52.5, volume: 58975566 },
-  { day: "2026-04-20", open: 53.34, high: 53.51, low: 50.75, close: 51.41, volume: 48819923 },
-  { day: "2026-04-21", open: 51.28, high: 54.23, low: 50.5, close: 52.53, volume: 55356044 },
-  { day: "2026-04-22", open: 51.5, high: 54, low: 48.69, close: 50.5, volume: 57305288 },
-  { day: "2026-04-23", open: 50.91, high: 55.55, low: 49.88, close: 55.55, volume: 62454259 },
-  { day: "2026-04-24", open: 55, high: 59.4, low: 54.1, close: 57.58, volume: 59375985 },
-  { day: "2026-04-27", open: 56.5, high: 59.38, low: 54.8, close: 56.4, volume: 54128787 },
-  { day: "2026-04-28", open: 56, high: 61.5, low: 55.41, close: 60.12, volume: 57229430 },
-  { day: "2026-04-29", open: 61.26, high: 65.3, low: 59.85, close: 65.3, volume: 62109220 },
-  { day: "2026-04-30", open: 62.99, high: 63.45, low: 59.14, close: 62.46, volume: 59409794 },
-  { day: "2026-05-06", open: 64.65, high: 68.71, low: 62.66, close: 68.5, volume: 56179604 },
-  { day: "2026-05-07", open: 69, high: 70.39, low: 61.65, close: 61.65, volume: 75596111 },
-  { day: "2026-05-08", open: 61, high: 64.35, low: 57, close: 63.7, volume: 62924235 },
-  { day: "2026-05-11", open: 62, high: 63.5, low: 57.33, close: 57.33, volume: 62301055 },
-  { day: "2026-05-12", open: 56.02, high: 56.5, low: 52.11, close: 54.01, volume: 60576017 },
-  { day: "2026-05-13", open: 54.15, high: 57.15, low: 53.57, close: 56, volume: 46801011 },
-  { day: "2026-05-14", open: 55.03, high: 57, low: 52.63, close: 52.63, volume: 43760995 },
-  { day: "2026-05-15", open: 51, high: 53.01, low: 49.52, close: 50.8, volume: 36628892 },
-  { day: "2026-05-18", open: 51.01, high: 52.31, low: 49.8, close: 50.13, volume: 29439941 },
-  { day: "2026-05-19", open: 50.19, high: 52.23, low: 49.31, close: 50.78, volume: 32730200 },
-  { day: "2026-05-20", open: 50.53, high: 53.54, low: 50.03, close: 53.02, volume: 36863953 },
-  { day: "2026-05-21", open: 52.29, high: 54.81, low: 52.2, close: 53.15, volume: 43632964 },
-  { day: "2026-05-22", open: 52.44, high: 53.49, low: 49.5, close: 50.44, volume: 37420546 },
-  { day: "2026-05-25", open: 49.18, high: 49.18, low: 45.4, close: 46, volume: 47197651 },
-  { day: "2026-05-26", open: 45, high: 45.4, low: 42, close: 42.24, volume: 43672555 },
-  { day: "2026-05-27", open: 43.43, high: 46.46, low: 43.43, close: 46.46, volume: 31692884 },
-  { day: "2026-05-28", open: 47, high: 47.6, low: 44.71, close: 45.5, volume: 31923932 },
-  { day: "2026-05-29", open: 45.93, high: 47.8, low: 44.5, close: 45.08, volume: 28553440 },
-  { day: "2026-06-01", open: 43.52, high: 47.47, low: 43.52, close: 46.59, volume: 29437402 },
-  { day: "2026-06-02", open: 46.42, high: 47.9, low: 44.03, close: 44.05, volume: 29250428 },
-  { day: "2026-06-03", open: 42.68, high: 44.66, low: 41.95, close: 43.27, volume: 27636194 },
-  { day: "2026-06-04", open: 43.01, high: 44.2, low: 41.97, close: 42.22, volume: 19748767 },
-  { day: "2026-06-05", open: 44.02, high: 44.6, low: 39.44, close: 39.66, volume: 28200145 },
-  { day: "2026-06-08", open: 39.01, high: 40.79, low: 37.85, close: 38.84, volume: 24316395 },
-  { day: "2026-06-09", open: 39.07, high: 39.7, low: 38.02, close: 39.6, volume: 18909708 },
-  { day: "2026-06-10", open: 38.71, high: 39.58, low: 38.19, close: 38.5, volume: 16349769 },
-  { day: "2026-06-11", open: 38.5, high: 38.8, low: 36.87, close: 36.99, volume: 21510928 },
-  { day: "2026-06-12", open: 37.73, high: 39.06, low: 37.04, close: 38.4, volume: 19433960 },
-  { day: "2026-06-15", open: 38, high: 39.04, low: 37.66, close: 39.02, volume: 16302165 },
-  { day: "2026-06-16", open: 39, high: 39.2, low: 37.39, close: 38.02, volume: 14903363 },
-  { day: "2026-06-17", open: 37.79, high: 38.28, low: 37.43, close: 37.8, volume: 13305053 },
-  { day: "2026-06-18", open: 37.56, high: 38.53, low: 37.01, close: 37.92, volume: 17259526 },
-  { day: "2026-06-22", open: 37.03, high: 37.5, low: 35.92, close: 37.28, volume: 20077733 },
-  { day: "2026-06-23", open: 37.28, high: 39.47, low: 37.28, close: 37.63, volume: 25881279 },
-  { day: "2026-06-24", open: 36.56, high: 37.44, low: 35.5, close: 35.5, volume: 23889762 },
-  { day: "2026-06-25", open: 35.52, high: 35.78, low: 34, close: 34.22, volume: 21520433 },
-  { day: "2026-06-26", open: 34, high: 34.32, low: 32.05, close: 32.08, volume: 17230529 },
+  { day: "2026-05-11", open: 20.5, high: 22.39, low: 20.35, close: 22.39, volume: 5825444 },
+  { day: "2026-05-12", open: 22.72, high: 24.63, low: 22.72, close: 23.21, volume: 21490550 },
+  { day: "2026-05-13", open: 23.07, high: 25.39, low: 23, close: 24.57, volume: 19380214 },
+  { day: "2026-05-14", open: 24.46, high: 25.75, low: 24.33, close: 25.25, volume: 13090492 },
+  { day: "2026-05-15", open: 25.3, high: 26.37, low: 25.11, close: 25.63, volume: 11181200 },
+  { day: "2026-05-18", open: 25.8, high: 26.87, low: 25.7, close: 26.48, volume: 10729106 },
+  { day: "2026-05-19", open: 26.26, high: 27.51, low: 25.46, close: 25.88, volume: 14469010 },
+  { day: "2026-05-20", open: 25.59, high: 25.99, low: 24.73, close: 25.3, volume: 10124500 },
+  { day: "2026-05-21", open: 25.3, high: 25.8, low: 24.53, close: 24.79, volume: 7723418 },
+  { day: "2026-05-22", open: 24.79, high: 25.02, low: 24.14, close: 24.63, volume: 5431700 },
+  { day: "2026-05-25", open: 24.78, high: 24.93, low: 24.19, close: 24.62, volume: 4093100 },
+  { day: "2026-05-26", open: 24.62, high: 26.07, low: 23.37, close: 25.15, volume: 9660999 },
+  { day: "2026-05-27", open: 25.15, high: 27.67, low: 24.44, close: 27.23, volume: 19568699 },
+  { day: "2026-05-28", open: 27.3, high: 27.99, low: 26.12, close: 26.69, volume: 13501500 },
+  { day: "2026-05-29", open: 26.83, high: 26.95, low: 26.14, close: 26.6, volume: 8723500 },
+  { day: "2026-06-01", open: 26.6, high: 27.93, low: 26.51, close: 27.26, volume: 9659200 },
+  { day: "2026-06-02", open: 26.88, high: 27.68, low: 25.9, close: 27.23, volume: 7115600 },
+  { day: "2026-06-03", open: 27.07, high: 28.8, low: 26.8, close: 27.89, volume: 8070100 },
+  { day: "2026-06-04", open: 27.54, high: 28.66, low: 27.28, close: 28.28, volume: 6511800 },
+  { day: "2026-06-05", open: 28.27, high: 28.89, low: 27.45, close: 28.89, volume: 7163583 },
+  { day: "2026-06-08", open: 28.05, high: 29.43, low: 27.71, close: 28.84, volume: 6972000 },
+  { day: "2026-06-09", open: 28.88, high: 31.11, low: 28.28, close: 30.66, volume: 11134048 },
+  { day: "2026-06-10", open: 30, high: 32.7, low: 29.63, close: 31.99, volume: 12751900 },
+  { day: "2026-06-11", open: 31.68, high: 34.41, low: 31.5, close: 34.33, volume: 14556097 },
+  { day: "2026-06-12", open: 33.8, high: 36.5, low: 32.6, close: 34.27, volume: 18675700 },
+  { day: "2026-06-15", open: 33.51, high: 36.2, low: 30.84, close: 31.8, volume: 20073800 },
+  { day: "2026-06-16", open: 32.3, high: 33.99, low: 31, close: 33.22, volume: 14217200 },
+  { day: "2026-06-17", open: 32.51, high: 33.97, low: 32.5, close: 32.85, volume: 7793400 },
+  { day: "2026-06-18", open: 32.85, high: 34.67, low: 32.85, close: 33.87, volume: 10053800 },
+  { day: "2026-06-22", open: 34.21, high: 34.21, low: 32.63, close: 34.08, volume: 7079638 },
+  { day: "2026-06-23", open: 33.71, high: 35.3, low: 33.71, close: 34.45, volume: 7643300 },
+  { day: "2026-06-24", open: 34.45, high: 35.43, low: 33.6, close: 35.07, volume: 10295000 },
+  { day: "2026-06-25", open: 34.8, high: 36.58, low: 33.8, close: 33.91, volume: 10835200 },
+  { day: "2026-06-26", open: 34, high: 34.11, low: 31.82, close: 32.2, volume: 9285700 },
 ];
 
 const snapshotQuote = {
@@ -98,10 +84,6 @@ const tradeResult = {
 tradeResult.realizedPnl = tradeResult.sellNet - trade.invested;
 tradeResult.realizedRate = tradeResult.realizedPnl / trade.invested;
 
-function shanghaiToday() {
-  return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Shanghai" }).format(new Date());
-}
-
 function inclusiveDays(start, end) {
   const startMs = Date.parse(`${start}T00:00:00+08:00`);
   const endMs = Date.parse(`${end}T00:00:00+08:00`);
@@ -117,16 +99,16 @@ function chartCandles(state) {
   const quote = state.quote;
   if (!quote || !quote.date || !quote.price) return daily.slice(-60);
 
+  const existing = daily.find((bar) => bar.day === quote.date);
   const liveBar = {
     day: quote.date,
     open: quote.open || quote.price,
-    high: Math.max(quote.high || quote.price, quote.price),
-    low: Math.min(quote.low || quote.price, quote.price),
+    high: quote.high || quote.price,
+    low: quote.low || quote.price,
     close: quote.price,
     volume: quote.volume || 0,
     live: true,
   };
-  const existing = daily.find((bar) => bar.day === quote.date);
   if (existing) Object.assign(existing, liveBar);
   else daily.push(liveBar);
   return daily.slice(-60);
@@ -135,13 +117,6 @@ function chartCandles(state) {
 function setText(selector, value) {
   const element = document.querySelector(selector);
   if (element) element.textContent = value;
-}
-
-function normalizedQuote(quote) {
-  if (!quote || !quote.date || quote.date < trade.buyDate) {
-    return snapshotQuote;
-  }
-  return quote;
 }
 
 function renderMetrics() {
@@ -376,7 +351,7 @@ async function refreshPosition({ automatic = false } = {}) {
   refreshButton.textContent = "更新中...";
   quoteStatus.textContent = "正在向新浪财经请求日线数据...";
   try {
-    const response = await fetch("api/position-603538", { cache: "no-store" });
+    const response = await fetch("api/position-605186", { cache: "no-store" });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const result = await response.json();
     viewState = {
