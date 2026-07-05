@@ -881,6 +881,13 @@ const csi1000TradeEvents = [
     date: "2026-06-26",
     price: 33.01,
   },
+  {
+    stock: "健麾信息",
+    code: "605186",
+    type: "buy",
+    date: "2026-07-01",
+    price: 31.52,
+  },
 ];
 
 const csi1000SnapshotDaily = [
@@ -917,6 +924,11 @@ const csi1000SnapshotDaily = [
   { day: "2026-06-24", open: 8650.816, high: 8803.501, low: 8581.751, close: 8793.487, volume: 28686714500 },
   { day: "2026-06-25", open: 8806.071, high: 8872.123, low: 8743.249, close: 8825.92, volume: 30544263800 },
   { day: "2026-06-26", open: 8771.598, high: 8797.282, low: 8563.695, close: 8601.408, volume: 32122765600 },
+  { day: "2026-06-29", open: 8616.424, high: 8677.63, low: 8413.864, close: 8597.893, volume: 30987102100 },
+  { day: "2026-06-30", open: 8574.25, high: 8815.108, low: 8547.312, close: 8809.786, volume: 27911736400 },
+  { day: "2026-07-01", open: 8827.47, high: 8944.195, low: 8806.646, close: 8876.63, volume: 32576587100 },
+  { day: "2026-07-02", open: 8688.291, high: 8865.966, low: 8598.869, close: 8625.334, volume: 31085890200 },
+  { day: "2026-07-03", open: 8627.382, high: 8740.668, low: 8559.285, close: 8620.789, volume: 29024450800 },
 ];
 
 let csi1000LiveDaily = null;
