@@ -1,16 +1,13 @@
 const POSITION = {
-  name: "健麾信息",
-  code: "605186",
-  symbol: "sh605186",
-  status: "closed",
-  buyDate: "2026-07-01",
-  buyPrice: 31.52,
+  name: "若羽臣",
+  code: "003010",
+  symbol: "sz003010",
+  status: "open",
+  buyDate: "2026-07-22",
+  buyPrice: 24.9,
   buyFee: 5,
-  sellDate: "2026-07-22",
-  sellPrice: 22.81,
-  sellFee: 5,
   shares: 200,
-  invested: 6309,
+  invested: 4985,
 };
 
 const JSON_HEADERS = {

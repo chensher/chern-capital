@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="chern_capital 实盘：健麾信息 605186 二次持仓跟踪。"
+      content="chern_capital 实盘：健麾信息 605186 二次交易已结束复盘。"
     />
-    <title>实盘持仓｜健麾信息｜chern_capital</title>
+    <title>实盘复盘｜健麾信息｜chern_capital</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body class="position-page">
@@ -25,46 +25,46 @@
     <main id="top">
       <section class="position-hero" aria-labelledby="position-title">
         <div>
-          <p class="eyebrow">Open Position / 605186 / 20260701</p>
+          <p class="eyebrow">Closed Position / 605186 / 20260701</p>
           <h1 id="position-title">健麾信息</h1>
           <p class="lede">
             2026-07-01 以 <code>31.52</code> 元买入 <code>200</code> 股，
-            作为健麾信息第二笔实盘持仓跟踪。
+            2026-07-22 以 <code>22.81</code> 元卖出，交易已结束。
           </p>
         </div>
         <div class="refresh-panel">
-          <button class="refresh-button" id="refresh-position" type="button">更新新浪行情</button>
+          <button class="refresh-button" id="refresh-position" type="button">更新新浪日线</button>
           <p class="quote-status" id="quote-status" aria-live="polite">
-            正在进入页面，准备自动获取新浪行情。
+            交易已结束；正在获取新浪日线用于补全复盘图。
           </p>
         </div>
       </section>
 
-      <section class="position-dashboard" aria-label="持仓概览">
+      <section class="position-dashboard" aria-label="交易结果概览">
         <div class="position-stat">
           <p class="item-label">投入金额</p>
           <strong id="cost-value">¥6,309.00</strong>
           <small>买入金额 ¥6,304.00 + 手续费 ¥5.00</small>
         </div>
         <div class="position-stat">
-          <p class="item-label">最新价格</p>
-          <strong id="last-price">¥33.26</strong>
-          <small id="price-time">2026-07-03 / 新浪快照</small>
+          <p class="item-label">卖出价格</p>
+          <strong id="last-price">¥22.81</strong>
+          <small id="price-time">2026-07-22 / 200 股</small>
         </div>
         <div class="position-stat">
-          <p class="item-label">持仓市值</p>
-          <strong id="market-value">¥6,652.00</strong>
-          <small>按最新价 × 200 股估算</small>
+          <p class="item-label">净回收</p>
+          <strong id="market-value">¥4,557.00</strong>
+          <small>卖出金额 ¥4,562.00 - 手续费 ¥5.00</small>
         </div>
-        <div class="position-stat pnl-positive" id="pnl-card">
-          <p class="item-label">浮动盈亏</p>
-          <strong id="pnl-value">+¥343.00</strong>
-          <small id="pnl-rate">+5.44%</small>
+        <div class="position-stat pnl-negative" id="pnl-card">
+          <p class="item-label">已实现盈亏</p>
+          <strong id="pnl-value">-¥1,752.00</strong>
+          <small id="pnl-rate">-27.77%</small>
         </div>
         <div class="position-stat">
           <p class="item-label">持仓天数</p>
-          <strong id="holding-days">3 天</strong>
-          <small id="trading-days">按自然日 / 含买入日</small>
+          <strong id="holding-days">22 天</strong>
+          <small id="trading-days">按自然日 / 含买入卖出日</small>
         </div>
       </section>
 
@@ -73,12 +73,13 @@
           <div class="chart-header">
             <div>
               <p class="item-label">日线图 / Sina Finance</p>
-              <h2>价格、成交量与建仓位置</h2>
+              <h2>价格、成交量与买卖位置</h2>
             </div>
             <div class="chart-legend" aria-label="图例">
               <span class="legend-rise">上涨</span>
               <span class="legend-fall">下跌</span>
-              <span class="legend-buy">建仓 ¥31.52</span>
+              <span class="legend-buy">买入 ¥31.52</span>
+              <span class="legend-sell">卖出 ¥22.81</span>
             </div>
           </div>
           <div class="trade-chart-wrap">
@@ -89,12 +90,12 @@
 
         <aside class="trade-note" id="trade-note">
           <p class="item-label">成交记录</p>
-          <h2>当前持仓</h2>
+          <h2>完整交易</h2>
           <dl>
             <dt>证券</dt>
             <dd>健麾信息 <code>605186</code></dd>
             <dt>状态</dt>
-            <dd>持仓中</dd>
+            <dd>已结束</dd>
             <dt>买入日期</dt>
             <dd>2026-07-01</dd>
             <dt>买入价格</dt>
@@ -105,14 +106,26 @@
             <dd>¥6,304.00</dd>
             <dt>买入手续费</dt>
             <dd>¥5.00</dd>
+            <dt>卖出日期</dt>
+            <dd>2026-07-22</dd>
+            <dt>卖出价格</dt>
+            <dd>¥22.81 / 股</dd>
+            <dt>卖出数量</dt>
+            <dd>200 股</dd>
+            <dt>卖出成交</dt>
+            <dd>¥4,562.00</dd>
+            <dt>卖出手续费</dt>
+            <dd>¥5.00</dd>
             <dt>投入金额</dt>
             <dd>¥6,309.00</dd>
-            <dt>行情来源</dt>
-            <dd>新浪财经</dd>
+            <dt>净回收</dt>
+            <dd>¥4,557.00</dd>
+            <dt>已实现盈亏</dt>
+            <dd>-¥1,752.00</dd>
           </dl>
           <p class="trade-explain">
-            持仓盈亏以投入金额 ¥6,309.00 为成本口径计算。Cloudflare 页面进入时会自动刷新一次新浪接口，
-            GitHub Pages 版本则显示静态快照。
+            盈亏以投入金额 ¥6,309.00 为成本口径计算；交易结果已固定。
+            页面进入时可更新新浪日线，用来补全卖出日前后的图形复盘。
           </p>
         </aside>
       </section>
@@ -122,7 +135,7 @@
 
     <footer class="site-footer">
       <span>chern_capital</span>
-      <span>open position / 605186 / 20260701</span>
+      <span>closed position / 605186 / 20260701</span>
     </footer>
 
     <script src="script.js"></script>
