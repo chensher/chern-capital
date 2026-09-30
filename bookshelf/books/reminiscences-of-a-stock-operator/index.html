@@ -1,0 +1,1114 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>股票作手回忆录宫殿</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Noto+Serif+SC:wght@400;700&display=swap">
+<style>
+/* 布局：全屏三维场景 + 四角浮层。七个街区对应利文斯顿的七段人生，每站一件物件和一块K线屏；浮层刻意采用单一的暗色玻璃风格 */
+:root{
+  color-scheme:dark;
+  --glass:rgba(14,18,24,.86); --glass-2:rgba(255,255,255,.08);
+  --ink:#EEF0EA; --ink-soft:#AAB4BC; --line:rgba(255,255,255,.16);
+  --accent:#E3B45A; --up:#E0473F; --down:#1FA37A; --blue:#8FB3DC;
+  --display:"ZCOOL XiaoWei","STKaiti","KaiTi",serif;
+  --body:"Noto Serif SC","Songti SC","SimSun",serif;
+}
+[hidden]{display:none!important}
+.fx{font-family:var(--body);font-weight:400}
+.brand h1 .fx{font-size:inherit;color:inherit;letter-spacing:inherit}
+html,body{height:100%}
+body{margin:0;background:#141a22;color:var(--ink);font-family:var(--body);font-size:14px;overflow:hidden;touch-action:none}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block;cursor:grab}
+#c:active{cursor:grabbing}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+h1,h2{font-family:var(--display);font-weight:400;margin:0}
+.glass{background:var(--glass);border:1px solid var(--line);border-radius:10px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+
+#top{position:fixed;left:12px;right:12px;top:calc(env(safe-area-inset-top,0px) + 12px);display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;pointer-events:none}
+#top>*{pointer-events:auto}
+.brand{padding:8px 14px;display:flex;flex-direction:column;line-height:1.2}
+.brand h1{font-size:20px;letter-spacing:.04em}
+.brand span{font-size:11px;color:var(--ink-soft);letter-spacing:.1em}
+#chips{display:flex;gap:3px;padding:5px;overflow-x:auto;min-width:0;flex:1 1 420px;scrollbar-width:none}
+#chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:0;background:transparent;border-radius:6px;padding:4px 9px;white-space:nowrap;color:var(--ink-soft);display:flex;flex-direction:column;align-items:flex-start;line-height:1.25}
+.chip b{font-family:var(--display);font-weight:400;font-size:15px}
+.chip small{font-size:10px;opacity:.8}
+.chip:hover{background:var(--glass-2);color:var(--ink)}
+.chip.on{background:var(--accent);color:#1b1f26}
+.tools{display:flex;flex-wrap:wrap;gap:6px;padding:5px}
+.seg{display:inline-flex;border-radius:6px;background:var(--glass-2);padding:2px}
+.seg button{border:0;background:transparent;padding:4px 10px;border-radius:5px;font-size:13px;color:var(--ink-soft)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:#141b24}
+.tbtn{border:1px solid var(--line);background:transparent;border-radius:6px;padding:4px 10px;font-size:13px}
+.tbtn[aria-pressed="true"]{border-color:var(--accent);color:var(--accent)}
+
+#where{position:fixed;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 124px);font-family:var(--display);font-size:15px;letter-spacing:.16em;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.7);pointer-events:none;white-space:nowrap}
+
+#panel{position:fixed;left:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 12px);width:min(460px,calc(100vw - 24px));max-height:62vh;overflow:auto;padding:16px 18px 14px}
+.eb{font-size:11.5px;letter-spacing:.12em;color:var(--accent)}
+.ph{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:3px 0 8px}
+.ph h2{font-size:24px;line-height:1.2}
+.ph small{font-size:12.5px;color:var(--ink-soft)}
+.chartbox{position:relative;margin:4px 0 6px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:8px;padding:8px 8px 6px}
+.chartbox .ct{font-size:12px;color:var(--ink-soft);margin:0 2px 4px}
+.chartbox canvas{display:block;width:100%;height:210px;touch-action:none}
+.legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11px;color:var(--ink-soft);margin:4px 2px 0}
+.legend i{font-style:normal;display:inline-block;width:10px;height:10px;margin-right:4px;vertical-align:-1px;border-radius:2px}
+.lg-b{background:var(--accent)}
+.lg-d{border:1.5px solid var(--accent);transform:rotate(45deg);width:7px!important;height:7px!important;border-radius:0!important}
+.lg-s{border:1.5px dashed var(--ink-soft)}
+.tip{position:absolute;pointer-events:none;background:#0B0F14;border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-size:12px;line-height:1.55;max-width:230px;z-index:2;font-variant-numeric:tabular-nums}
+.tip b{color:var(--accent);font-weight:700}
+.img{font-size:14.5px;line-height:1.85;margin:6px 0 10px}
+.key{display:flex;gap:8px;align-items:baseline;margin:0;line-height:1.7}
+.key i{font-style:normal;font-size:11px;letter-spacing:.12em;background:var(--accent);color:#1b2028;padding:0 6px;border-radius:2px;flex:none}
+.key b{font-weight:700}
+.more{font-size:12.5px;color:var(--ink-soft);margin:8px 0 0;line-height:1.8}
+.quote{margin:10px 0 0;padding:6px 10px;border-left:2px solid var(--accent);font-family:Georgia,"Times New Roman",serif;font-style:italic;font-size:13px;color:#E8E2CC}
+.quote span{display:block;font-style:normal;font-family:var(--body);font-size:11px;color:var(--ink-soft);margin-top:2px}
+.bridge{color:var(--accent)!important}
+.q{font-family:var(--display);font-size:18px;color:var(--blue);margin:4px 0 8px}
+.acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.acts button{border:1px solid var(--line);background:transparent;border-radius:6px;padding:5px 12px;font-size:13px}
+.acts .ok{border-color:var(--down);color:var(--down)}
+.acts .no{border-color:var(--up);color:var(--up)}
+.acts .sel{background:var(--ink);color:#141b24;border-color:var(--ink)}
+.pnav{display:flex;gap:6px;margin-top:12px;border-top:1px solid var(--line);padding-top:10px;align-items:center}
+.pnav button{border:1px solid var(--line);background:var(--glass-2);border-radius:6px;padding:5px 12px;font-size:13px}
+.pnav .sp{flex:1}
+.pnav .prog{font-size:11.5px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+
+#pad{position:fixed;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 12px);display:grid;grid-template-columns:repeat(3,52px);grid-template-rows:repeat(2,52px);gap:6px;padding:8px}
+#pad button{border:1px solid var(--line);background:var(--glass-2);border-radius:8px;font-size:13px;user-select:none;-webkit-user-select:none;touch-action:none}
+#pad button.hold{background:var(--accent);color:#1b2028}
+.keys{position:fixed;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 148px);padding:8px 12px;font-size:11.5px;color:var(--ink-soft);line-height:1.85}
+.keys b{color:var(--ink);font-weight:700;font-family:ui-monospace,Menlo,monospace;font-size:11px;border:1px solid var(--line);border-radius:3px;padding:0 4px}
+
+#intro{position:fixed;inset:0;display:grid;place-items:center;background:rgba(8,12,18,.55);padding:16px;z-index:5}
+#intro .card{max-width:560px;padding:24px 26px 22px;max-height:88vh;overflow:auto}
+#intro h2{font-size:30px;margin-bottom:8px}
+#intro p{color:var(--ink-soft);line-height:1.8;margin:0 0 10px}
+#intro ol{margin:0 0 14px;padding-left:1.4em;line-height:1.85;font-size:13.5px}
+#intro ol b{color:var(--accent);font-weight:400;font-family:var(--display);font-size:15.5px}
+#intro ol span{color:var(--ink-soft)}
+#go{border:0;background:var(--accent);color:#1b1f26;border-radius:8px;padding:9px 22px;font-size:15px}
+#loading{position:fixed;inset:0;display:grid;place-items:center;font-family:var(--display);font-size:20px;color:var(--ink-soft);z-index:6;background:#141a22}
+
+@media (max-width:700px){
+  .keys{display:none}
+  #where{top:calc(env(safe-area-inset-top,0px) + 160px)}
+  #panel{max-height:44vh;bottom:calc(env(safe-area-inset-bottom,0px) + 140px)}
+  .brand h1{font-size:17px}
+  .chartbox canvas{height:180px}
+}
+@media (hover:hover) and (pointer:fine) and (min-width:701px){#pad{grid-template-columns:repeat(3,44px);grid-template-rows:repeat(2,40px)}}
+</style>
+</head>
+<body>
+
+<canvas id="c" aria-label="股票作手回忆录三维宫殿"></canvas>
+<div id="loading">正在搭建宫殿…</div>
+
+<div id="top">
+  <div class="brand glass"><h1>股票作手<span class="fx">回</span>忆录 · 记忆宫殿</h1><span>七个街区 · 三十五站 · 书中价位K线</span></div>
+  <div id="chips" class="glass" role="navigation" aria-label="街区"></div>
+  <div class="tools glass">
+    <a class="tbtn" href="../../" style="text-decoration:none">← 书架</a>
+    <div class="seg" role="group" aria-label="视角"><button id="v-crane" aria-pressed="true">纸鹤</button><button id="v-eye" aria-pressed="false">第一人称</button></div>
+    <div class="seg" role="group" aria-label="模式"><button id="m-tour" aria-pressed="true">游览</button><button id="m-recall" aria-pressed="false">回忆</button></div>
+    <button class="tbtn" id="auto" aria-pressed="false">自动巡游</button>
+  </div>
+</div>
+<div id="where"></div>
+<div id="panel" class="glass" aria-live="polite"></div>
+<div class="keys glass">
+  <div><b>W</b><b>S</b> 前进后退　<b>A</b><b>D</b> 转向</div>
+  <div><b>空格</b> 上升　<b>Shift</b> 下降　拖动鼠标 看四周</div>
+  <div><b>N</b> 下一站　<b>B</b> 上一站　点击发光编号 飞过去</div>
+</div>
+<div id="pad" class="glass">
+  <button data-k="up">上升</button><button data-k="fwd">前进</button><button data-k="down">下降</button>
+  <button data-k="left">左转</button><button data-k="back">后退</button><button data-k="right">右转</button>
+</div>
+
+<div id="intro" hidden>
+  <div class="card glass">
+    <h2>拉里·利文斯顿的一生</h2>
+    <p>这座宫殿按《股票作手回忆录》（1923）的顺序建成：七个街区对应他人生的七段，从14岁的报价板男孩一路走到操纵大师。每个街区五站，每站有一件只属于那段故事的物件，身后立着一块K线屏。</p>
+    <ol id="introList"></ol>
+    <p>K线里凡是书中写明的价位都用实心和金色标记；书里没写的部分按叙述补全，画成虚线空心，并注明是示意。飞近发光编号就能看到那一站；按 N 自动飞往下一站。</p>
+    <button id="go">起飞</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ============ 《股票作手回忆录》记忆宫殿：内容与K线数据 ============
+   K线元组: [时间标签, 开, 高, 低, 收, 来源, 注释]
+   来源字母: o h l c = 该价位书中原文给出；O H L C = 由书中数字直接推算；空 = 按书中叙述补全的示意值
+   标记: [K线序号, 价位, 'B'买入/回补 | 'S'卖出/做空 | 'N'事件, 说明]
+   水平线: [价位, 说明]
+*/
+const D=[
+{id:'bucket',name:'对赌行少年',sub:'波士顿 · 圣路易斯 · 霍博肯',yr:'14—21岁',ch:'第1—2章',sky:'#C9C3B6',ground:'#8E8272',path:'#6B5E4E',
+ bridge:'利文斯顿带着对赌行赢来的钱去了纽约。下一区：华尔街的学费。',
+ S:[
+ {t:'报价板男孩的小本子',y:'14—15岁',ch:1,
+  img:'一块两层楼高的黑板，粉笔数字不停地跳。黑板下摊着一本比人还大的小本子，页边写着"周一记下，周二周三应该怎样"。本子上压着一枚刻着"$3.12"的硬币。',
+  key:'14岁在经纪行当报价板男孩，把价格的"习惯"记进小本子，拿行情验证自己的预判；第一笔交易和同事合伙买伯灵顿，赚了3.12美元',
+  more:'他说读行情纸带就像拿望远镜看一场战斗，十次里有七次靠得住。15岁攒下第一个1000美元，母亲吓坏了；20岁有了1万美元现金。',
+  q:'There is nothing new in Wall Street.',
+  chart:{type:'bar',title:'早年的几个数字',unit:'美元',c:[['第一笔保证金(5股)',5,1,'和同事合伙，一人一半'],['第一笔利润',3.12,1,'伯灵顿，两天后平仓'],['15岁',1000,1,'全在对赌行赚的'],['20岁',10000,1,'第一次攒到1万美元现金']],log:true}},
+ {t:'糖业陷阱',y:'约20岁',ch:1,
+  img:'七张粉红色的大单子扇形摊开，每张写着"做空 糖业 500股 105¼"。旁边一台电报机咔嗒作响，头顶的灯牌突然亮出"SUGAR 108"。',
+  key:'在"世界主义者"对赌行以105¼做空3500股糖业；跌到103时莫名不安，抢在报价前以103平仓；几秒后对赌行在纽约把价格拉到108，洗掉了其他空头',
+  more:'这叫"对赌行突袭"：故意把价格瞬间打到客户保证金外，再任它弹回。同屋的亨利·威廉斯空了2500股，被一扫而光。',
+  q:'It didn\'t work that time, did it, old boy?',
+  chart:{title:'糖业 · 当天盘中（时段为示意）',unit:'$',c:[
+   ['开空',105.25,105.5,104.5,104.75,'o','以105¼开空3500股'],
+   ['',104.75,104.9,103.4,103.5,'','跌了一两个点，停下喘口气'],
+   ['',103.5,103.9,103.3,103.6,'','犹豫，他开始不安'],
+   ['',103.6,103.7,103,103.1,'l','当日低点103'],
+   ['平仓',103.1,103.4,103,103,'c','抢着以103平仓'],
+   ['突袭',103,108,103,107.5,'h','对赌行把价拉到108'],
+   ['',107.5,107.6,104,104.2,'','随即跌回']],
+   m:[[0,105.25,'S','做空3500股'],[4,103,'B','103平仓'],[5,108,'N','拉到108']]}},
+ {t:'91⅛的票据',y:'约20岁',ch:1,
+  img:'一张门板大的成交单，"Bot Steel at 90⅛"被红笔划掉，旁边改成"91⅛"。单子底下用铁链拴着一颗沉重的铁球，球上写着"3"。',
+  key:'"世界主义者"对付他：要求3点保证金，还加收溢价，从½点加到1点、再到1½点；钢铁明明90⅛成交，票上却写91⅛',
+  more:'普通客户1点保证金，跌破89¼就自动爆仓。多加的溢价意味着涨1¼点他都还在亏；3点保证金让他的交易能力少了三分之二。他照样是赢家。',
+  q:'Some handicap, that!',
+  chart:{title:'钢铁 · 一张票据上的三条线',unit:'$',c:[
+   ['',89.8,90.3,89.6,90.1,''],['买入',90.1,90.5,89.9,90.2,''],['',90.2,91,90,90.9,''],['',90.9,91.2,90.4,90.6,'']],
+   hl:[[90.125,'正常票面 90⅛'],[91.125,'加溢价后 91⅛'],[89.25,'1点保证金爆仓线 89¼']]}},
+ {t:'三百个傻瓜',y:'21岁后',ch:2,
+  img:'一扇门后挤着三百个小人，都仰头看报价板。门口立着一只上了锁的保险箱，箱门贴着名牌"Horace Kent"。',
+  key:'在纽约输光后借500美元去圣路易斯，化名霍勒斯·肯特在多兰的对赌行两天赚2800美元，被老板认出赶走；特勒的店连一单都不让他下',
+  more:'多兰指着客户说：这三百个傻瓜养活我一家，你两天拿走的比他们两周输的还多。',
+  q:'Three hundred suckers!',
+  chart:{type:'bar',title:'圣路易斯之行',unit:'美元',c:[['借来的本钱',500,1,'向富勒顿借'],['多兰处两天',2800,1,'做奥马哈、B.R.T.'],['特勒处',0,1,'想买1500股B.R.T.，被当场拒绝']]}},
+ {t:'霍博肯的周六',y:'约1900年',ch:2,
+  img:'一只大钟停在11点15分，钟下站着一个穿灰制服的私家警察。桌上堆着两千、四张五百、三张一百的钞票。',
+  key:'特勒在霍博肯开了分店。周六中午收市，他11点15分才开始下空单，赶在最后五分钟空头回补的反弹前平仓，应得5100美元，店里只付得出2800',
+  more:'周一他去取余款，圣路易斯来的人求他别再来了。后来他让老麦克德维特替他下单，又赚了2800美元。不到一个月霍博肯店关门。1900年大选前一天，所有对赌行都拒绝买单。',
+  q:'This isn\'t St. Louis.',
+  chart:{title:'霍博肯 · 周六最后45分钟（相对点数，示意）',unit:'点',rel:true,c:[
+   ['11:15',0,0.2,-0.3,-0.2,'','开始下空单，投入2000美元'],['11:25',-0.2,0,-1.1,-1,'','交易员打压止损盘'],['11:35',-1,-0.8,-1.9,-1.8,'',''],['11:45',-1.8,-1.5,-2.6,-2.4,'',''],['11:55',-2.4,-2.2,-2.7,-2.6,'','平仓，应得5100美元'],['12:00',-2.6,-1.4,-2.6,-1.5,'','最后五分钟空头回补']],
+   m:[[0,0,'S','卖出多只股票'],[4,-2.6,'B','反弹前平仓']]}}
+ ]},
+{id:'street',name:'华尔街的学费',sub:'纽约 · 富勒顿与哈丁兄弟',yr:'21—29岁',ch:'第3—5、7章',sky:'#D2D6D8',ground:'#9A9A92',path:'#6E6E68',
+ bridge:'老火鸡说完"这是牛市"，利文斯顿终于学会坐着不动。下一区：预感与恐慌。',
+ S:[
+ {t:'纸带讲的是古代史',y:'22岁',ch:3,
+  img:'一台报价机从玻璃罩里吐出纸带，纸带越往外越发黄卷边，最后变成一卷古代羊皮卷。',
+  key:'第一天在正规交易所会员行：84买100股、半小时后85卖出，两小时里进出1100股，净亏1100美元，差不多是本钱的一半',
+  more:'对赌行按纸带价格成交，正规行要把单子送到交易所大厅，成交价常常比纸带差好几点；他自己的大单还会压低价格。在对赌行能赢的方法，在这里不灵。',
+  q:'the tape always talked ancient history to me',
+  chart:{title:'第一天 · 盘中（第一笔为书中价位）',unit:'$',c:[
+   ['买入',84,84.4,83.9,84.3,'o','100股 84买入'],['卖出',84.3,85.1,84.2,85,'c','半小时内85卖出'],['',85,85.2,84.4,84.5,'','又做一笔，赚¾点'],['',84.5,84.8,83.8,84,'','之后越做越亏'],['',84,84.3,83.2,83.4,''],['',83.4,83.9,83,83.6,'','两小时1100股，净亏1100美元']],
+   m:[[0,84,'B','买100'],[1,85,'S','85卖']]}},
+ {t:'"小钳子"北太平洋',y:'1901年',ch:3,
+  img:'一台火车头喷着白烟爬上一段斜坡，车头牌子写着"N.P."。车厢里坐满了穿礼服的钢铁大亨。',
+  key:'1901年大繁荣中他看空，但北太平洋的走势像还要涨，于是做多1000股，在约110卖出，赚了30点，账户接近5万美元',
+  more:'当时还不知道，哈里曼集团正在悄悄吸筹。5月8日收盘后，全世界都知道哈里曼与摩根在争夺北太平洋的控制权。',
+  q:'Little Nipper behaved as if it were going still higher.',
+  chart:{title:'北太平洋 · 1901年春（买价由书中数字推算）',unit:'$',c:[
+   ['买入',80,81.5,79.5,81,'O','由"约110卖出、赚30点"推算买价约80'],['',81,84,80.5,83.5,''],['',83.5,88,83,87,''],['',87,91,86,90.5,''],['',90.5,96,89,95,''],['',95,101,94,100,''],['',100,105,98,104,''],['卖出',104,110.5,103,110,'c','约110卖出，账户近5万美元']],
+   m:[[0,80,'B','做多1000股'],[7,110,'S','110附近了结']]}},
+ {t:'1901年5月9日',y:'1901年5月9日',ch:3,
+  img:'悬崖边，一只巨大的蜗牛驮着报价机慢慢爬，纸带在它身后拖了一路。悬崖下面，股票凭证正在往下掉。',
+  key:'北太平洋逼空引发恐慌。他按市价做空，纸带显示100时下单，实际成交在80；他立刻回补做多，又比预想多付了约15点，一天之内输光5万美元',
+  more:'纸带远远落后于大厅的真实价格。他看对了行情：暴跌、然后反弹；却因为成交价与纸带脱节而破产。',
+  q:'I was dead right and--I lost every cent I had!',
+  chart:{title:'5月9日 · 他做空的股票（前收为示意）',unit:'$',c:[
+   ['前收',115,116,114,115,'','前一晚收盘（书中：当日共跌30到40点）'],['开盘',104,105,92,93,'','开盘就崩'],['下单',93,100,78,80,'c','纸带100时下单，实际成交80'],['回补',80,96,79,95,'C','回补价比预想高约15点'],['',95,98,88,91,'']],
+   hl:[[100,'纸带上的价格 100']],
+   m:[[2,80,'S','做空成交80'],[3,95,'B','回补约95']]}},
+ {t:'老火鸡：这是牛市',y:'1900年代初',ch:5,
+  img:'一只胸脯鼓鼓的大火鸡，下巴抵着胸口，稳稳坐在一把大扶手椅上，屁股底下垫着写着"500股"的坐垫。',
+  key:'帕特里奇老头拿着500股克莱麦克斯汽车，10天涨了7点也不卖：卖了就会失去仓位。大钱靠的不是想，而是坐得住',
+  more:'埃尔默劝他先卖、回调再买回，老头只重复一句"这是牛市，你知道的"。利文斯顿后来说：看对行情不难，看对还坐得住的人才少。',
+  q:'Well, this is a bull market, you know!',
+  chart:{title:'克莱麦克斯汽车 · 10天（相对点数，示意）',unit:'点',rel:true,c:[
+   ['1',0,0.8,-0.2,0.6,''],['2',0.6,1.5,0.4,1.3,''],['3',1.3,2,1,1.8,''],['4',1.8,2.6,1.5,2.4,''],['5',2.4,3.4,2.2,3.2,''],['6',3.2,3.8,2.7,3,''],['7',3,4.4,2.9,4.2,''],['8',4.2,5.5,4,5.3,''],['9',5.3,6.3,5,6.1,''],['10',6.1,7.2,5.9,7,'C','10天涨了7点']],
+   m:[[9,7,'N','埃尔默卖出，老头不卖']]}},
+ {t:'执事的眼镜',y:'书中举例',ch:7,
+  img:'一副巨大的银框老花镜架在糖罐上，罐旁四块积木从矮到高排成台阶：2000、2000、2000、4000。',
+  key:'加仓要在上涨中进行：书中举例110买2000股、111再买2000、到114共6000股均价111¾；回落到112¼再到113¾时买4000股，若成交一路抬到115½，说明做对了',
+  more:'怀特执事听说哈夫迈耶在买糖，先卖出1万股、再卖1万股试探，发现抛压被一路吃掉，随即买进3万股。他说：不买太便宜、太容易的股票。',
+  q:'I never want to buy stocks too cheap or too easily.',
+  chart:{title:'书中举例 · 分批加仓（全部为书中价位）',unit:'$',c:[
+   ['第1批',109.8,110.4,109.6,110.2,'o','110买2000股'],['第2批',110.2,111.2,110.1,111,'c','111再买2000'],['第3批',111,112.6,110.9,112.4,'','第三批2000股'],['',112.4,114.2,112.3,114,'c','涨到114，先停手'],['回落',114,114.1,112.25,112.6,'l','回落到112¼'],['试探',112.6,113.8,112.5,113.75,'c','113¾时下单买4000'],['确认',113.75,115.5,113.75,115.3,'oh','成交114、114½……115½']],
+   hl:[[111.75,'6000股均价 111¾']],
+   m:[[0,110,'B','2000'],[1,111,'B','2000'],[5,113.75,'B','4000']]}}
+ ]},
+{id:'panic',name:'预感与恐慌',sub:'大西洋城 · 萨拉托加 · 棕榈滩',yr:'1906—1907',ch:'第6、8、9章',sky:'#CFE0EA',ground:'#D9CBA6',path:'#B09A6E',
+ bridge:'摩根的1000万美元救了交易所。利文斯顿买了游艇，却被玉米拖住。下一区：商品与宿敌。',
+ S:[
+ {t:'海鸥与地震',y:'1906年4月',ch:6,
+  img:'沙滩上几只海鸥把蛤蜊叼到半空再丢下来摔开。地面上裂开一道长长的口子，裂缝旁立着"联合太平洋"的站牌。',
+  key:'在大西洋城散步时毫无理由地想卖联合太平洋，在涨势中连卖3000股、再加到5000股；第二天旧金山地震，他加倍再加倍，几天赚了25万美元',
+  more:'地震当天市场只低开两点、收盘还收复了失地，因为牛市氛围让人不愿相信坏消息。第二天报道更详细，股价才开始滑落。',
+  q:'I just felt like selling it.',
+  chart:{title:'联合太平洋 · 1906年4月（书中未给价位，按叙述示意）',unit:'点',rel:true,c:[
+   ['第1天',0,1.6,-0.2,1.2,'','大西洋城：涨势中卖出3000股'],['第2天',1.2,2.4,0.1,0.2,'','上午更高，尾盘跌破他的均价，加卖2000'],['地震',-2,0.4,-2.3,0,'','只低开两点，收盘收复'],['第4天',0,0.2,-3.2,-2.8,'','详细报道传来，下滑，加卖5000'],['第5天',-2.8,-2.5,-10,-9.2,'','开始真正下跌，再加卖1万'],['平仓',-9.2,-8,-13,-11,'','全部回补，赚25万美元']],
+   m:[[0,1,'S','卖3000'],[1,0.3,'S','加2000'],[3,-2.6,'S','加5000'],[4,-9,'S','加1万'],[5,-11,'B','回补']]}},
+ {t:'萨拉托加的电话',y:'1906年夏',ch:6,
+  img:'一部老式立式电话，听筒吊在电线上晃荡。旁边一只写着"10%"的气球越升越高。',
+  key:'在约160分批买入联合太平洋，哈丁来电话骂他是冤大头；他改主意卖光并在约162做空4000股；次日公司宣布10%股息，他在约165下单回补，成交价却到了172和174，亏了4万美元',
+  more:'他随即顺势做多4000股，第二天早上卖出，不但补回4万还多赚约1.5万。他说这是便宜的一课：为了别人的意见放弃自己的判断。这是他最后一次瞎撞式的交易。',
+  q:'It was a cheap lesson.',
+  chart:{title:'联合太平洋 · 1906年8月',unit:'$',c:[
+   ['吸筹',157,160.5,156.5,160,'c','约160，每次500股分批买入'],['',160,161.5,159.5,161,''],['电话',161,162.5,160.5,162,'c','哈丁来电，卖光并在约162做空4000'],['10%股息',164,175,163,174,'hc','约165下单回补，成交到172、174'],['次日',174,180,173,178,'','早上卖掉顺势买入的4000股'],['',178,186,176,184,'',''],['',184,194,183,191,'','第10章：股息后大涨约30点']],
+   m:[[0,160,'B','分批买'],[2,162,'S','空4000'],[3,165,'B','回补约165'],[3,174,'N','成交172/174'],[4,178,'S','多单出场']]}},
+ {t:'直布罗陀之石',y:'1906—1907年2月',ch:8,
+  img:'一块巨大的岩石上刻着"READING"，一道裂缝从顶部劈到底。岩石脚下贴着一张报纸广告："新股分期付款"。',
+  key:'大北方与北太平洋发新股竟允许分期付款，他看出这是银行家承认缺钱，于是在约330卖出大北方优先股；众人说瑞丁被操纵、碰不得，他同时让两个经纪人各卖4000股，价格从111几分钟内跌到92，全部回补',
+  more:'1906年他看空太早，被反弹洗光。这次他等到信号才下手：到1907年2月，大北方优先股跌了六七十点，他全部了结。',
+  q:'That ad is a signed confession on the part of the bankers.',
+  chart:{title:'瑞丁 · 几分钟之内',unit:'$',c:[
+   ['卖出',111,111.2,108,108.5,'o','两家经纪人同时各卖4000股'],['',108.5,109,100,101,'',''],['',101,101.5,96,96.5,'',''],['回补',96.5,97,92,93,'l','几分钟内以92回补全部空单']],
+   m:[[0,111,'S','空8000+'],[3,92,'B','92回补']]}},
+ {t:'棕榈滩的阿纳康达',y:'1907年2月',ch:9,
+  img:'一根被风暴折断的电线杆，断线垂在地上。旁边摞着一叠铜锭，最上面一块写着"300"，另一块写着"292"。',
+  key:'他相信股票首次突破100、200、300时会继续冲，于是在阿纳康达突破300时买入3.2万股（合8000整股）；次日电报线断，只收到一个报价292；第三天开298、摸302¾后回落，他定下规矩：回到301就说明是假突破，在301全部市价卖出',
+  more:'成交明细：500股299¾，1000股299⅝，100股299½，200股299⅜，200股299¼，最后一批298¾。奥利弗·布莱克偷听电报说他会以320买回来。第二天阿纳康达开在296下方，很快"没有买盘"，一路跌到秋天的大崩盘。',
+  q:'When you want to get out, get out.',
+  chart:{title:'阿纳康达 · 1907年2月',unit:'$',c:[
+   ['突破',296,301,295.5,300.5,'','即将突破300时买入8000整股'],['电报断',292,292,292,292,'ohlc','整天只收到一个报价：292'],['假突破',298,302.75,298.5,299,'oh','开298，摸302¾后回落，301全部卖出'],['次日',295.5,296,285,286,'o','开在296下方，一度没有买盘'],['',286,288,278,280,'',''],['',280,282,270,272,'','一路跌到秋天']],
+   hl:[[300,'整数关 300'],[301,'他给自己的止损线 301']],
+   m:[[0,300,'B','买3.2万股'],[2,301,'S','301市价卖出'],[2,298.75,'N','最后成交298¾']]}},
+ {t:'货币柱下的老鼠',y:'1907年10月24日',ch:9,
+  img:'交易所里一根写着"MONEY"的柱子，四周围着一圈焦急的经纪人。柱顶罩着一只玻璃钟罩，钟罩里的老鼠正喘不过气。',
+  key:'1907年10月，拆借利率在100%到150%之间；24日这天有钱也借不到，联合太平洋一度没有任何买盘。摩根让阿特伯里到货币柱宣布放款1000万美元',
+  more:'银行家托人请他别再卖了。他早已回补，并反手买入10万股，当天身家超过100万美元。他说那天自己当了一回"一日之王"。经纪人朋友形容货币柱下的人群像抽真空钟罩里的老鼠。',
+  q:'I had been king for a day!',
+  chart:{type:'bar',title:'纽约交易所的活期拆借利率（年化）',unit:'%',c:[['平日·花旗的底线',6,1,'花旗银行自夸从不高于6%'],['10月初·低',100,1,'借款人自己报利率'],['10月初·高',150,1,''],['10月24日下午',null,1,'有利率也借不到钱'],['摩根出手',null,1,'阿特伯里：1000万美元，人人有份']]}}
+ ]},
+{id:'commod',name:'商品与宿敌',sub:'芝加哥 · 纽约棉花交易所',yr:'1907—1908',ch:'第10—12章',sky:'#E4D7B4',ground:'#C7B27C',path:'#9A8452',
+ bridge:'珀西·托马斯让他亏掉了几乎所有的钱。下一区：低谷与归来。',
+ S:[
+ {t:'小麦穿过玻璃天花板',y:'书中举例',ch:10,
+  img:'一片麦穗被一块透明玻璃压在头顶，玻璃上印着"1.20"。其中一株麦穗顶破玻璃，裂纹向四周散开。',
+  key:'价格沿最小阻力线运行。小麦几个月都在1.10到1.20美元之间，某天收在1.19之上，次日开在1.20½，他买入；随后1.21、1.22、1.23、1.25一路涨',
+  more:'欧洲一直在悄悄买，很多人在1.19附近做空。有一天美国休市，温尼伯小麦高开6美分，第二天美国市场也跟着高开6美分。',
+  q:'prices, like everything else, move along the line of least resistance',
+  chart:{title:'小麦 · 箱体与突破',unit:'bu',c:[
+   ['',1.13,1.18,1.12,1.17,''],['',1.17,1.18,1.10,1.11,''],['',1.11,1.20,1.11,1.19,'',''],['',1.19,1.195,1.12,1.13,''],['',1.13,1.195,1.13,1.192,'c','收在1.19上方'],['突破',1.205,1.21,1.20,1.21,'oh','开1.20½买入'],['',1.21,1.22,1.205,1.22,'c',''],['',1.22,1.23,1.215,1.23,'c',''],['',1.23,1.25,1.225,1.25,'c',''],['温尼伯',1.31,1.32,1.30,1.31,'O','休市日温尼伯高开6美分，次日同样高开6美分']],
+   hl:[[1.10,'箱体下沿 1.10'],[1.20,'箱体上沿 1.20']],
+   m:[[5,1.205,'B','1.20½买入']]}},
+ {t:'推不动的棉花',y:'书中举例',ch:10,
+  img:'一个小人用肩膀把一大包棉花往斜坡上推，一松手棉包就滚回坡底，坡上留着四五道同样的压痕。',
+  key:'棉花在12美分附近窄幅徘徊，他等不及突破，自己买5万包往上推；一停手价格就回落。反复四五次，亏了约20万美元。不久之后棉花大涨，他却不在场',
+  more:'规则：在窄幅震荡的市场里，不要预测下一次大行情往哪边走，等价格突破区间再动手。',
+  q:'Stock-market post-mortems don\'t pay dividends.',
+  chart:{title:'棉花 · 12美分附近（书中只给出12美分，其余示意）',unit:'¢',c:[
+   ['',12.0,12.1,11.9,12.0,''],['推',12.0,12.3,12.0,12.25,'','买5万包，价格上去'],['',12.25,12.28,11.98,12.0,'','一停手就回落'],['推',12.0,12.32,11.98,12.28,''],['',12.28,12.3,11.97,11.99,''],['推',11.99,12.3,11.98,12.27,''],['',12.27,12.28,11.96,12.0,'','第四五次后认输，亏约20万'],['',12.0,12.4,11.98,12.35,'','后来自己涨起来'],['',12.35,12.9,12.3,12.85,''],['',12.85,13.5,12.8,13.4,'','一路涨到"本可大赚"的价位']],
+   hl:[[12,'约12美分']],
+   m:[[1,12.0,'B','自己推'],[3,12.0,'B','再推'],[5,11.99,'B','再推']]}},
+ {t:'燕麦熊饵',y:'1907年10月后',ch:11,
+  img:'一只张开的捕兽夹里放着一碗燕麦，夹子旁堆着一大堆金黄的玉米棒。',
+  key:'他空了1000万蒲式耳小麦和1000万蒲式耳玉米，斯特拉顿却逼空玉米。他同时让四家经纪行各卖5万蒲式耳燕麦，芝加哥交易员以为阿穆尔在打斯特拉顿，纷纷卖玉米；他10分钟买进600万蒲式耳，再市价买回剩下的400万',
+  more:'全部1000万蒲式耳在开始回补时价格的半美分之内完成。燕麦空单只亏了3000美元，小麦的盈利抵掉大部分，所有谷物合计只亏2.5万美元。此后玉米又涨了25美分。',
+  q:'That was pretty cheap bear bait.',
+  chart:{title:'玉米 · 回补那十几分钟（相对美分）· 此后玉米又涨约25美分',unit:'¢',rel:true,c:[
+   ['逼空中',0,0.3,-0.2,0.1,'','斯特拉顿控盘'],['卖燕麦',0.1,0.2,-0.4,-0.3,'','四家行同时各卖5万蒲式耳燕麦'],['交易员抛玉米',-0.3,-0.2,-1.6,-1.4,'','10分钟内买进600万蒲式耳'],['买余下',-1.4,0.6,-1.4,0.5,'C','市价买回400万，均价在起点半美分内']],
+   m:[[2,-1.4,'B','600万'],[3,0.3,'B','400万']]}},
+ {t:'七月棉花"被逼空"',y:'约1908年5月底',ch:11,
+  img:'一台印刷机滚筒飞转，吐出的报纸头版印着大字："七月棉花被拉里·利文斯顿逼空"。印刷机上方悬着一顶棉花做的王冠。',
+  key:'5月底人人都在卖七月棉花，他收下了所有浮动筹码，从10万包买到12万包；棉花每天涨40到50点。周六最后10分钟他四家各买5000包，价格涨30点收在最高',
+  more:'周一利物浦本应高开20点，却高开了50点。他手里有14万包，没有市场接得住。周二早上《世界报》头版说他逼空了七月棉花，开盘10分钟他就把14万包卖光，大多卖在当天最高价。',
+  q:'JULY COTTON CORNERED BY LARRY LIVINGSTON',
+  chart:{title:'七月棉花 · 两周（相对点数）',unit:'点',rel:true,c:[
+   ['吸筹',0,5,-5,0,'','满场都在卖，他买到10万包'],['',0,6,-4,2,'','12万包'],['起涨',2,48,0,45,'','每天涨40到50点'],['',45,95,43,92,'',''],['',92,140,90,138,'',''],['周六',138,170,136,168,'','最后10分钟买2万包，拉30点收最高'],['周一',210,240,205,232,'','利物浦高开50点（预期20点）'],['周二',250,262,236,240,'','《世界报》报道，开盘10分钟卖光14万包']],
+   m:[[0,0,'B','10万包'],[5,168,'B','+2万包'],[7,255,'S','卖光14万包']]}},
+ {t:'磁铁一样的托马斯',y:'1908年',ch:12,
+  img:'一块红色的大马蹄形磁铁，正把一个小人从地面吸起来。小人脚边摞着一套精装的司各特全集。',
+  key:'他被棉花大户珀西·托马斯说服，从空头转成多头，买进6万包、为了托住价格又加到15万包，最后连利物浦都在买，共44万包。同时他卖掉了赚钱的小麦、留着亏钱的棉花',
+  more:'小麦卖出后又涨了20美分，本可赚约800万美元；棉花最终卖光，几乎亏掉全部身家。此前一个推销员三言两语就让他签了500美元的司各特全集合同。',
+  q:'Always sell what shows you a loss and keep what shows you a profit.',
+  chart:{title:'棉花 · 越跌越买（示意）',unit:'点',rel:true,c:[
+   ['转多',0,20,-10,5,'','平掉空单，买6万包'],['',5,10,-40,-35,''],['托盘',-35,-20,-70,-65,'','为了"托住价格"加到15万包'],['',-65,-50,-100,-95,''],['',-95,-80,-130,-125,'','在利物浦也买'],['',-125,-110,-165,-160,'','累计44万包'],['认输',-160,-150,-220,-210,'','全部卖出，身家所剩无几']],
+   m:[[0,5,'B','6万包'],[2,-65,'B','加仓'],[4,-125,'B','加仓'],[6,-210,'S','卖光44万包']]}}
+ ]},
+{id:'comeback',name:'低谷与归来',sub:'纽约 · 战争景气',yr:'1908—1918',ch:'第13—15章',sky:'#B8B6B0',ground:'#7A7670',path:'#56524C',
+ bridge:'还清了一百多万债务，利文斯顿开始研究别人的贴士为什么会失灵。下一区：贴士与信号。',
+ S:[
+ {t:'威廉森的烟幕',y:'约1909—1910年',ch:13,
+  img:'一台烟雾机不停地往外喷灰白的烟，烟雾后面隐约是一张写着"$25,000"的支票。',
+  key:'欠债10万美元时，丹·威廉森主动给他一张2.5万美元的支票，只要求他在自己的行里交易。三周他赚到11.2万，却没坚持还钱。后来威廉森替他平掉8000股切萨皮克与大西洋的空单、又替他买1万股南大西洋，他反欠15万',
+  more:'他后来才明白：自己是被拿来当烟幕的。威廉森的姐夫、铁路大亨阿尔文·马昆德病重，家族要出清股票，最怕他这个空头在外面砸盘。感恩之情让他错过了一生最好的行情。',
+  q:'the tape is not chivalrous and moreover does not reward loyalty',
+  chart:{type:'bar',title:'他在威廉森行里的账户',unit:'美元',c:[['支票',25000,1,'威廉森给的本钱'],['三周后',112000,1,'平均每周赚150%'],['C&A空单被平后',-150000,1,'反欠15万美元'],['南大西洋1万股',null,1,'亏损，又被"神秘地"抹平']]}},
+ {t:'锁上的交易所',y:'1911—1914年',ch:14,
+  img:'交易所的两扇大门被铁链缠住，挂着一把大锁。门上钉着一页日历："1914年7月31日"。',
+  key:'1911到1914年四年没有机会，他欠下超过100万美元。他决定申请破产，大多数债主直接签了免责书，破产清单只有约10万美元',
+  more:'纠缠他的只有两个：一个欠800美元的债主，一家破产券商的接管人（6万美元）。交易所从1914年7月31日关到12月中旬。1915年2月，威廉森只答应替他担保500股。',
+  q:'I must go through bankruptcy.',
+  chart:{type:'bar',title:'他的债务',unit:'美元',c:[['总欠款',1000000,1,'全部是股市亏损'],['破产清单',100000,1,'大债主都签了免责'],['破产券商接管人',60000,1,''],['那位800美元的债主',800,1,'1917年他最后一个还钱给此人']],log:true}},
+ {t:'伯利恒钢铁的100',y:'1915年初',ch:14,
+  img:'一根钢梁撞破一道写着"100"的大门，门框还在冒火星。',
+  key:'他只有500股的额度，第一笔必须赢。他盯了六周伯利恒钢铁，涨到90时差点忍不住，98时在纸带上"看见了100"，以98到99买进500股；当天收在114或115，再买500；第二天到145',
+  more:'他的经验：股票第一次突破100、200、300时，往往还会再涨30到50点，300以上更快。这六周是他最煎熬的六周。',
+  q:'I saw 100 on the tape when the ticker was only printing 98.',
+  chart:{title:'伯利恒钢铁 · 1915年初',unit:'$',c:[
+   ['',78,82,77,81,'','他每天只看不买'],['',81,85,80,84,''],['',84,88,83,87,''],['动摇',87,90.5,86,90,'c','涨到90，开始坐立不安'],['',90,94,89,93,''],['买入',93,99,92,98.5,'','98到99买入500股'],['',98.5,115,98,114.5,'c','收盘114或115，再买500股'],['次日',116,146,115,145,'c','次日到145，本钱有了']],
+   hl:[[100,'首次突破100']],
+   m:[[5,98,'B','500股'],[6,114.5,'B','+500股'],[7,145,'N','145']]}},
+ {t:'潜望镜',y:'1916—1917年2月',ch:14,
+  img:'地板上冒出一根潜望镜，四周一圈圈水波。潜望镜旁边，一大包棉花正往地板下沉。',
+  key:'1916年领涨股回落后不再创新高，他在12只老领涨股上各空5000股，全部有4点浮盈后加倍到12万股，"泄密"消息砸盘时回补，全年赚约300万。1917年2月他空着5万股美国钢铁',
+  more:'那天2点25分他为押注和平买了1.5万包棉花；收盘后德国宣布无限制潜艇战。当晚有大亨愿以低于收盘5点卖钢铁，无人接。次日股票低开多达8点，他回补赚约150万；棉花跌停500点，亏约37.5万。之后他还清了全部欠款。',
+  q:'Never try to sell at the top.',
+  chart:{title:'美国钢铁 · 潜艇照会前后（相对点数）',unit:'点',rel:true,c:[
+   ['前一日',0.5,1.2,-0.3,0,'','收盘；他空着5万股'],['开盘',-8,-6,-10,-7,'o','有的股票低开8点，他全部回补']],
+   hl:[[-5,'当晚有人愿以低于收盘5点卖出，无人接']],
+   m:[[1,-8,'B','回补5万股']]}},
+ {t:'被锁住的咖啡',y:'1917—1918年',ch:15,
+  img:'一堆咖啡麻袋上挂着一把巨大的挂锁，锁上贴着一张价格标签"限价"。',
+  key:'战时其他商品比战前涨了100%到400%，只有咖啡还低于战前。他1917年冬开始买，九个月纹丝不动，割肉后又买了三倍的远期合约；价格刚要上涨，卖给他的烘焙商跑去华盛顿，战时价格委员会定了最高价，交易所被迫关闭',
+  more:'他形容这是他做过最正当的商品交易。那时生咖啡一直在9美分附近，烘焙好的咖啡却跟着涨价。交易所复市后，咖啡卖到23美分。',
+  q:'made me add the unexpectable to the unexpected in my list of hazards',
+  chart:{title:'生咖啡 · 按月（书中给出9美分与23美分）',unit:'¢',c:[
+   ['买入',8.9,9.2,8.8,9.0,'','1917年冬开始买'],['',9.0,9.2,8.8,8.9,''],['',8.9,9.1,8.8,9.0,''],['',9.0,9.1,8.7,8.8,''],['',8.8,9.0,8.7,8.9,''],['',8.9,9.1,8.8,9.0,''],['',9.0,9.1,8.8,8.9,''],['',8.9,9.0,8.7,8.8,''],['割肉',8.8,8.9,8.6,8.7,'','九个月后大亏出场'],['三倍',8.7,9.3,8.7,9.2,'','再买三倍远期'],['',9.2,9.9,9.1,9.8,'','开始上涨'],['限价',9.8,10.1,9.6,9.7,'','价格委员会定最高价，交易所关闭'],['复市后',23,23.5,22.5,23,'c','复市后卖到23美分']],
+   hl:[[9,'"一直在9美分附近"']],
+   gap:[12,'交易所关闭'],
+   m:[[0,9,'B','买入'],[8,8.7,'S','止损'],[9,8.7,'B','三倍'],[11,9.7,'S','被迫卖出']]}}
+ ]},
+{id:'tips',name:'贴士与信号',sub:'棕榈滩 · 华盛顿 · 温泉城',yr:'1915—1922',ch:'第16—18章',sky:'#BFE3EA',ground:'#E3D9B8',path:'#B8A57A',
+ bridge:'他发现庄家也得按行情办事。最后一区：操纵的艺术。',
+ S:[
+ {t:'五百美元的晚宴',y:'战时繁荣末期',ch:16,
+  img:'一张铺白布的圆桌，两把椅子挨得很近，桌上一张500美元钞票，旁边一座锡锭堆成的小塔。',
+  key:'婆罗洲锡上市第一小时他买了1万股，120时卖给庄家，庄家后来拉到150。在棕榈滩，公司总裁维森斯坦在晚宴上悄悄劝利文斯顿夫人买，她用丈夫刚给的500美元在108买了100股，当天涨3点',
+  more:'他当天正好开始看空全市场，因婆罗洲锡异常活跃，第一个就空了它1万股；第二天早晚各卖2000股，价格跌到102，后来到100。他把500美元还给妻子："傻姑娘，别碰这笔交易。"维森斯坦本想借她钓他进场。',
+  q:'You foolish little girl, you keep your hands off this deal.',
+  chart:{title:'婆罗洲锡',unit:'$',c:[
+   ['上市',95,108,94,106,'','第一小时他买1万股'],['',106,114,104,113,''],['',113,121,111,120,'c','120卖出1万股'],['',120,135,118,133,''],['',133,150,131,148,'h','庄家拉到150'],['',148,149,125,127,'','牛市已过，边跌边派发'],['',127,128,108,110,''],['晚宴次日',108,112,107.5,111,'oc','夫人108买100股，当天涨3点；他开始做空'],['',111,111.5,102,102,'l','早晚各卖2000股，跌到102'],['',102,103,99.5,100,'c','跌到面值100']],
+   m:[[0,100,'B','1万股'],[2,120,'S','120卖'],[7,108,'N','夫人买100'],[7,111,'S','空1万'],[8,102,'S','再卖4000']]}},
+ {t:'黑猫与钢铁',y:'1922年前后',ch:17,
+  img:'早餐桌上蹲着一只黑猫，尾巴慢慢摆。桌上一边码着一排钢锭，另一边孤零零放着一块铜锭。',
+  key:'牛市初他同时在约114买犹他铜和美国钢铁。犹他铜表现不对，只买了5000股就停；钢铁表现对，第一天买2万股，最后加到7.2万股。他在一个成交量很大的早上把钢铁全部卖掉，均价离当日和整波最高点只差1点',
+  more:'同一小时卖犹他铜，价格一下跌了5点。朋友说是黑猫告诉他卖的。他说不是预感，是看到了一个足以吞下7.2万股的大市场。总盈利约150万美元。',
+  q:'I don\'t look out for the breaks; I look out for the warnings.',
+  chart:{title:'美国钢铁（起点约114，其后为示意）',unit:'点',rel:true,c:[
+   ['起步',0,1.5,-0.5,1.2,'','首日买2万股（起点约114）'],['',1.2,3,1,2.8,''],['',2.8,5.5,2.5,5.2,'','持续加仓'],['',5.2,8,5,7.6,''],['',7.6,11,7.2,10.5,'','7.2万股'],['',10.5,15,10,14.5,''],['',14.5,19,14,18.5,''],['',18.5,22,18,21.5,'','去华盛顿谈税'],['卖出',21.5,24,21,22.5,'','一小时内卖光，均价离顶1点']],
+   m:[[0,0,'B','2万'],[4,8,'B','到7.2万'],[8,23,'S','卖出7.2万']]}},
+ {t:'给小麦量体温',y:'1922年',ch:17,
+  img:'一袋小麦上插着一支巨大的体温计，一副听诊器贴在麻袋上。',
+  key:'煤矿罢工和铁路工人罢工让冬小麦运不出来，他判断等运力恢复时冬、春小麦会一起涌来。他先卖25万蒲式耳试盘，价格跌¼美分；再卖25万，买盘只肯1万、1.5万地零星接，价格跌1¼美分',
+  more:'这说明没有买盘，他接着卖了200万，几天后又卖200万，小麦随后一天暴跌6美分。他把试盘比作医生量体温、摸脉搏、看舌苔。',
+  q:'You can\'t tell till you bet.',
+  chart:{title:'小麦 · 试盘与加码（相对美分）',unit:'¢',rel:true,c:[
+   ['试盘1',0,0.1,-0.3,-0.25,'c','卖25万蒲式耳，跌¼美分'],['试盘2',-0.25,-0.2,-1.55,-1.5,'','再卖25万，买盘零星，累计跌1¼'],['加码',-1.5,-1.3,-2.6,-2.5,'','卖200万'],['再加',-2.5,-2.2,-3.6,-3.5,'','几天后再卖200万'],['破位',-3.5,-3.4,-9.6,-9.5,'','一天暴跌6美分']],
+   m:[[0,-0.25,'S','25万'],[1,-1.5,'S','25万'],[2,-2.5,'S','200万'],[3,-3.5,'S','200万']]}},
+ {t:'温泉城的午餐',y:'1920年代初',ch:17,
+  img:'高尔夫球洞旗边扔着一根球杆，旁边一盘没吃完的午餐，叉子还插在上面。盘子后面立着一包棉花。',
+  key:'他空了5万包棉花却顾着做股票，亏损从25万涨到100万，在温泉城认错回补。第二天午饭前看到棉花跌了50点却没有反弹，卖1万包；饭没上桌又跑去看，还是没反弹，再卖1万包，又跌40点',
+  more:'他到华盛顿再卖4万包，市场又跌75点。开车回纽约路过费城时棉花已小规模恐慌，他打长途电话全部回补，基本补回了先前的百万亏损。这不是预感，是市场的"行为"变了。',
+  q:'I must be wrong!',
+  chart:{title:'棉花 · 从认错到翻身（相对点数）',unit:'点',rel:true,c:[
+   ['',0,40,-10,30,'','空5万包，一压就反弹'],['',30,70,20,60,'','亏25万'],['',60,120,50,110,''],['认错',110,160,105,150,'','温泉城回补，亏约100万'],['次日',150,152,100,100,'','跌50点不反弹，卖1万包；午餐时再卖1万'],['',100,102,60,60,'','又跌40点'],['华盛顿',60,62,-15,-15,'','卖4万包，跌75点'],['费城',-15,-10,-120,-110,'','小恐慌，全部回补']],
+   m:[[3,150,'B','认错回补'],[4,100,'S','1万+1万'],[6,60,'S','4万'],[7,-110,'B','回补']]}},
+ {t:'热带贸易的液压机',y:'1920年代初',ch:18,
+  img:'一棵棕榈树下立着一台液压机，压板正慢慢压下来。压板下面放着一根钓鱼竿。',
+  key:'他在佛州钓鱼，看到大盘疲软时热带贸易被内部人从140拉到155，电报卖出2000股（成交153），回纽约后陆续空到3万股、价格到133。内部人拉到150、又拉到149逼空，他不补，反而去卖持有热带贸易的赤道商业公司来戳破假象',
+  more:'热带贸易跌到125后又被拉起20多点，他照样不动；最后跌破120、110、面值，在跌破90的恐慌日全部回补，赚了100多万。一年后它又到150，他试着做空，发现内部人在真正买入，于是在153回补、156做多，结果涨过200。',
+  q:'Knowledge is power and power need not fear lies',
+  chart:{title:'热带贸易（TT）',unit:'$',c:[
+   ['',139,141,138,140,'c','他上次看到约140'],['',140,156,139,155,'c','报纸上是155'],['开空',155,155.5,152,153,'c','电报卖2000股，成交153'],['',153,154,140,141,'','陆续加空'],['',141,142,132,133,'c','空到3万股，价格133'],['逼空1',133,150.5,132.5,150,'c','内部人拉到150，他不动'],['',150,150.5,139,139.5,'l','跌破140'],['逼空2',139.5,149,139,148,'h','拉到149，他卖赤道商业'],['',148,148.5,124.5,125,'c','跌到125'],['逼空3',125,149,124,146,'H','再被拉起20到25点'],['',146,147,118,119,'','跌破120'],['',119,120,108,109,'','跌破110'],['',109,110,98,99,'','跌破面值'],['回补',99,100,88,90,'l','跌破90的恐慌日全部回补'],['一年后',148,151,147,150,'c','一年后又到150，他试空'],['',150,156,149,155,'','发现真实买盘：153回补，156做多'],['',155,185,154,182,''],['',182,205,180,202,'h','涨过200']],
+   gap:[14,'一年后'],
+   m:[[2,153,'S','空2000'],[4,133,'S','到3万股'],[7,149,'N','卖赤道商业'],[13,90,'B','全部回补'],[15,153,'B','153回补'],[15,156,'B','156做多']]}}
+ ]},
+{id:'manip',name:'操纵的艺术',sub:'纽约 · 庄家与资金池',yr:'1901—1923',ch:'第19—24章',sky:'#C8C0D6',ground:'#6E6878',path:'#4E4858',
+ bridge:'股票投机永远不会消失。纸鹤回到起点，切到「回忆」再走一遍。',
+ S:[
+ {t:'基恩的钓竿',y:'1901—1904年',ch:20,
+  img:'一根飞钓竿甩出一道长长的弧线，钓线末端挂着一张写着"$200,000"的支票，支票被原样退了回来。',
+  key:'基恩是最伟大的操盘手：1901年替摩根的承销团在公开市场卖出75万多股美国钢铁，把普通股拉到55；股票后来在1903年跌到10、1904年跌到8⅞',
+  more:'洛克菲勒和罗杰斯卖不掉的联合铜业，基恩在约100附近替他们卖了22万股，之后价格又涨10点。罗杰斯寄来20万美元支票，基恩退回；罗杰斯后来"好心"劝他在约130买联合铜业。操纵的铁律：拉到尽可能高，然后在下跌途中卖给公众。',
+  q:'Stocks are manipulated to the highest point possible and then sold to the public on the way down.',
+  chart:{title:'美国钢铁普通股 · 按年',unit:'$',c:[
+   ['1901',40,55,38,45,'h','基恩拉到55，卖出75万多股'],['1902',45,47,29,30,'',''],['1903',30,31,10,11,'l','跌到10'],['1904',11,20,8.875,19,'l','最低8⅞']],
+   m:[[0,55,'S','派发']]}},
+ {t:'帝国钢铁的台阶',y:'1915年后',ch:21,
+  img:'一段钢台阶，每上三级就退一级，一路爬到顶。台阶底下锁着一只铁箱，箱上写着"70%"。',
+  key:'帝国钢铁70%的股份被锁进信托，他拿到从70到100分级的10万股看涨期权作为报酬；先吃掉70以上所有卖盘，涨了就卖给交易员，跌了再买回来，一路把价格从70做到面值100',
+  more:'整个过程他只积累了7000股，均价约85。之后一家银行想要控股权，高价买走了他全部期权。他说行情纸带是世上最好的广告。',
+  q:'the greatest publicity agent in the wide world is the ticker',
+  chart:{title:'帝国钢铁 · 从70到100',unit:'$',c:[
+   ['起点',70,70.5,69.5,70,'c','吃掉70及以上所有卖盘'],['',70,74.5,70,74,'','交易员跟进，他供货'],['',74,74.5,71.5,72,'','回落时买回'],['',72,78.5,71.8,78,''],['',78,78.5,75.5,76,''],['小冲刺',76,84.5,75.8,84,'','偶尔快速拉升制造话题'],['',84,84.3,80.5,81,''],['',81,90.5,80.8,90,''],['',90,90.3,87.5,88,''],['',88,97.5,87.8,97,''],['面值',97,100.5,96.5,100,'c','到100，人人都想买']],
+   hl:[[70,'期权起点 70'],[85,'他7000股的均价 约85'],[100,'期权终点 100']],
+   m:[[0,70,'B','吸货'],[10,100,'N','被整体收购']]}},
+ {t:'撑不住的油桶',y:'1915年后',ch:21,
+  img:'一只大油桶被几根绳子吊着勉强立住，桶底在漏油，地上的油渍越来越大。',
+  key:'普伦蒂斯的石油产品资金池握着10多万股、价格102到103，请他出手。他拉到约107，判断牛市将尽，主张立刻不计价卖出、哪怕跌破面值；普伦蒂斯坚持护盘，他只好按吩咐买进',
+  more:'大盘转熊后石油产品跟着下跌，资金池被套得更深，最后在低得多的价格清仓。他说：当你是唯一的买家时，买进就是傻瓜。',
+  q:'And the only way to sell is to sell.',
+  chart:{title:'石油产品',unit:'$',c:[
+   ['接手',102,103.2,101.8,103,'oc','102到103'],['',103,105.5,102.8,105,''],['',105,107.2,104.5,107,'h','拉到约107'],['护盘',107,107.3,103.5,104,'','普伦蒂斯要求托盘'],['护盘',104,104.8,100.5,101,'','跌破面值，继续买'],['',101,101.5,95.5,96,''],['',96,96.5,89.5,90,''],['',90,91,85,86,'L','他预言会跌15到20点']],
+   hl:[[100,'面值']],
+   m:[[3,104,'B','被迫买'],[4,101,'B','被迫买']]}},
+ {t:'达摩克利斯之炉',y:'战时繁荣之后',ch:22,
+  img:'一只三眼铸铁炉，三个炉眼上分别写着"格雷""米德兰""西部"。炉子正上方用一根细线吊着一把剑。',
+  key:'联合炉具以50美元发行、超额认购25%，后跌到37被托住，银行按每股35美元押着10万股。另有三位老手握着20万股，是悬在头顶的剑。他让三人组600万资金池、以40给他看涨期权并把股票托管',
+  more:'资金还没到位，沃尔夫就自己买进并四处放话说利文斯顿要拉升，价格37到39、再到42，他顺势卖出3万股，三天内把银行的10万股全部卖光，一股都没买。之后价格跌到32、31¼，沃尔夫冲进办公室质问；最后三人以25½交给他，在下跌途中卖完。一个裁缝还因此买了股票。',
+  q:'I never trade in them Curb stocks!',
+  chart:{title:'联合炉具',unit:'$',c:[
+   ['发行',50,50.5,49.8,50.3,'oh','50发行，只略高于50'],['',50.3,50.4,45,45.5,''],['',45.5,46,40.2,41,'l','发起人托在40以上'],['钉住',41,41.2,37,37,'c','钉在37'],['',37,37.2,37,37,'ohlc','几个月不动'],['第1天',37,39,37,39,'ohc','沃尔夫买进，37到39'],['第2天',39,42.2,39,42,'hc','到42，他开始卖，先卖3万股'],['第3天',42,43.5,41.5,43,'','市场传他要拉升'],['第4—5天',43,44,42,42.5,'h','近44，银行的10万股卖完'],['',42.5,42.8,39.5,39.8,'l','跌破期权价40'],['',39.8,40,32,32.5,'l','跌到32'],['沃尔夫',32.5,33,31.25,31.25,'c','31¼，沃尔夫冲进来'],['清仓',30,30.5,25.5,26,'','25½托管，边跌边卖']],
+   hl:[[35,'银行每股贷款 35'],[40,'看涨期权价 40']],
+   m:[[6,42,'S','卖3万'],[8,43.5,'S','卖完10万'],[12,29,'S','清仓']]}},
+ {t:'纽黑文的铁路桥',y:'1902年起',ch:23,
+  img:'一座木栈桥正在一节节塌下去，桥上一节新英格兰客车厢歪在半空，车厢侧面写着"255 → 12"。',
+  key:'纽黑文铁路1902年股价255，是新英格兰最体面的投资。新总裁以虚高价格收购各种资产，有条电车线200万买进、1000万卖给公司。内部人边卖边说"是空头在袭击"，股价从255一路跌到12',
+  more:'他的结论：持续下跌从来不是空头袭击造成的，而是内部人在卖出或不再买入。另一只因特维尔石油被资金池拉到50后崩跌，经纪人对外说是利文斯顿在砸盘。最后一章他主张：发布看多消息的"知情人士"应当署名。',
+  q:'beware of explanations that explain only what unnamed insiders wish',
+  chart:{title:'纽黑文铁路 · 一路跌下去',unit:'$',c:[
+   ['1902',250,256,248,255,'c','255，新英格兰的金边股'],['',255,256,245,250,'c','250'],['',250,251,195,200,'c','200'],['',200,205,145,150,'c','150'],['',150,152,95,100,'c','100'],['',100,102,48,50,'c','50'],['',50,52,24,25,'c','25'],['终点',25,26,11.5,12,'c','12']],
+   m:[[1,250,'N','"空头袭击"'],[7,12,'N','255→12']]}}
+ ]}
+];
+
+/* =================== 三维基础 =================== */
+const $=s=>document.querySelector(s);
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const CN=['一','二','三','四','五','六','七'];
+const canvas=$('#c');
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(D[0].sky);scene.fog=new THREE.Fog(D[0].sky,55,240);
+const camera=new THREE.PerspectiveCamera(62,1,0.1,900);camera.rotation.order='YXZ';
+const hemi=new THREE.HemisphereLight(0xf5f1e6,0x5d6252,0.95);scene.add(hemi);
+const sun=new THREE.DirectionalLight(0xfff1d6,0.7);sun.position.set(-40,80,30);scene.add(sun);
+const MC={};
+function mt(c,e,op){const k=c+'|'+(e||'')+'|'+(op||'');if(!MC[k]){const m=new THREE.MeshLambertMaterial({color:c,side:THREE.DoubleSide});if(e)m.emissive=new THREE.Color(e);if(op){m.transparent=true;m.opacity=op;m.depthWrite=false}MC[k]=m}return MC[k]}
+function add(p,geo,m,x,y,z){const o=new THREE.Mesh(geo,m);o.position.set(x||0,y||0,z||0);p.add(o);return o}
+const B=(p,w,h,d,c,x,y,z,e)=>add(p,new THREE.BoxGeometry(w,h,d),e?new THREE.MeshLambertMaterial({color:c,emissive:new THREE.Color(e),side:THREE.DoubleSide}):mt(c),x,y,z);
+const Cy=(p,rt,rb,h,c,x,y,z,s,e,op)=>add(p,new THREE.CylinderGeometry(rt,rb,h,s||18),mt(c,e,op),x,y,z);
+const Sp=(p,r,c,x,y,z,sx,sy,sz,e,op)=>{const o=add(p,new THREE.SphereGeometry(r,20,14),op?new THREE.MeshLambertMaterial({color:c,emissive:new THREE.Color(e||0),transparent:true,opacity:op,depthWrite:false,side:THREE.DoubleSide}):mt(c,e),x,y,z);o.scale.set(sx||1,sy||1,sz||1);return o};
+const Co=(p,r,h,c,x,y,z,s,e)=>add(p,new THREE.ConeGeometry(r,h,s||18),mt(c,e),x,y,z);
+const To=(p,R,r,c,x,y,z,arc,e)=>add(p,new THREE.TorusGeometry(R,r,10,30,arc||Math.PI*2),new THREE.MeshLambertMaterial({color:c,emissive:new THREE.Color(e||0),side:THREE.DoubleSide}),x,y,z);
+function Pr(p,w,h,d,c,x,y,z){const s=new THREE.Shape();s.moveTo(-w/2,0);s.lineTo(w/2,0);s.lineTo(0,h);s.lineTo(-w/2,0);const g=new THREE.ExtrudeGeometry(s,{depth:d,bevelEnabled:false});g.translate(0,0,-d/2);return add(p,g,mt(c),x,y,z)}
+function Grp(p,x,y,z){const g=new THREE.Group();g.position.set(x||0,y||0,z||0);p.add(g);return g}
+function TX(w,h,draw){const c=document.createElement('canvas');c.width=w;c.height=h;draw(c.getContext('2d'),w,h);const t=new THREE.CanvasTexture(c);t.anisotropy=4;t.userData={c,draw};return t}
+function Pl(p,w,h,t,x,y,z,basic){const o={map:t,side:THREE.DoubleSide,transparent:true};const m=basic?new THREE.MeshBasicMaterial(o):new THREE.MeshLambertMaterial(o);return add(p,new THREE.PlaneGeometry(w,h),m,x,y,z)}
+const FD='"ZCOOL XiaoWei","KaiTi",serif',FB='"Noto Serif SC","Songti SC",serif';
+function T(c,s,x,y,px,col,font,align){c.font=`${px}px ${font||FB}`;c.fillStyle=col;c.textAlign=align||'center';c.textBaseline='middle';c.fillText(s,x,y)}
+function Lab(p,text,x,y,z,h,col,font){
+  h=h||0.55;const fs=72,c=document.createElement('canvas'),g=c.getContext('2d');g.font=`${fs}px ${font||FD}`;
+  const w=Math.ceil(g.measureText(text).width)+40;c.width=w;c.height=Math.ceil(fs*1.45);
+  g.font=`${fs}px ${font||FD}`;g.textAlign='center';g.textBaseline='middle';g.lineWidth=12;g.strokeStyle='rgba(12,16,24,.62)';g.strokeText(text,w/2,c.height/2+3);g.fillStyle=col||'#fff';g.fillText(text,w/2,c.height/2+3);
+  const s=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),transparent:true,depthWrite:false}));
+  s.scale.set(h*w/c.height,h,1);s.position.set(x,y,z);p.add(s);return s;
+}
+let seed=17;const rnd=()=>(seed=seed*16807%2147483647)/2147483647;
+const AN=[];const anim=f=>AN.push(f);
+const GOLD='#D4AF37';
+
+/* =================== K线绘制 =================== */
+const FR=['','⅛','¼','⅜','½','⅝','¾','⅞'];
+function fmtV(v,spec){
+  if(v==null)return '—';
+  const u=spec.unit;
+  if(spec.rel){const s=(v>0?'+':v<0?'−':'')+(+Math.abs(v).toFixed(2)).toString();return s+(u==='¢'?'¢':u==='点'?'点':'')}
+  if(u==='$'){const n=Math.round(v*8);if(Math.abs(v*8-n)<1e-6){const w=Math.floor(n/8),r=n-w*8;return w+FR[r]}return (+v.toFixed(2)).toString()}
+  if(u==='bu'){const ct=Math.round(v*200)/2;const w=Math.floor(ct);const half=ct-w>0.1;return '$'+Math.floor(w/100)+'.'+String(w%100).padStart(2,'0')+(half?'½':'')}
+  if(u==='¢')return (+v.toFixed(2))+'¢';
+  if(u==='美元')return (v<0?'−':'')+'$'+Math.abs(v).toLocaleString('en-US');
+  if(u==='%')return v+'%';
+  return String(v);
+}
+function niceStep(r){const e=Math.pow(10,Math.floor(Math.log10(r)));const f=r/e;return (f<1.5?1:f<3?2:f<7?5:10)*e}
+function diamond(c,x,y,s,fill){c.beginPath();c.moveTo(x,y-s);c.lineTo(x+s,y);c.lineTo(x,y+s);c.lineTo(x-s,y);c.closePath();if(fill){c.fill()}c.stroke()}
+function drawChart(c,W,H,spec,o){
+  o=o||{};const th=o.board?{bg:'#101814',grid:'rgba(255,255,255,.10)',txt:'#C9D2CC',title:'#F4E6C0',up:'#FF5A4E',down:'#2FCB8E',gold:'#F2C45A'}:{bg:null,grid:'rgba(255,255,255,.08)',txt:'#AAB4BC',title:'#EEF0EA',up:'#E0473F',down:'#1FA37A',gold:'#E3B45A'};
+  const sc=o.scale||1;c.save();c.scale(sc,sc);W/=sc;H/=sc;
+  if(th.bg){c.fillStyle=th.bg;c.fillRect(0,0,W,H)}
+  const top=o.board?34:10,bot=o.board?30:26,left=o.board?54:44,right=o.board?96:86;
+  if(o.board){T(c,spec.title,left,17,17,th.title,FB,'left')}
+  const res={slots:[],spec};
+  if(spec.type==='bar'){
+    const n=spec.c.length,pw=W-left-right+60,x0=left-10,sw=pw/n;const vals=spec.c.map(r=>r[1]);const fin=vals.filter(v=>v!=null);
+    const log=spec.log;const mx=Math.max(...fin.map(Math.abs),1);const hasNeg=fin.some(v=>v<0);
+    const base=hasNeg?top+(H-top-bot)*0.62:H-bot;const hPos=base-top,hNeg=H-bot-base;
+    const hOf=v=>log?(Math.log10(Math.max(1,Math.abs(v)))/Math.log10(mx))*hPos:(Math.abs(v)/mx)*(v<0?hNeg:hPos);
+    c.strokeStyle=th.grid;c.beginPath();c.moveTo(x0,base);c.lineTo(x0+pw,base);c.stroke();
+    spec.c.forEach((r,i)=>{const [lab,v]=r;const cx=x0+sw*(i+0.5),bw=Math.min(sw*0.55,70);
+      if(v==null){c.save();c.strokeStyle=th.gold;c.setLineDash([4,3]);c.strokeRect(cx-bw/2,top+hPos*0.25,bw,hPos*0.75);c.restore();T(c,'∅',cx,top+hPos*0.6,18,th.gold)}
+      else{const h=Math.max(2,hOf(v));c.fillStyle=v<0?th.down:th.gold;const y=v<0?base:base-h;c.fillRect(cx-bw/2,y,bw,h);
+        T(c,fmtV(v,spec),cx,v<0?base+h+10:base-h-9,o.board?13:11,th.title,FB)}
+      c.save();const lb=lab.length>8?lab.slice(0,8)+'…':lab;T(c,lb,cx,H-bot+13,o.board?12:10.5,th.txt);c.restore();
+      res.slots.push({x:cx,w:sw,i})});
+    c.restore();return res;
+  }
+  const gi=spec.gap?spec.gap[0]:-1;const n=spec.c.length+(gi>=0?1:0);const pw=W-left-right,sw=pw/n;
+  let lo=Infinity,hi=-Infinity;spec.c.forEach(r=>{lo=Math.min(lo,r[3]);hi=Math.max(hi,r[2])});(spec.hl||[]).forEach(h=>{lo=Math.min(lo,h[0]);hi=Math.max(hi,h[0])});
+  const pad=(hi-lo)*0.1||1;lo-=pad;hi+=pad;const Y=v=>top+(hi-v)/(hi-lo)*(H-top-bot);
+  const st=niceStep((hi-lo)/4);c.font=`${o.board?12:10.5}px ${FB}`;
+  for(let v=Math.ceil(lo/st)*st;v<=hi;v+=st){const y=Y(v);c.strokeStyle=th.grid;c.lineWidth=1;c.beginPath();c.moveTo(left,y);c.lineTo(W-right,y);c.stroke();T(c,fmtV(+v.toFixed(4),spec),left-6,y,o.board?12:10.5,th.txt,FB,'right')}
+  (spec.hl||[]).forEach(h=>{const y=Y(h[0]);c.save();c.strokeStyle=th.gold;c.setLineDash([5,4]);c.lineWidth=1.2;c.beginPath();c.moveTo(left,y);c.lineTo(W-right,y);c.stroke();c.restore();
+    c.save();c.font=`${o.board?12:10.5}px ${FB}`;c.fillStyle=th.gold;c.textAlign='left';c.textBaseline='middle';let t=h[1];const maxw=right-6;while(c.measureText(t).width>maxw&&t.length>3)t=t.slice(0,-1);if(t!==h[1])t+='…';c.fillText(t,W-right+4,y);c.restore()});
+  let slot=0;spec.c.forEach((r,i)=>{
+    if(i===gi){const gx=left+sw*(slot+0.5);c.save();c.strokeStyle=th.txt;c.setLineDash([2,4]);c.beginPath();c.moveTo(gx,top);c.lineTo(gx,H-bot);c.stroke();c.restore();T(c,spec.gap[1],gx,top+8,o.board?12:10,th.gold);slot++}
+    const [t,op,hh,ll,cl,b,nt]=r;const cx=left+sw*(slot+0.5),bw=Math.max(3,Math.min(sw*0.56,22));const up=cl>=op;const col=up?th.up:th.down;const anc=b&&b.length>0;
+    c.save();c.strokeStyle=col;c.fillStyle=col;c.lineWidth=1.4;if(!anc){c.setLineDash([3,2]);c.globalAlpha=0.75}
+    c.beginPath();c.moveTo(cx,Y(hh));c.lineTo(cx,Y(Math.max(op,cl)));c.moveTo(cx,Y(Math.min(op,cl)));c.lineTo(cx,Y(ll));c.stroke();
+    const y1=Y(Math.max(op,cl)),y2=Y(Math.min(op,cl));const bh=Math.max(1.5,y2-y1);
+    if(anc){c.fillRect(cx-bw/2,y1,bw,bh)}else{c.strokeRect(cx-bw/2,y1,bw,bh)}c.restore();
+    if(b){c.save();c.strokeStyle=th.gold;c.fillStyle=th.gold;c.lineWidth=1.3;for(const ch of b){const key={o:op,h:hh,l:ll,c:cl}[ch.toLowerCase()];diamond(c,cx+bw/2+4,Y(key),3.2,ch===ch.toLowerCase())}c.restore()}
+    if(t){T(c,t,cx,H-bot+12,o.board?11.5:10,th.txt,FB)}
+    res.slots.push({x:cx,w:sw,i});slot++;
+  });
+  (spec.m||[]).forEach(([i,p,k,txt])=>{const s=res.slots.find(q=>q.i===i);if(!s)return;const x=s.x,y=Y(p);c.save();
+    if(k==='B'){c.fillStyle=th.up;c.beginPath();c.moveTo(x,y+4);c.lineTo(x-6,y+13);c.lineTo(x+6,y+13);c.fill();T(c,txt,x,y+22,o.board?11.5:10,th.up,FB)}
+    else if(k==='S'){c.fillStyle=th.down;c.beginPath();c.moveTo(x,y-4);c.lineTo(x-6,y-13);c.lineTo(x+6,y-13);c.fill();T(c,txt,x,y-21,o.board?11.5:10,th.down,FB)}
+    else{c.fillStyle=th.gold;c.beginPath();c.arc(x,y,3.5,0,7);c.fill();T(c,txt,x,y-12,o.board?11.5:10,th.gold,FB)}c.restore()});
+  if(spec.rel&&o.board){T(c,'书中未给绝对价位 · 纵轴为相对变化',W-8,H-8,11,th.txt,FB,'right')}
+  res.Y=Y;c.restore();return res;
+}
+
+/* =================== 物件与建筑 =================== */
+/* ============ 35 件专属物件 + 7 座建筑 ============ */
+const man=(p,x,y,z,c,s)=>{s=s||1;const g=Grp(p,x,y,z);g.scale.setScalar(s);Cy(g,0.16,0.2,0.75,c||'#2A2A2E',0,0.38,0,10);Sp(g,0.14,'#E5C9A8',0,0.9,0);return g};
+const PROPS=[
+/* ===== 一 对赌行少年 ===== */
+[
+function(g){ // 报价板 + 小本子 + $3.12
+  const t=TX(512,300,(c,w,h)=>{c.fillStyle='#1E2622';c.fillRect(0,0,w,h);c.strokeStyle='rgba(255,255,255,.25)';for(let x=0;x<w;x+=85){c.beginPath();c.moveTo(x,0);c.lineTo(x,h);c.stroke()}
+    const n=['BUR','SUG','STL','TCI','WU','BRT'];n.forEach((s,i)=>{T(c,s,42+i*85,24,22,'#E8E4D0','Georgia,serif')});
+    for(let r=0;r<6;r++)for(let i=0;i<6;i++)T(c,(80+Math.floor(rnd()*40))+['','⅛','¼','½','¾'][Math.floor(rnd()*5)],42+i*85,64+r*38,24,'#F4F1E4','Georgia,serif')});
+  B(g,3.4,2.2,0.12,'#3A2A1C',0,3.1,-1.5);const bd=Pl(g,3.2,2.0,t,0,3.1,-1.43);
+  B(g,0.12,2.2,0.12,'#3A2A1C',-1.6,1.1,-1.5);B(g,0.12,2.2,0.12,'#3A2A1C',1.6,1.1,-1.5);
+  const pg=TX(200,260,(c,w,h)=>{c.fillStyle='#F2EBD6';c.fillRect(0,0,w,h);c.strokeStyle='#B7A788';for(let y=30;y<h;y+=18){c.beginPath();c.moveTo(10,y);c.lineTo(w-10,y);c.stroke()}
+    T(c,'周一 BUR 84',70,40,17,'#2A2A2A');T(c,'→ 周二?',70,76,17,'#2A2A2A');T(c,'→ 周三?',70,112,17,'#2A2A2A');c.fillStyle='#A8281E';c.fillRect(20,150,120,3)});
+  const bk=Grp(g,0,0.9,0.8);bk.rotation.x=-0.9;const l=Pl(bk,1.1,1.45,pg,-0.57,0,0);l.rotation.y=0.12;const r=Pl(bk,1.1,1.45,pg,0.57,0,0);r.rotation.y=-0.12;
+  B(g,2.4,0.4,1.2,'#5B3E27',0,0.65,0.8);
+  const cn=Grp(g,1.7,1.4,1.2);const cc=Cy(cn,0.38,0.38,0.06,'#C9CED4',0,0,0,28);cc.rotation.x=Math.PI/2;Lab(cn,'$3.12',0,0,0.06,0.3,'#fff',FB);
+  anim(t=>{cn.rotation.y=t*1.2});
+},
+function(g){ // 七张粉红单子 + 电报机 + SUGAR 108
+  const tk=TX(160,110,(c,w,h)=>{c.fillStyle='#F2B8C6';c.fillRect(0,0,w,h);c.strokeStyle='#A0485E';c.lineWidth=4;c.strokeRect(4,4,w-8,h-8);T(c,'做空 糖业',w/2,32,22,'#5A1E2E');T(c,'500股',w/2,62,20,'#5A1E2E');T(c,'105¼',w/2,90,22,'#5A1E2E','Georgia,serif')});
+  for(let i=0;i<7;i++){const a=(i-3)*0.22;const p=Pl(g,0.8,0.55,tk,Math.sin(a)*1.2-0.2,1.2+Math.cos(a)*1.2,0.6);p.rotation.z=-a}
+  B(g,1.4,0.2,0.8,'#5B3E27',1.4,0.55,-0.6);const key=B(g,0.7,0.06,0.12,'#B08A3E',1.4,0.75,-0.4);Cy(g,0.12,0.12,0.4,'#2A2A2A',1.2,0.85,-0.9);Cy(g,0.12,0.12,0.4,'#2A2A2A',1.6,0.85,-0.9);
+  const sign=Lab(g,'SUGAR 108',0,4.2,-0.5,0.8,'#FF6B5A',FB);
+  anim(t=>{key.rotation.z=Math.sin(t*14)>0.3?0.1:0;sign.visible=(t%2)<1.4});
+},
+function(g){ // 91⅛ 票据 + 铁球
+  const t=TX(360,240,(c,w,h)=>{c.fillStyle='#F4EEDC';c.fillRect(0,0,w,h);c.strokeStyle='#6A5A48';c.lineWidth=5;c.strokeRect(6,6,w-12,h-12);T(c,'COSMOPOLITAN',w/2,36,24,'#3A2E24','Georgia,serif');
+    T(c,'Bot 10 Steel at 90⅛',w/2,104,32,'#2A2A2A','Georgia,serif');c.strokeStyle='#C0392B';c.lineWidth=6;c.beginPath();c.moveTo(60,104);c.lineTo(w-60,104);c.stroke();T(c,'91⅛',w/2,166,52,'#C0392B','Georgia,serif')});
+  const tg=Grp(g,0,2.5,-0.2);tg.rotation.x=-0.1;Pl(tg,2.6,1.75,t,0,0,0);B(tg,2.7,1.85,0.05,'#6A5A48',0,0,-0.04);
+  B(g,0.12,1.7,0.12,'#3A2A1C',0,0.9,-0.3);
+  const ball=Sp(g,0.55,'#2E2E30',1.6,1,1.1);Lab(g,'3',1.6,1,1.66,0.45,'#fff',FB);
+  for(let k=0;k<6;k++){const l=To(g,0.12,0.035,'#555',1.3-k*0.2,1.2+k*0.2,0.9-k*0.15);l.rotation.y=k%2?Math.PI/2:0;l.rotation.z=0.6}
+  anim(t=>{tg.rotation.z=Math.sin(t*0.8)*0.03});
+},
+function(g){ // 三百个傻瓜 + 保险箱
+  B(g,4.2,2.6,0.2,'#6B4A2E',0,1.75,-1.6);B(g,3.4,2.2,0.05,'#1E1A16',0,1.55,-1.48);
+  for(let i=0;i<60;i++){const x=(rnd()-0.5)*3.2,z=-1.45-rnd()*0.1;const m=man(g,x,0.5+rnd()*0.2,z+0.02,['#2A2A2E','#3A3226','#262C38'][i%3],0.5)}
+  Lab(g,'300',0,3.4,-1.4,0.6,'#F4D98A',FB);
+  B(g,1.2,1.4,1.0,'#3E4348',1.3,1.15,0.8);Cy(g,0.3,0.3,0.06,'#A7ADB2',1.3,1.2,1.32,24).rotation.x=Math.PI/2;
+  const lk=To(g,0.18,0.05,'#C9A04A',1.3,1.95,1.32,Math.PI);B(g,0.4,0.35,0.12,'#C9A04A',1.3,1.75,1.32);
+  const nt=TX(220,60,(c,w,h)=>{c.fillStyle='#F4EEDC';c.fillRect(0,0,w,h);T(c,'Horace Kent',w/2,h/2+2,30,'#2A1E17','Georgia,serif')});Pl(g,0.9,0.25,nt,1.3,0.75,1.32);
+  const dl=man(g,-1.3,0.45,0.9,'#2A2A2E',1.4);
+  anim(t=>{dl.rotation.y=Math.sin(t*0.9)*0.6});
+},
+function(g){ // 11:15 大钟 + 灰衣警察 + 钞票
+  const f=TX(256,256,(c,w,h)=>{c.fillStyle='#F4EEDD';c.beginPath();c.arc(128,128,124,0,7);c.fill();c.strokeStyle='#2A2A2A';c.lineWidth=8;c.stroke();for(let i=0;i<12;i++){const a=i/12*Math.PI*2-Math.PI/2;T(c,String(i||12),128+Math.cos(a)*96,128+Math.sin(a)*96,28,'#2A2A2A','Georgia,serif')}});
+  B(g,0.3,2.6,0.3,'#3A2A1C',0,1.75,-0.6);const cf=Grp(g,0,3.3,-0.4);Cy(cf,1.05,1.05,0.15,'#6B4A2E',0,0,-0.08,32).rotation.x=Math.PI/2;Pl(cf,2,2,f,0,0,0.01);
+  const hm=Grp(cf,0,0,0.03);B(hm,0.07,0.75,0.02,'#111',0,0.35,0);hm.rotation.z=-Math.PI*2*15/60;
+  const hh=Grp(cf,0,0,0.04);B(hh,0.1,0.5,0.02,'#111',0,0.23,0);hh.rotation.z=-Math.PI*2*(11.25/12);
+  const sh=Grp(cf,0,0,0.05);B(sh,0.03,0.85,0.02,'#C0392B',0,0.4,0);
+  const pc=man(g,1.6,0.45,0.6,'#8A8E92',1.5);Cy(pc,0.17,0.2,0.1,'#6E7276',0,1.05,0,12);
+  [[2000,0],[500,1],[500,2],[500,3],[500,4],[100,5],[100,6],[100,7]].forEach(([v,i])=>B(g,0.7,0.05,0.35,'#6E9A6A',-1.4,0.5+i*0.06,0.8));
+  Lab(g,'$5,100',-1.4,1.3,0.8,0.35,'#F4D98A',FB);
+  anim(t=>{sh.rotation.z=-t*1.5});
+}],
+/* ===== 二 华尔街的学费 ===== */
+[
+function(g){ // 报价机吐出羊皮卷
+  Cy(g,0.45,0.55,1.1,'#5A3A26',-1.2,1.0,0);B(g,0.6,0.45,0.45,'#B08A3E',-1.2,1.8,0);Sp(g,0.62,'#DDEEFF',-1.2,1.85,0,1,1.1,1,null,0.22);
+  const N=60,pos=[],uv=[],idx=[];for(let i=0;i<N;i++){const s=i/(N-1),x=-0.9+s*2.4,y=1.8-Math.sin(s*2.2)*1.1,z=0.3+Math.sin(s*5)*0.4;pos.push(x,y,z-0.14,x,y,z+0.14);uv.push(0,s,1,s);if(i<N-1){const a=i*2;idx.push(a,a+1,a+2,a+1,a+3,a+2)}}
+  const tp=TX(64,512,(c,w,h)=>{const gr=c.createLinearGradient(0,0,0,h);gr.addColorStop(0,'#F4EFE0');gr.addColorStop(1,'#C9A56A');c.fillStyle=gr;c.fillRect(0,0,w,h);c.fillStyle='#333';for(let y=10;y<h;y+=26)c.fillRect(16,y,32,6)});
+  const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));geo.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));geo.setIndex(idx);geo.computeVertexNormals();
+  add(g,geo,new THREE.MeshLambertMaterial({map:tp,side:THREE.DoubleSide}));
+  const sc=Grp(g,1.7,0.9,0.4);Cy(sc,0.28,0.28,1.4,'#D9B77A',0,0,0,16).rotation.z=Math.PI/2;[-0.72,0.72].forEach(x=>{const k=Cy(sc,0.1,0.1,0.3,'#6A4428',x,0,0,10);k.rotation.z=Math.PI/2});
+  Lab(g,'84 → 85',0,3.4,0,0.5,'#F4D98A',FB);
+  anim(t=>{sc.rotation.x=Math.sin(t)*0.1});
+},
+function(g){ // 北太平洋火车头上坡
+  const ramp=B(g,4.4,0.2,1.4,'#7A6A58',0,1.0,0);ramp.rotation.z=0.25;
+  const loco=Grp(g,0,1.25,0);loco.rotation.z=0.25;
+  Cy(loco,0.35,0.35,1.6,'#1E1E22',0.1,0.45,0,16).rotation.z=Math.PI/2;B(loco,0.7,0.8,0.8,'#26262A',-0.9,0.55,0);B(loco,0.8,0.08,0.9,'#8A1E1E',-0.9,1.0,0);
+  Cy(loco,0.1,0.16,0.6,'#1E1E22',0.6,1.0,0,10);[-0.6,-0.1,0.4].forEach(x=>[-0.42,0.42].forEach(z=>{const w=Cy(loco,0.22,0.22,0.08,'#8A1E1E',x,0.05,z,16);w.rotation.x=Math.PI/2}));
+  const pl=TX(120,60,(c,w,h)=>{c.fillStyle='#C9A04A';c.fillRect(0,0,w,h);T(c,'N.P.',w/2,h/2+2,36,'#1E1E22','Georgia,serif')});Pl(loco,0.5,0.25,pl,0.92,0.45,0).rotation.y=Math.PI/2;
+  const smoke=[0,1,2,3].map(()=>Sp(g,0.25,'#ECECEC',0,0,0,1,1,1,null,0.5));
+  anim(t=>{const u=(t*0.12)%1;loco.position.x=-1.2+u*2.4;loco.position.y=1.25+(-1.2+u*2.4)*0.255;smoke.forEach((s,i)=>{const v=(t*0.5+i/4)%1;s.position.set(loco.position.x+0.6*0.97-v*0.8,loco.position.y+1.1+v*1.6,0);s.scale.setScalar(0.6+v*1.5)})});
+},
+function(g){ // 蜗牛驮报价机 + 悬崖
+  B(g,2.6,0.8,3,'#8A7B6A',-1,0.85,0);
+  const certs=[];for(let i=0;i<4;i++){const c=B(g,0.9,0.02,0.6,'#F2EBD6',1.6,3-i*0.7,0.2);c.rotation.set(i*0.5,i,i*0.3);certs.push(c)}
+  const sn=Grp(g,-1,1.25,0.4);const sh=Sp(sn,0.55,'#B07A4A',0,0.5,0,1,1,0.8);To(sn,0.32,0.06,'#6A4428',0,0.5,0.43);
+  const body=Sp(sn,0.3,'#9AA07A',0.4,0.1,0,2.4,0.6,0.9);[0.95,1.05].forEach((x,i)=>Cy(sn,0.03,0.03,0.4,'#9AA07A',x,0.35,i?0.12:-0.12,6));
+  B(sn,0.5,0.35,0.35,'#B08A3E',0,1.18,0);
+  const tp=B(g,2.8,0.02,0.2,'#F4EFE0',-2.5,1.3,0.4);
+  Lab(g,'纸带 100 · 成交 80',0,4.3,0,0.5,'#FF8A7A',FB);
+  anim(t=>{sn.position.x=-1.4+Math.sin(t*0.2)*0.3;certs.forEach((c,i)=>{c.position.y=3-((t*0.4+i*0.25)%1)*2.6;c.rotation.x=t+i})});
+},
+function(g){ // 火鸡坐扶手椅
+  B(g,1.8,0.3,1.4,'#7A2E2A',0,0.9,0);B(g,1.8,1.4,0.25,'#7A2E2A',0,1.7,-0.6);B(g,0.25,0.6,1.4,'#7A2E2A',-0.85,1.25,0);B(g,0.25,0.6,1.4,'#7A2E2A',0.85,1.25,0);
+  [[-0.8,-0.6],[0.8,-0.6],[-0.8,0.6],[0.8,0.6]].forEach(([x,z])=>B(g,0.12,0.5,0.12,'#4A2A1A',x,0.55,z));
+  const cu=TX(160,60,(c,w,h)=>{c.fillStyle='#C9A04A';c.fillRect(0,0,w,h);T(c,'500股',w/2,h/2+2,32,'#3A2A1C')});Pl(g,1.2,0.4,cu,0,1.06,0.1).rotation.x=-Math.PI/2;
+  const tk=Grp(g,0,1.1,0);Sp(tk,0.62,'#6A4A32',0,0.5,0.05,1,0.95,1.05);
+  for(let i=0;i<9;i++){const a=(i-4)*0.28;const f=add(tk,new THREE.PlaneGeometry(0.35,1.1),mt(i%2?'#8A5A3A':'#5A3A26'),Math.sin(a)*0.5,0.9+Math.cos(a)*0.5,-0.45);f.rotation.z=-a}
+  const hd=Grp(tk,0,0.95,0.55);Sp(hd,0.18,'#C8B8A8',0,0,0);Co(hd,0.05,0.18,'#E0A030',0,-0.02,0.2,8).rotation.x=Math.PI/2;Sp(hd,0.07,'#C0392B',0.06,-0.15,0.12,0.6,1.5,0.6);
+  hd.rotation.x=0.7;
+  anim(t=>{tk.rotation.y=Math.sin(t*0.7)*0.15});
+},
+function(g){ // 执事眼镜 + 糖罐 + 加仓台阶
+  Cy(g,0.55,0.45,0.9,'#F2EFE8',-1.3,0.9,0.3,24);Sp(g,0.5,'#F2EFE8',-1.3,1.35,0.3,1,0.3,1);Sp(g,0.08,'#C9A04A',-1.3,1.5,0.3);
+  for(let i=0;i<6;i++)B(g,0.18,0.18,0.18,'#FAFAF6',-0.7+i*0.08,0.54+Math.floor(i/3)*0.18,0.9+(i%3)*0.1);
+  const sp=Grp(g,-1.3,2.1,0.45);[-0.35,0.35].forEach(x=>{To(sp,0.28,0.035,'#C9CED4',x,0,0);Cy(sp,0.27,0.27,0.01,'#DDEEFF',x,0,0,20,null,0.3).rotation.x=Math.PI/2});
+  To(sp,0.1,0.03,'#C9CED4',0,0.05,0,Math.PI);
+  [[2000,0.6],[2000,0.9],[2000,1.2],[4000,1.8]].forEach(([n,h],i)=>{B(g,0.6,h,0.7,i==3?'#C0392B':'#B08A3E',0.1+i*0.62,0.45+h/2,-0.1);Lab(g,String(n),0.1+i*0.62,0.45+h+0.25,0.3,0.28,'#fff',FB)});
+  anim(t=>{sp.rotation.z=Math.sin(t*0.9)*0.08});
+}],
+/* ===== 三 预感与恐慌 ===== */
+[
+function(g){ // 海鸥、蛤蜊、地裂
+  const crack=TX(256,64,(c,w,h)=>{c.clearRect(0,0,w,h);c.strokeStyle='#1A120A';c.lineWidth=10;c.beginPath();c.moveTo(0,32);for(let x=0;x<=w;x+=16)c.lineTo(x,32+(rnd()-0.5)*40);c.stroke()});
+  const cr=Pl(g,4.4,1.1,crack,0,0.47,0.4);cr.rotation.x=-Math.PI/2;
+  const sgn=TX(260,80,(c,w,h)=>{c.fillStyle='#233345';c.fillRect(0,0,w,h);T(c,'联合太平洋',w/2,h/2+2,34,'#F4E3B0')});Cy(g,0.05,0.05,1.8,'#555',1.8,1.35,-0.6,8);Pl(g,1.2,0.37,sgn,1.8,2.2,-0.58);
+  const gulls=[0,1,2].map(i=>{const gl=Grp(g,0,0,0);Sp(gl,0.18,'#F7F7F4',0,0,0,1,0.8,1.8);const wl=Grp(gl),wr=Grp(gl);add(wl,new THREE.PlaneGeometry(0.8,0.25),mt('#EDEDEA'),-0.4,0,0);add(wr,new THREE.PlaneGeometry(0.8,0.25),mt('#EDEDEA'),0.4,0,0);wl.rotation.x=wr.rotation.x=-Math.PI/2;gl.userData.w=[wl,wr];
+    const cl=Sp(g,0.1,'#6A5A7A',0,0,0,1.2,0.6,1);gl.userData.cl=cl;return gl});
+  anim(t=>{gulls.forEach((gl,i)=>{const a=t*0.6+i*2.1;gl.position.set(Math.cos(a)*1.8,2.6+Math.sin(t*1.3+i)*0.4,Math.sin(a)*1.2);gl.rotation.y=-a;const f=Math.sin(t*8+i);gl.userData.w[0].rotation.z=f*0.5;gl.userData.w[1].rotation.z=-f*0.5;
+    const u=(t*0.35+i/3)%1;const cl=gl.userData.cl;if(u<0.5){cl.position.set(gl.position.x,gl.position.y-0.2,gl.position.z)}else{cl.position.set(gl.position.x,Math.max(0.52,gl.position.y-0.2-(u-0.5)*8),gl.position.z)}})});
+},
+function(g){ // 立式电话 + 10% 气球
+  B(g,1.4,0.9,0.9,'#5B3E27',0,0.9,0);Cy(g,0.28,0.35,0.12,'#1A1A1A',0,1.41,0,20);Cy(g,0.07,0.07,1.1,'#1A1A1A',0,2,0,10);Cy(g,0.16,0.1,0.22,'#1A1A1A',0,2.6,0.1,16).rotation.x=0.6;
+  const rv=Grp(g,0.5,2.2,0.2);Cy(rv,0.08,0.12,0.45,'#1A1A1A',0,0,0,12);
+  const cord=[];for(let i=0;i<8;i++)cord.push(Sp(g,0.04,'#333',0,0,0));
+  const bl=Grp(g,-1.2,3,0.3);Sp(bl,0.6,'#C0392B',0,0,0,1,1.15,1);Cy(bl,0.006,0.006,1.5,'#ddd',0,-1.4,0,4);Lab(bl,'10%',0,0,0.62,0.45,'#fff',FB);
+  anim(t=>{const sw=Math.sin(t*1.8)*0.5;rv.position.set(0.5+Math.sin(sw)*0.5,1.6-Math.cos(sw)*0.3,0.3);rv.rotation.z=sw;cord.forEach((c,i)=>{const k=i/7;c.position.set(0.15+(rv.position.x-0.15)*k,1.45+(rv.position.y-1.45)*k-Math.sin(k*Math.PI)*0.3,0.1+0.2*k)});bl.position.y=3+((t*0.2)%1)*2.4;bl.visible=bl.position.y<5.2});
+},
+function(g){ // 直布罗陀之石 + 分期付款广告
+  const rk=Co(g,1.6,3.4,'#8A847A',0,2.15,-0.3,7);rk.scale.z=0.8;
+  const cr=TX(64,256,(c,w,h)=>{c.clearRect(0,0,w,h);c.strokeStyle='#1A1A1A';c.lineWidth=6;c.beginPath();c.moveTo(32,0);for(let y=0;y<=h;y+=20)c.lineTo(32+(rnd()-0.5)*30,y);c.stroke()});
+  Pl(g,0.5,2.8,cr,0.05,2.0,0.95,true).rotation.x=-0.42;
+  Lab(g,'READING',0,1.6,1.3,0.45,'#F4F1EA',FB);
+  const ad=TX(240,300,(c,w,h)=>{c.fillStyle='#EFE8D6';c.fillRect(0,0,w,h);T(c,'大北方 · 北太平洋',w/2,34,22,'#2A2A2A');T(c,'新股发行',w/2,72,30,'#2A2A2A');T(c,'分期付款',w/2,122,40,'#A8281E');c.fillStyle='#555';for(let y=160;y<h-20;y+=14)c.fillRect(24,y,w-48,3);T(c,'GN pfd ≈ 330',w/2,h-20,20,'#2A2A2A','Georgia,serif')});
+  const a=Pl(g,1.1,1.4,ad,1.9,1.2,0.6);a.rotation.y=-0.4;
+  anim(t=>{rk.rotation.z=Math.sin(t*9)*0.004*(Math.sin(t*0.5)>0.8?1:0)});
+},
+function(g){ // 折断的电线杆 + 铜锭 300/292
+  Cy(g,0.12,0.14,2.2,'#6B4A2E',-1.4,1.55,-0.4,10);const top=Grp(g,-1.4,2.6,-0.4);const tp=Cy(top,0.12,0.12,1.6,'#6B4A2E',0,0.8,0,10);top.rotation.z=-1.1;B(top,1.2,0.08,0.08,'#6B4A2E',0,1.4,0);
+  const wires=[0,1,2].map(i=>{const w=Cy(g,0.012,0.012,1.8,'#222',-0.7+i*0.1,1.3,-0.4+i*0.1,4);return w});
+  const ing=(y,txt,c)=>{const m=B(g,1.4,0.3,0.6,c,1,y,0.4,'#3a1a00');Lab(g,txt,1,y,0.71,0.26,'#fff',FB)};
+  ing(0.6,'',GOLD);ing(0.9,'292','#B8733A');ing(1.2,'300','#C9824A');ing(1.5,'298¾','#B8733A');
+  Lab(g,'只有一个报价',-1.4,3.8,-0.4,0.4,'#F4D98A');
+  anim(t=>{wires.forEach((w,i)=>{w.rotation.z=0.5+Math.sin(t*1.5+i)*0.12})});
+},
+function(g){ // 货币柱 + 钟罩里的老鼠
+  Cy(g,0.22,0.28,4,'#C9B38A',0,2.45,-0.8,16);const sg=TX(200,70,(c,w,h)=>{c.fillStyle='#233345';c.fillRect(0,0,w,h);T(c,'MONEY',w/2,h/2+2,40,'#F4D98A','Georgia,serif')});
+  const s=Pl(g,0.9,0.32,sg,0,4.1,-0.56);
+  const bj=Sp(g,0.7,'#DDEEFF',0,5.0,-0.8,1,1.2,1,null,0.25);
+  const ms=Grp(g,0,4.6,-0.8);const mb=Sp(ms,0.18,'#8A8A8A',0,0,0,1.4,1,1);Sp(ms,0.08,'#8A8A8A',0.25,0.05,0);[-0.05,0.05].forEach(z=>Sp(ms,0.05,'#C8A0A0',0.22,0.13,z));
+  for(let i=0;i<14;i++){const a=i/14*Math.PI*2;man(g,Math.cos(a)*1.6,0.45,-0.8+Math.sin(a)*1.3,'#26262A',0.9).rotation.y=-a+Math.PI/2}
+  const at=man(g,1.4,0.45,1.3,'#3A3024',1.3);const arm=Cy(at,0.05,0.05,0.5,'#3A3024',0.15,1.05,0,6);arm.rotation.z=-0.4;
+  Lab(g,'$10,000,000',1.4,2.2,1.3,0.35,'#9FE3C8',FB);
+  anim(t=>{mb.scale.set(1.4,1+Math.sin(t*9)*0.15,1+Math.sin(t*9)*0.15)});
+}],
+/* ===== 四 商品与宿敌 ===== */
+[
+function(g){ // 麦穗顶破玻璃天花板
+  const wheat=(x,z,h)=>{Cy(g,0.02,0.025,h,'#C9A54A',x,0.45+h/2,z,5);Sp(g,0.07,'#D9B85C',x,0.45+h+0.12,z,1,2.6,1)};
+  for(let i=0;i<22;i++){const x=(rnd()-0.5)*3.2,z=(rnd()-0.5)*1.6;wheat(x,z,1.4+rnd()*0.3)}
+  const gl=add(g,new THREE.BoxGeometry(3.6,0.04,2),mt('#CFE9F7',null,0.35),0,2.35,0);
+  Lab(g,'1.20',-1.4,2.55,0.8,0.4,'#9FD0FF',FB);
+  const hero=Grp(g,0.6,0,0.2);Cy(hero,0.03,0.035,2.6,'#D9B85C',0,0.45+1.3,0,6);Sp(hero,0.09,'#E9C866',0,3.2,0,1,2.8,1);
+  const ck=TX(256,256,(c,w,h)=>{c.clearRect(0,0,w,h);c.strokeStyle='rgba(255,255,255,.9)';c.lineWidth=3;for(let i=0;i<10;i++){const a=i/10*Math.PI*2;c.beginPath();c.moveTo(128,128);let x=128,y=128;for(let k=0;k<5;k++){x+=Math.cos(a+(rnd()-0.5)*0.6)*24;y+=Math.sin(a+(rnd()-0.5)*0.6)*24;c.lineTo(x,y)}c.stroke()}});
+  const c=Pl(g,1.6,1.6,ck,0.6,2.38,0.2,true);c.rotation.x=-Math.PI/2;
+  anim(t=>{hero.rotation.z=Math.sin(t*1.1)*0.05});
+},
+function(g){ // 推棉包上坡
+  const sl=B(g,4.2,0.2,1.6,'#8A7B5A',0,1.2,0);sl.rotation.z=0.32;
+  const bale=Grp(g,0,0,0);B(bale,0.8,0.7,0.9,'#F2F0EA',0,0,0);[-0.2,0.2].forEach(x=>B(bale,0.04,0.72,0.92,'#8A6A3A',x,0,0));
+  const pu=man(g,0,0,0,'#3A3024',1.2);
+  for(let i=0;i<5;i++){const m=B(g,0.2,0.02,1.4,'#6E5E40',-0.6+i*0.28,0.0,0);m.rotation.z=0.32;m.position.y=1.32+(-0.6+i*0.28)*0.33}
+  Lab(g,'12¢',-1.6,2.4,0.4,0.45,'#F4F1EA',FB);
+  anim(t=>{const u=(t*0.25)%1;const s=u<0.6?u/0.6:1-(u-0.6)/0.4;const x=-1.4+s*2.2;bale.position.set(x,1.32+x*0.33+0.4,0);bale.rotation.z=u<0.6?0.32:0.32-(u-0.6)*20;pu.position.set(x-0.7,1.32+(x-0.7)*0.33+0.1,0);pu.visible=u<0.62;pu.rotation.z=-0.3});
+},
+function(g){ // 捕兽夹 + 燕麦碗 + 玉米堆
+  const tr=Grp(g,-0.8,0.5,0.6);Cy(tr,0.7,0.7,0.06,'#4A4A4E',0,0,0,24);
+  const j1=Grp(tr,0,0.05,0);To(j1,0.6,0.04,'#6A6A6E',0,0,0,Math.PI).rotation.x=0;const j2=Grp(tr,0,0.05,0);To(j2,0.6,0.04,'#6A6A6E',0,0,0,Math.PI);j2.rotation.y=Math.PI;
+  for(let i=0;i<10;i++){const a=i/10*Math.PI;Co(j1,0.03,0.12,'#8A8A8E',Math.cos(a)*0.6,Math.sin(a)*0.6+0.06,0,5)}
+  Cy(tr,0.3,0.2,0.2,'#8A5A3A',0,0.15,0,16);Sp(tr,0.28,'#D9C08A',0,0.25,0,1,0.3,1);
+  const cobT=TX(64,128,(c,w,h)=>{c.fillStyle='#E9B83A';c.fillRect(0,0,w,h);c.fillStyle='#C9982A';for(let y=0;y<h;y+=8)for(let x=(y/8%2)*4;x<w;x+=8)c.fillRect(x,y,5,6)});
+  const cm=new THREE.MeshLambertMaterial({map:cobT});
+  for(let i=0;i<14;i++){const cb=add(g,new THREE.CylinderGeometry(0.1,0.12,0.6,10),cm,1+(rnd()-0.5)*1.2,0.6+Math.floor(i/5)*0.2,-0.2+(rnd()-0.5)*1);cb.rotation.set(Math.PI/2,rnd()*3,rnd())}
+  Lab(g,'熊饵 20万蒲式耳燕麦',-0.8,1.8,0.6,0.32,'#F4F1EA');
+  anim(t=>{const o=Math.max(0,Math.sin(t*0.7))*1.2;j1.rotation.x=o*0.5;j2.rotation.x=-o*0.5});
+},
+function(g){ // 印刷机 + 头版 + 棉花王冠
+  B(g,2.2,1.2,1.2,'#3A3F45',0,1.05,-0.6);const rl=[0.2,0.6].map(y=>{const r=Cy(g,0.2,0.2,2.0,'#8A8E92',0,1.6+y*0.6,-0.6,16);r.rotation.z=Math.PI/2;return r});
+  const np=TX(360,260,(c,w,h)=>{c.fillStyle='#F2EFE4';c.fillRect(0,0,w,h);T(c,'THE WORLD',w/2,28,28,'#111','Georgia,serif');c.fillStyle='#111';c.fillRect(12,46,w-24,3);
+    T(c,'JULY COTTON',w/2,90,40,'#111','Georgia,serif');T(c,'CORNERED BY',w/2,138,34,'#111','Georgia,serif');T(c,'LARRY LIVINGSTON',w/2,184,32,'#111','Georgia,serif');c.fillStyle='#777';for(let y=210;y<h-10;y+=10)c.fillRect(20,y,w-40,3)});
+  const p=Pl(g,1.9,1.4,np,0,1.25,0.4);p.rotation.x=-0.5;
+  const cr=Grp(g,0,3.6,-0.4);To(cr,0.45,0.1,'#F2F0EA',0,0,0).rotation.x=Math.PI/2;for(let i=0;i<6;i++){const a=i/6*Math.PI*2;Sp(cr,0.14,'#FFFFFF',Math.cos(a)*0.45,0.2,Math.sin(a)*0.45)}
+  anim(t=>{rl.forEach(r=>r.rotation.x=t*3);cr.rotation.y=t*0.6;cr.position.y=3.6+Math.sin(t)*0.12});
+},
+function(g){ // 马蹄形磁铁吸起小人 + 司各特全集
+  const mg=Grp(g,0,3.2,-0.2);To(mg,0.8,0.22,'#C0392B',0,0,0,Math.PI).rotation.z=Math.PI;
+  [-0.8,0.8].forEach(x=>{B(mg,0.45,0.5,0.45,'#C0392B',x,0.25,0);B(mg,0.45,0.25,0.45,'#C9CED4',x,-0.12,0)});
+  const pm=man(g,0,1.5,-0.2,'#2A2A2E',1.2);
+  const bs=['#6A1E1E','#1E3A6A','#2E5A3A','#6A4A1E','#4A1E5A','#1E4A5A'];bs.forEach((c,i)=>{B(g,0.18,0.8,0.6,c,1.3+i*0.19,0.85,0.9);});
+  Lab(g,'Walter Scott  $500',1.8,1.6,0.9,0.3,'#F4D98A',FB);
+  Lab(g,'44万包',-1.6,1.2,0.6,0.4,'#FF8A7A',FB);
+  anim(t=>{const u=(Math.sin(t*0.8)+1)/2;pm.position.y=0.45+u*1.6;pm.rotation.z=Math.sin(t*2)*0.15;mg.rotation.z=Math.sin(t*0.8)*0.05});
+}],
+/* ===== 五 低谷与归来 ===== */
+[
+function(g){ // 烟雾机 + 支票
+  B(g,1.2,1.8,1.2,'#5A5E64',-1,1.35,-0.2);Cy(g,0.25,0.3,1,'#4A4E54',-1,2.75,-0.2,12);
+  const ck=TX(360,160,(c,w,h)=>{c.fillStyle='#E8EFE4';c.fillRect(0,0,w,h);c.strokeStyle='#4A6A5A';c.lineWidth=4;c.strokeRect(6,6,w-12,h-12);T(c,'Pay to L. Livingston',w/2,40,22,'#2A3A2E','Georgia,serif');T(c,'$25,000.00',w/2,90,44,'#1E3A2A','Georgia,serif');T(c,'— D. Williamson',w-100,134,20,'#2A3A2E','Georgia,serif')});
+  const cp=Pl(g,1.8,0.8,ck,1.1,2.0,0.3);cp.rotation.y=-0.3;
+  const sm=[];for(let i=0;i<10;i++)sm.push(Sp(g,0.35,'#C8CACC',0,0,0,1,1,1,null,0.55));
+  anim(t=>{sm.forEach((s,i)=>{const u=(t*0.18+i/10)%1;s.position.set(-1+u*2.4,3.3+u*1.5+Math.sin(u*6+i)*0.2,-0.2+u*0.8);s.scale.setScalar(0.5+u*2.2);s.material.opacity=0.55*(1-u*0.6)})});
+},
+function(g){ // 锁链大门 + 日历
+  B(g,4.2,3.6,0.4,'#B8B2A4',0,2.25,-0.9);[-0.9,0.9].forEach(x=>B(g,1.7,2.8,0.12,'#4A3A2A',x,1.85,-0.64));
+  for(let k=0;k<12;k++){const l=To(g,0.14,0.04,'#707478',-1.5+k*0.27,2.0+Math.sin(k*0.5)*0.1,-0.5);l.rotation.y=k%2?Math.PI/2:0}
+  B(g,0.5,0.55,0.2,'#6A6E72',0,1.6,-0.44);To(g,0.18,0.06,'#6A6E72',0,1.95,-0.44,Math.PI);
+  const cal=TX(200,240,(c,w,h)=>{c.fillStyle='#F4F1EA';c.fillRect(0,0,w,h);c.fillStyle='#A8281E';c.fillRect(0,0,w,60);T(c,'1914',w/2,32,34,'#fff','Georgia,serif');T(c,'7月31日',w/2,110,34,'#2A2A2A');T(c,'休市',w/2,170,40,'#A8281E')});
+  Pl(g,0.8,0.95,cal,1.4,3.4,-0.64);
+  Lab(g,'> $1,000,000 债务',0,4.6,-0.6,0.42,'#FF8A7A',FB);
+  anim(t=>{});
+},
+function(g){ // 钢梁撞破 100 大门
+  const gt=TX(256,256,(c,w,h)=>{c.fillStyle='#3A3F45';c.fillRect(0,0,w,h);T(c,'100',w/2,h/2+8,120,'#F4D98A','Georgia,serif')});
+  const l=Pl(g,1.3,2.6,gt,-0.8,1.75,-0.4);l.rotation.y=0.9;const r=Pl(g,1.3,2.6,gt,0.8,1.75,-0.4);r.rotation.y=-0.9;
+  B(g,0.2,3,0.2,'#2A2E32',-1.5,1.95,-0.9);B(g,0.2,3,0.2,'#2A2E32',1.5,1.95,-0.9);B(g,3.2,0.2,0.2,'#2A2E32',0,3.4,-0.9);
+  const bm=Grp(g,0,1.8,0);[0.5,-0.5].forEach(y=>B(bm,3.6,0.12,0.8,'#8A3E2A',0,y*0.6,0,'#401000'));B(bm,3.6,0.6,0.1,'#8A3E2A',0,0,0,'#401000');bm.rotation.y=Math.PI/2;
+  const sp=[];for(let i=0;i<12;i++)sp.push(Sp(g,0.05,'#FFB040',0,0,0,1,1,1,'#FF8800'));
+  anim(t=>{bm.position.z=-0.4+Math.sin(t*1.2)*0.3;sp.forEach((s,i)=>{const u=(t*0.9+i/12)%1;const a=i*2.3;s.position.set(Math.cos(a)*u*1.5,1.8+Math.sin(a)*u*1.2+u*0.4,-0.4+u*0.6)})});
+},
+function(g){ // 潜望镜 + 下沉的棉包
+  const pr=Grp(g,-0.6,0,0.2);Cy(pr,0.12,0.12,2.6,'#5A6068',0,0.45+1.3,0,12);B(pr,0.3,0.3,0.5,'#5A6068',0,3.05,0.15);Cy(pr,0.1,0.1,0.02,'#9FD0FF',0,3.05,0.41,12,'#2a5a8a').rotation.x=Math.PI/2;
+  const rings=[0,1,2].map(()=>{const r=To(g,0.5,0.03,'#9FD0FF',-0.6,0.48,0.2);r.rotation.x=Math.PI/2;return r});
+  const bale=Grp(g,1.4,0,0.4);B(bale,0.9,0.8,1,'#F2F0EA',0,0,0);[-0.22,0.22].forEach(x=>B(bale,0.04,0.82,1.02,'#8A6A3A',x,0,0));
+  Lab(g,'−500点',1.4,2.3,0.4,0.4,'#FF8A7A',FB);Lab(g,'−8点 回补5万股',-0.6,3.8,0.2,0.36,'#9FE3C8',FB);
+  anim(t=>{pr.position.y=Math.sin(t*0.5)*0.4-0.2;rings.forEach((r,i)=>{const u=(t*0.4+i/3)%1;r.scale.setScalar(0.5+u*3);r.material.opacity=1-u;r.material.transparent=true});bale.position.y=0.4+0.2-((t*0.15)%1)*0.8;bale.rotation.z=Math.sin(t)*0.1});
+},
+function(g){ // 咖啡麻袋 + 巨锁 + 限价标签
+  const sack=(x,y,z,r)=>{const s=Sp(g,0.55,'#A88A5A',x,y,z,1,0.7,0.8);s.rotation.y=r||0};
+  sack(-0.8,0.8,0.3);sack(0.3,0.8,0.5,0.4);sack(-0.3,1.4,0.2,0.2);sack(1.1,0.8,-0.2);
+  const lk=Grp(g,-0.2,2.4,0.4);B(lk,1.1,0.9,0.35,'#B08A3E',0,0,0);To(lk,0.35,0.1,'#8A8E92',0,0.5,0,Math.PI);Sp(lk,0.08,'#2A2A2A',0,0,0.18);
+  const tg=TX(200,120,(c,w,h)=>{c.fillStyle='#F4EEDC';c.fillRect(0,0,w,h);c.strokeStyle='#A8281E';c.lineWidth=5;c.strokeRect(5,5,w-10,h-10);T(c,'限价',w/2,48,44,'#A8281E');T(c,'9¢ → ?',w/2,94,28,'#2A2A2A','Georgia,serif')});
+  const t=Pl(g,0.9,0.55,tg,0.7,2.0,0.7);
+  for(let i=0;i<20;i++){const b=Sp(g,0.06,'#4A2A1A',(rnd()-0.5)*3,0.5,(rnd()-0.5)*2+0.6,1,0.6,0.8);b.rotation.y=rnd()*3}
+  anim(t2=>{lk.rotation.z=Math.sin(t2*1.4)*0.08;t.rotation.z=Math.sin(t2*1.1)*0.2});
+}],
+/* ===== 六 贴士与信号 ===== */
+[
+function(g){ // 圆桌晚宴 + 500美元 + 锡锭塔
+  Cy(g,1.2,1.2,0.08,'#F4F1EA',0,1.35,0.2,32);Cy(g,0.1,0.14,0.9,'#5B3E27',0,0.9,0.2,10);
+  [[-1.1,0.4,0.6],[1.1,0.4,-0.6]].forEach(([x,z,r])=>{const ch=Grp(g,x,0,z);ch.rotation.y=r+Math.PI/2*(x<0?1:-1);B(ch,0.6,0.08,0.6,'#6A3E26',0,0.95,0);B(ch,0.6,0.8,0.08,'#6A3E26',0,1.35,-0.28)});
+  const bill=TX(240,110,(c,w,h)=>{c.fillStyle='#CFE0C6';c.fillRect(0,0,w,h);c.strokeStyle='#2E5A3A';c.lineWidth=5;c.strokeRect(5,5,w-10,h-10);T(c,'500',w/2,h/2+4,56,'#1E3A2A','Georgia,serif')});
+  const b=Pl(g,0.7,0.32,bill,0.2,1.4,0.5);b.rotation.x=-Math.PI/2;
+  [[-0.3,0.3],[0.35,-0.1]].forEach(([x,z])=>{Cy(g,0.08,0.04,0.2,'#DDEEFF',x,1.5,z,12,null,0.5);Cy(g,0.01,0.01,0.15,'#DDEEFF',x,1.45,z,4)});
+  const tin=[[3,0],[2,1],[1,2]];tin.forEach(([n,l])=>{for(let i=0;i<n;i++)B(g,0.4,0.18,0.25,'#C9CED4',-0.3+i*0.42-(n-1)*0.21+0.3,1.48+l*0.19,-0.3,'#222')});
+  Lab(g,'108',0,2.5,0.2,0.4,'#F4D98A',FB);
+  anim(t=>{b.rotation.z=Math.sin(t*0.8)*0.3});
+},
+function(g){ // 黑猫 + 钢锭与铜锭
+  B(g,2.4,0.1,1.4,'#6B4A2E',0,1.35,0.1);[[-1.1,-0.55],[1.1,-0.55],[-1.1,0.75],[1.1,0.75]].forEach(([x,z])=>B(g,0.1,0.9,0.1,'#5B3E27',x,0.9,z));
+  for(let i=0;i<6;i++)B(g,0.4,0.2,0.22,'#7A8088',-0.9+i*0.13,1.5+Math.floor(i/3)*0.2,-0.3+(i%3)*0.24,'#111');
+  B(g,0.4,0.2,0.22,'#B8733A',0.95,1.5,0.5,'#301000');Lab(g,'犹他铜 −5',0.95,1.95,0.5,0.28,'#FF8A7A');Lab(g,'钢铁 72,000股',-0.8,2.2,-0.1,0.28,'#E6ECF2');
+  const cat=Grp(g,0.2,1.4,0.2);Sp(cat,0.28,'#111114',0,0.28,0,1,1.1,0.9);Sp(cat,0.2,'#111114',0,0.68,0.08);[-0.1,0.1].forEach(x=>Co(cat,0.07,0.16,'#111114',x,0.86,0.08,4));
+  [-0.07,0.07].forEach(x=>Sp(cat,0.035,'#E9D84A',x,0.7,0.26,1,1,1,'#8a7a00'));
+  const tail=Grp(cat,0,0.1,-0.22);Cy(tail,0.04,0.05,0.6,'#111114',0,0.3,0,6);
+  anim(t=>{tail.rotation.z=Math.sin(t*1.6)*0.6;cat.rotation.y=Math.sin(t*0.4)*0.4});
+},
+function(g){ // 麦袋 + 体温计 + 听诊器
+  Sp(g,0.8,'#C8B07A',0,1.2,0.2,1,1.2,0.8);Cy(g,0.3,0.4,0.2,'#B8A06A',0,2.2,0.2,12);
+  const th=Grp(g,0.6,1.8,0.5);th.rotation.z=-0.35;Cy(th,0.08,0.08,2.4,'#EEF4F8',0,0.6,0,12,null,0.7);Sp(th,0.16,'#C0392B',0,-0.6,0);const merc=Cy(th,0.04,0.04,1,'#C0392B',0,-0.1,0,8);
+  const st=Grp(g,-0.8,1.6,0.6);Cy(st,0.18,0.18,0.08,'#C9CED4',0,0,0,20).rotation.x=Math.PI/2;
+  const tube=new THREE.CatmullRomCurve3([new THREE.Vector3(-0.8,1.6,0.64),new THREE.Vector3(-1.4,2.2,0.8),new THREE.Vector3(-1.2,3,0.6),new THREE.Vector3(-0.9,3.2,0.5)]);
+  add(g,new THREE.TubeGeometry(tube,40,0.035,8),mt('#2A2A2E'));
+  Lab(g,'−¼¢   −1¼¢   −6¢',0,3.8,0.2,0.4,'#FF8A7A',FB);
+  anim(t=>{const u=(t*0.25)%1;merc.scale.y=1-u*0.8;merc.position.y=-0.6+0.5*(1-u*0.8)});
+},
+function(g){ // 高尔夫洞旗 + 午餐盘 + 棉包
+  const hole=Cy(g,0.2,0.2,0.02,'#111',-1.2,0.47,0.6,16);Cy(g,0.02,0.02,2,'#ddd',-1.2,1.45,0.6,6);const fl=Grp(g,-1.2,2.3,0.6);add(fl,new THREE.PlaneGeometry(0.6,0.4),mt('#C0392B'),0.3,0,0);
+  const club=Grp(g,-0.5,0.5,0.9);Cy(club,0.02,0.025,1.4,'#8A8E92',0,0.1,0,6).rotation.z=1.3;B(club,0.2,0.1,0.08,'#6A6E72',-0.68,-0.06,0);
+  Cy(g,0.45,0.4,0.05,'#F4F1EA',0.4,1.0,0.7,24);B(g,1.4,0.5,1.0,'#6B4A2E',0.4,0.7,0.6);
+  Sp(g,0.14,'#B8733A',0.3,1.07,0.7,1.4,0.5,1);Sp(g,0.1,'#6A9A4A',0.55,1.06,0.6,1,0.6,1);const fk=Cy(g,0.015,0.015,0.5,'#C9CED4',0.5,1.25,0.8,4);fk.rotation.z=-0.5;
+  const bale=Grp(g,1.4,1.05,-0.6);B(bale,0.9,0.8,1,'#F2F0EA',0,0,0);[-0.22,0.22].forEach(x=>B(bale,0.04,0.82,1.02,'#8A6A3A',x,0,0));
+  Lab(g,'−50  −40  −75',0.4,2.5,0.2,0.4,'#9FE3C8',FB);
+  anim(t=>{fl.rotation.y=Math.sin(t*2)*0.3});
+},
+function(g){ // 棕榈 + 液压机 + 钓竿
+  Cy(g,0.14,0.2,3.4,'#8A6A4A',-1.7,2.15,-0.6,8);for(let k=0;k<7;k++){const l=Sp(g,1.1,'#4E8A4A',-1.7+Math.cos(k)*0.8,3.9,-0.6+Math.sin(k)*0.8,1,0.12,0.35);l.rotation.y=k}
+  B(g,1.8,0.3,1.2,'#3E4650',0.4,0.6,0);[-0.6,1.4].forEach(x=>Cy(g,0.08,0.08,2.6,'#8A8E92',x,1.95,0,10));B(g,2.2,0.4,1.2,'#3E4650',0.4,3.3,0);
+  const pl=B(g,1.6,0.25,1.0,'#C0392B',0.4,2.4,0);const rod=Cy(g,0.1,0.1,1,'#8A8E92',0.4,2.9,0,10);
+  const rd=Grp(g,0.4,0.85,0.3);Cy(rd,0.02,0.03,2.4,'#6A4A2A',0,0,0,6).rotation.z=Math.PI/2;
+  Lab(g,'TT  155 → 90',0.4,4.1,0,0.42,'#F4D98A',FB);
+  anim(t=>{const u=(Math.sin(t*0.7)+1)/2;pl.position.y=2.4-u*1.2;rod.position.y=2.9-u*0.6;rod.scale.y=1+u*1.2});
+}],
+/* ===== 七 操纵的艺术 ===== */
+[
+function(g){ // 飞钓竿 + 退回的支票
+  const rod=Grp(g,-1.4,0.5,0.6);Cy(rod,0.025,0.05,3.2,'#6A4A2A',0,1.6,0,6);rod.rotation.z=-0.5;
+  const ck=TX(360,160,(c,w,h)=>{c.fillStyle='#EFE8D6';c.fillRect(0,0,w,h);c.strokeStyle='#6A5A48';c.lineWidth=4;c.strokeRect(6,6,w-12,h-12);T(c,'Pay to J. R. Keene',w/2,40,22,'#2A2A2A','Georgia,serif');T(c,'$200,000',w/2,92,46,'#2A2A2A','Georgia,serif');T(c,'RETURNED',w/2,136,24,'#A8281E','Georgia,serif')});
+  const cp=Pl(g,1.5,0.67,ck,0.9,2.4,0);
+  const pts=[];for(let i=0;i<=30;i++)pts.push(new THREE.Vector3(0,0,0));
+  const lg=new THREE.BufferGeometry().setFromPoints(pts);const line=new THREE.Line(lg,new THREE.LineBasicMaterial({color:0xF4F1EA}));g.add(line);
+  const cert=TX(240,160,(c,w,h)=>{c.fillStyle='#E6EEF4';c.fillRect(0,0,w,h);c.strokeStyle='#2F5DA8';c.lineWidth=6;c.strokeRect(6,6,w-12,h-12);T(c,'U.S. STEEL',w/2,50,30,'#1E3A6A','Georgia,serif');T(c,'55 → 8⅞',w/2,110,36,'#A8281E','Georgia,serif')});
+  const c2=Pl(g,1.1,0.73,cert,-0.3,1.2,1.1);c2.rotation.x=-0.6;
+  anim(t=>{const tipX=-1.4+Math.sin(0.5)*3.2,tipY=0.5+Math.cos(0.5)*3.2;cp.position.set(0.9+Math.sin(t*0.9)*0.4,2.4+Math.sin(t*1.3)*0.3,Math.cos(t*0.9)*0.3);cp.rotation.z=Math.sin(t)*0.2;
+    const a=lg.attributes.position;for(let i=0;i<=30;i++){const k=i/30;a.setXYZ(i,tipX+(cp.position.x-tipX)*k,tipY+(cp.position.y+0.33-tipY)*k+Math.sin(k*Math.PI)*0.8,cp.position.z*k)}a.needsUpdate=true});
+},
+function(g){ // 进三退一的台阶 + 信托箱
+  let y=0.45,x=-1.9;const steps=[1,1,-1,1,1,-1,1,1,-1,1,1];steps.forEach((d,i)=>{y+=d*0.28;B(g,0.34,y-0.2,1.0,d>0?'#7A8088':'#A0A6AE',x,0.45+(y-0.45)/2+0.1,-0.4);x+=0.36});
+  const bx=Grp(g,0.2,0.45,0.9);B(bx,1.2,0.7,0.8,'#3E4348',0,0.35,0);B(bx,1.24,0.1,0.84,'#C9A04A',0,0.72,0);B(bx,0.25,0.3,0.1,'#C9A04A',0,0.45,0.42);
+  Lab(g,'70%  信托',0.2,1.6,0.9,0.36,'#F4D98A');Lab(g,'70 → 100',-0.2,3.7,-0.4,0.42,'#9FE3C8',FB);
+  const walker=man(g,0,0,-0.4,'#2A2A2E',0.9);
+  anim(t=>{const u=(t*0.08)%1;const i=Math.min(10,Math.floor(u*11));let yy=0.45;for(let k=0;k<=i;k++)yy+=steps[k]*0.28;walker.position.set(-1.9+i*0.36,yy+0.05,-0.4)});
+},
+function(g){ // 吊着的漏油桶
+  const br=Grp(g,0,0.7,0);Cy(br,0.7,0.7,1.8,'#2E4A6A',0,0.9,0,24);[0.3,1.5].forEach(y=>To(br,0.71,0.04,'#1E2A3A',0,y,0).rotation.x=Math.PI/2);
+  const lb=TX(200,80,(c,w,h)=>{c.fillStyle='#F4F1EA';c.fillRect(0,0,w,h);T(c,'PETE PRODUCTS',w/2,h/2+2,24,'#1E2A3A','Georgia,serif')});Pl(br,1.0,0.4,lb,0,1.0,0.71);
+  [-1.2,1.2].forEach(x=>{B(g,0.12,3.8,0.12,'#6B4A2E',x*1.3,2.35,-0.6);});B(g,3.4,0.12,0.12,'#6B4A2E',0,4.2,-0.6);
+  const ropes=[-0.5,0.5].map(x=>Cy(g,0.015,0.015,1.8,'#C9B38A',x,3.3,-0.3,4));
+  const pd=Cy(g,0.4,0.4,0.01,'#0A0A0A',0.6,0.47,0.8,24);
+  const drip=Sp(g,0.06,'#111',0.5,1,0.5);
+  Lab(g,'102 → 107 → ?',0,5.0,-0.6,0.42,'#FF8A7A',FB);
+  anim(t=>{br.rotation.z=Math.sin(t*0.9)*0.08;const u=(t*0.1)%1;pd.scale.set(1+u*2.5,1,1+u*2.5);const d=(t*1.2)%1;drip.position.y=1-d*0.5});
+},
+function(g){ // 三眼炉 + 达摩克利斯之剑
+  B(g,2.4,0.9,1.2,'#2A2A2E',0,1.15,0);[[-1.05,-0.5],[1.05,-0.5],[-1.05,0.5],[1.05,0.5]].forEach(([x,z])=>B(g,0.12,0.4,0.12,'#2A2A2E',x,0.6,z));
+  const nm=['格雷','米德兰','西部'];nm.forEach((n,i)=>{const x=-0.75+i*0.75;To(g,0.26,0.05,'#4A4A4E',x,1.62,0).rotation.x=Math.PI/2;const f=Sp(g,0.14,'#FF7A2A',x,1.7,0,1,1.4,1,'#FF5A00');f.userData.fire=1;Lab(g,n,x,1.05,0.62,0.22,'#F4D98A')});
+  Cy(g,0.14,0.14,1.2,'#3A3A3E',0.9,2.2,-0.5,10);
+  const sw=Grp(g,0,3.6,0);B(sw,0.1,1.4,0.02,'#C9CED4',0,-0.3,0,'#222');B(sw,0.5,0.08,0.08,'#C9A04A',0,0.42,0);B(sw,0.06,0.35,0.06,'#6A4428',0,0.62,0);Sp(sw,0.06,'#C9A04A',0,0.82,0);
+  Cy(g,0.004,0.004,1.4,'#ddd',0,5.1,0,4);
+  Lab(g,'20万股',-1.4,3.6,0.2,0.34,'#FF8A7A',FB);
+  const fires=g.children.filter(c=>c.userData&&c.userData.fire);
+  anim(t=>{sw.rotation.z=Math.sin(t*1.1)*0.06;fires.forEach((f,i)=>{f.scale.y=1.2+Math.sin(t*7+i)*0.3})});
+},
+function(g){ // 塌陷的栈桥 + 车厢
+  const tr=Grp(g,0,0,0);for(let i=0;i<5;i++){const x=-2+i;const h=2.2-(i>2?(i-2)*0.9:0);[-0.5,0.5].forEach(z=>{const p=Cy(tr,0.06,0.06,h,'#6B4A2E',x,0.45+h/2,z,6);if(i>2)p.rotation.z=(i-2)*0.25})}
+  B(tr,2.6,0.12,1.2,'#5B3E27',-1,2.7,0);const dk=B(tr,2.2,0.12,1.2,'#5B3E27',1.3,2.1,0);dk.rotation.z=-0.45;
+  const car=Grp(g,0.9,2.9,0);car.rotation.z=-0.4;B(car,2.2,0.9,0.9,'#2E5A3A',0,0,0);B(car,2.3,0.12,1.0,'#1E3A2A',0,0.5,0);
+  const sd=TX(300,90,(c,w,h)=>{c.fillStyle='#2E5A3A';c.fillRect(0,0,w,h);T(c,'N.Y. N.H. & H.',w/2,28,24,'#F4D98A','Georgia,serif');T(c,'255 → 12',w/2,66,32,'#fff','Georgia,serif')});Pl(car,2.0,0.6,sd,0,0,0.46);
+  [-0.7,0.7].forEach(x=>{Cy(car,0.2,0.2,0.1,'#111',x,-0.5,0.4,12).rotation.x=Math.PI/2;Cy(car,0.2,0.2,0.1,'#111',x,-0.5,-0.4,12).rotation.x=Math.PI/2});
+  anim(t=>{car.rotation.z=-0.4-Math.max(0,Math.sin(t*0.4))*0.15;car.position.y=2.9-Math.max(0,Math.sin(t*0.4))*0.3});
+}]
+];
+
+/* ============ 七座建筑（正面朝 +z） ============ */
+const BUILD=[
+function(g){ // 波士顿对赌行
+  const f=TX(512,320,(c,w,h)=>{c.fillStyle='#8A4A3A';c.fillRect(0,0,w,h);c.strokeStyle='rgba(40,20,15,.35)';for(let y=0;y<h;y+=8){c.beginPath();c.moveTo(0,y);c.lineTo(w,y);c.stroke()}
+    c.fillStyle='#1E2A22';c.fillRect(30,150,452,140);c.fillStyle='#E8E4D0';for(let r=0;r<4;r++)for(let i=0;i<9;i++)c.fillRect(46+i*48,168+r*30,32,12);
+    c.fillStyle='#1E2A22';c.fillRect(20,40,472,60);T(c,'COSMOPOLITAN STOCK BROKERAGE CO.',w/2,72,24,'#E3C27A','Georgia,serif')});
+  add(g,new THREE.BoxGeometry(16,10,8),[mt('#7A4436'),mt('#7A4436'),mt('#3A3F45'),mt('#7A4436'),new THREE.MeshLambertMaterial({map:f}),mt('#7A4436')],0,5,0);
+  B(g,16.6,0.6,8.6,'#4A3A30',0,10.3,0);[-5,0,5].forEach(x=>B(g,1,2,1,'#5A3A2E',x,11.6,-2));
+  B(g,5,0.3,1.6,'#2A2A2E',0,3.6,4.8);
+},
+function(g){ // 1903 纽约证券交易所
+  B(g,16,1.6,10,'#E3DED3',0,0.8,0);B(g,14,11,7,'#E8E4DA',0,7.1,-1.5);
+  for(let i=0;i<6;i++)Cy(g,0.55,0.62,9,'#F2EFE8',-5.5+i*2.2,6.1,3.4,20);
+  B(g,15,1.4,9,'#E3DED3',0,11.3,0.3);Pr(g,15.4,2.6,9,'#E8E4DA',0,12,0.3);
+  const s=TX(512,64,(c,w,h)=>{c.fillStyle='#E8E4DA';c.fillRect(0,0,w,h);T(c,'NEW YORK STOCK EXCHANGE',w/2,h/2+2,34,'#5A5244','Georgia,serif')});Pl(g,12,1.2,s,0,11.3,4.82);
+  for(let i=0;i<5;i++)man(g,-4+i*2,1.6,5.6,'#26262A',1.3);
+},
+function(g){ // 大西洋城木栈道 + 分行亭
+  B(g,22,0.5,5,'#9A7A52',0,1.2,3);for(let i=0;i<10;i++)Cy(g,0.15,0.15,1.2,'#6B4A2E',-10+i*2.2,0.6,5.3,8);
+  B(g,9,5,6,'#F4F1EA',0,4,-1.5);Pr(g,9.6,2.2,6.6,'#2F5E7E',0,6.5,-1.5);
+  const s=TX(400,80,(c,w,h)=>{c.fillStyle='#2F5E7E';c.fillRect(0,0,w,h);T(c,'HARDING BROS. · BRANCH',w/2,h/2+2,30,'#F4F1EA','Georgia,serif')});Pl(g,7,1.4,s,0,5.6,1.52);
+  const sea=add(g,new THREE.PlaneGeometry(40,20),mt('#4A8AA8','#0a2030'),0,0.1,-14);sea.rotation.x=-Math.PI/2;
+  for(let i=0;i<6;i++){const u=Cy(g,0.05,0.05,2.6,'#ddd',-9+i*3.6,2.8,4.5,6);const top=Co(g,1.1,0.6,i%2?'#C0392B':'#F4F1EA',-9+i*3.6,4.2,4.5,10)}
+},
+function(g){ // 芝加哥期货交易所塔楼
+  B(g,14,12,10,'#9A8A72',0,6,0);B(g,5,14,5,'#A89880',0,19,0);Co(g,4,6,'#5A6A5A',0,29,0,4).rotation.y=Math.PI/4;
+  const ck=TX(256,256,(c,w,h)=>{c.fillStyle='#F4EEDD';c.beginPath();c.arc(128,128,120,0,7);c.fill();c.strokeStyle='#2A2A2A';c.lineWidth=8;c.stroke();for(let i=0;i<12;i++){const a=i/12*Math.PI*2;c.fillStyle='#2A2A2A';c.fillRect(128+Math.cos(a)*100-4,128+Math.sin(a)*100-4,8,8)}});
+  Pl(g,3.4,3.4,ck,0,22,2.52);const st=man(g,0,32,0,'#C9A04A',2.2);
+  const s=TX(512,64,(c,w,h)=>{c.fillStyle='#9A8A72';c.fillRect(0,0,w,h);T(c,'BOARD OF TRADE',w/2,h/2+2,40,'#2A2A2A','Georgia,serif')});Pl(g,10,1.2,s,0,10.5,5.02);
+  for(let i=0;i<4;i++){Cy(g,1.4,1.4,9,'#C9B38A',-10+i*0.01,4.5,-8+i*3.2,16)}
+},
+function(g){ // 战时钢铁厂
+  B(g,16,7,9,'#5A5E64',0,3.5,0);Pr(g,16.4,2.4,9.4,'#3A3E44',0,7,0);B(g,6,9,6,'#4A4E54',-9,4.5,-2);
+  const chs=[-5,0,5].map(x=>{Cy(g,0.8,1,14,'#6A5A52',x,15,-2.5,14);return x});
+  const smoke=[];for(let i=0;i<12;i++)smoke.push(Sp(g,1,'#8A8A8A',0,0,0,1,1,1,null,0.45));
+  const glow=B(g,4,3,0.2,'#FF7A2A',0,2,4.52,'#FF5A00');
+  anim(t=>{smoke.forEach((s,i)=>{const x=chs[i%3],u=(t*0.1+i/12)%1;s.position.set(x+u*6,22+u*8,-2.5+u*2);s.scale.setScalar(1+u*3);s.material.opacity=0.45*(1-u)});glow.material.emissiveIntensity=0.7+Math.sin(t*5)*0.3});
+},
+function(g){ // 棕榈滩别墅 + 游艇
+  B(g,14,6,8,'#F4EEE2',0,3,0);B(g,5,9,5,'#F4EEE2',-4,4.5,1);Pr(g,14.6,2,8.6,'#C0643A',0,6,0);Pr(g,5.6,2,5.6,'#C0643A',-4,9,1);
+  for(let i=0;i<5;i++){const x=-5+i*2.5;B(g,1.4,2.6,0.1,'#2F5E7E',x,2.2,4.02)}
+  const water=add(g,new THREE.PlaneGeometry(30,14),mt('#3A8AA8','#0a2030'),0,0.1,-14);water.rotation.x=-Math.PI/2;
+  const y=Grp(g,6,0.4,-11);B(y,8,1.2,2.2,'#F4F4F2',0,0,0);B(y,3.5,1.2,1.6,'#F4F4F2',-0.5,1.2,0);Cy(y,0.08,0.08,5,'#8A6A4A',1.5,3,0,6);
+  [[-8,5],[8,5],[-10,-3],[10,-3]].forEach(([x,z])=>{Cy(g,0.3,0.4,8,'#8A6A4A',x,4,z,8);for(let k=0;k<7;k++){const l=Sp(g,2.2,'#4E8A4A',x+Math.cos(k)*1.6,8,z+Math.sin(k)*1.6,1,0.12,0.35);l.rotation.y=k}});
+  anim(t=>{y.rotation.z=Math.sin(t*0.8)*0.03});
+},
+function(g){ // 行情纸带剧院
+  B(g,16,12,8,'#3A2E3E',0,6,0);B(g,17,1,9,'#2A2030',0,12.5,0);
+  const mq=B(g,12,2.2,2,'#1A141E',0,5,4.8);
+  const tx=TX(1024,128,(c,w,h)=>{c.fillStyle='#1A141E';c.fillRect(0,0,w,h);for(let i=0;i<60;i++){c.fillStyle='#F4D98A';c.beginPath();c.arc(10+i*17,10,5,0,7);c.arc(10+i*17,h-10,5,0,7);c.fill()}T(c,'THE TAPE  ·  STEEL 55  ·  STOVE 42  ·  TT 153  ·  IMP. STEEL 100  ·',w/2,h/2+4,44,'#F4D98A','Georgia,serif')});
+  tx.wrapS=THREE.RepeatWrapping;Pl(g,12,2.2,tx,0,5,5.82,true);
+  const s=TX(400,100,(c,w,h)=>{c.fillStyle='#3A2E3E';c.fillRect(0,0,w,h);T(c,'MANIPULATION',w/2,h/2+4,52,'#E6C8F0','Georgia,serif')});Pl(g,9,2.2,s,0,9.5,4.02);
+  anim(t=>{tx.offset.x=t*0.05});
+}
+];
+
+
+/* =================== 组装世界 =================== */
+const DZ=76,Z0=-4,OFF=[[0,0],[-9,-10],[0,-20],[9,-30],[0,-40]];
+const LOCS=[],markers=[];
+const MT={};function markerTex(n,st){const k=n+st;if(!MT[k])MT[k]=TX(128,128,(g,w,h)=>{g.beginPath();g.arc(w/2,h/2,w/2-8,0,7);g.fillStyle=st==='on'?'#E0674E':st==='ok'?'#3C8A6C':'rgba(252,246,230,.95)';g.fill();g.lineWidth=7;g.strokeStyle=st==='on'?'#fff':'#D4AF37';g.stroke();g.fillStyle=st==='idle'?'#22262c':'#fff';g.font=`bold 64px ${FB}`;g.textAlign='center';g.textBaseline='middle';g.fillText(n,w/2,h/2+4)});return MT[k]}
+function strip(a,b,col){const dx=b.x-a.x,dz=b.z-a.z,L=Math.hypot(dx,dz);const m=add(scene,new THREE.PlaneGeometry(2.2,L),mt(col),(a.x+b.x)/2,0.05,(a.z+b.z)/2);m.rotation.order='YXZ';m.rotation.set(-Math.PI/2,Math.atan2(dx,dz),0);return m}
+function boardTex(s){return TX(640,400,(c,w,h)=>{
+  if(s.chart){drawChart(c,w,h,s.chart,{board:true,scale:1})}
+  else{c.fillStyle='#101814';c.fillRect(0,0,w,h);T(c,s.t,w/2,120,40,'#F4E6C0',FD);T(c,'“'+s.q+'”',w/2,220,22,'#C9D2CC','Georgia,serif')}
+  c.strokeStyle='#C9A04A';c.lineWidth=6;c.strokeRect(3,3,w-6,h-6)})}
+function buildWorld(){
+  const gr=add(scene,new THREE.PlaneGeometry(900,1300),mt('#8E927F'),0,0,-260);gr.rotation.x=-Math.PI/2;
+  let prev=new THREE.Vector3(0,0,34);
+  D.forEach((d,i)=>{
+    const z0=Z0-i*DZ;
+    const patch=add(scene,new THREE.PlaneGeometry(110,DZ),mt(d.ground),0,0.02,z0-DZ/2+16);patch.rotation.x=-Math.PI/2;
+    Lab(scene,CN[i]+' · '+d.name,0,14,z0+20,1.5,'#FFFFFF');Lab(scene,d.yr+' · '+d.ch,0,12.5,z0+20,0.75,'#F4E6C0',FB);
+    const side=i%2?1:-1;const bg=Grp(scene,side*32,0,z0-20);bg.rotation.y=side<0?Math.PI/2:-Math.PI/2;BUILD[i](bg);
+    OFF.forEach(([ox,oz],k)=>{
+      const p=new THREE.Vector3(ox,0,z0+oz);strip(prev,p,d.path);prev=p;
+      const g=Grp(scene,p.x,0,p.z);Cy(g,2.9,3.1,0.45,d.path,0,0.22,0,32);
+      const s=d.S[k];PROPS[i][k](g);
+      const bd=Grp(g,0,0,-3.7);[-2.5,2.5].forEach(x=>B(bd,0.16,6.6,0.16,'#2A2420',x,3.3,0));B(bd,5.3,3.35,0.12,'#2A2420',0,6.4,-0.05);
+      Pl(bd,5.0,3.1,boardTex(s),0,6.4,0.02,true);
+      const loc={d:i,k,v:new THREE.Vector3(p.x,4.4,p.z+10.5),yaw:0,pitch:0.02,idx:LOCS.length,state:''};
+      const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:markerTex(k+1,'idle'),transparent:true,depthWrite:false}));sp.position.set(p.x,8.7,p.z-3.7);sp.scale.set(0.85,0.85,1);sp.userData.loc=loc;scene.add(sp);
+      loc.sprite=sp;markers.push(sp);loc.name=Lab(scene,s.t,p.x,9.7,p.z-3.7,0.62,'#FFFFFF');
+      LOCS.push(loc);
+    });
+  });
+  const hg=new THREE.ConeGeometry(1,1,6);for(let k=0;k<26;k++){const a=k/26*Math.PI*2,r=300+rnd()*60;const h=add(scene,hg,mt('#9BA6AE'),Math.cos(a)*r*0.8,0,-260+Math.sin(a)*r*1.4);h.scale.set(60+rnd()*50,30+rnd()*40,60+rnd()*40);h.position.y=h.scale.y/2-2}
+}
+
+/* =================== 纸鹤 =================== */
+const crane=new THREE.Group();crane.rotation.order='YXZ';scene.add(crane);
+(function(){const pm=new THREE.MeshLambertMaterial({color:0xFBF8F0,side:THREE.DoubleSide}),acc=new THREE.MeshLambertMaterial({color:0xD24E36,side:THREE.DoubleSide});
+  const tri=(pts,m)=>{const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pts.flat(),3));g.computeVertexNormals();return new THREE.Mesh(g,m)};
+  crane.add(tri([[0,0.25,0.1],[-0.22,0,0.2],[0,0,-0.6],[0,0.25,0.1],[0.22,0,0.2],[0,0,-0.6],[0,0.25,0.1],[-0.22,0,0.2],[0,0,0.9],[0,0.25,0.1],[0.22,0,0.2],[0,0,0.9]],pm));
+  crane.add(tri([[0,0.02,-0.5],[0,0.6,-1.1],[0,0.05,-0.35]],pm));crane.add(tri([[0,0.6,-1.1],[0,0.45,-1.3],[0,0.55,-1.05]],acc));crane.add(tri([[0,0.02,0.7],[0,0.55,1.25],[0,0.05,0.5]],pm));
+  const wl=new THREE.Group(),wr=new THREE.Group();wl.add(tri([[0,0,-0.35],[0,0,0.35],[-1.5,0.1,0.25]],pm));wr.add(tri([[0,0,-0.35],[0,0,0.35],[1.5,0.1,0.25]],pm));
+  wl.position.y=wr.position.y=0.12;crane.add(wl,wr);crane.userData.w=[wl,wr];})();
+
+/* =================== 状态与界面 =================== */
+let prog={};try{prog=JSON.parse(localStorage.getItem('rso-prog')||'{}')}catch(e){}
+const save=()=>{try{localStorage.setItem('rso-prog',JSON.stringify(prog))}catch(e){}};
+let view='crane',mode='tour',rev={},activeIdx=-1,shownKey='',autoOn=false,autoT=0;
+const P=new THREE.Vector3(0,8,34);let yaw=0,pitch=-0.12;const keys={};let tween=null;
+const idOf=L=>D[L.d].id+L.k;const TOTAL=D.length*5;
+const chips=$('#chips');
+D.forEach((d,i)=>{const b=document.createElement('button');b.className='chip';b.innerHTML=`<b>${d.name}</b><small>${d.yr}</small>`;b.onclick=()=>{flyTo(LOCS[i*5]);b.blur()};chips.appendChild(b)});
+$('#introList').innerHTML=D.map(d=>`<li><b>${d.name}</b>　<span>${d.yr} · ${d.sub} · ${d.ch}</span></li>`).join('');
+function setSeg(a,b,on){$(a).setAttribute('aria-pressed',on);$(b).setAttribute('aria-pressed',!on)}
+$('#v-crane').onclick=()=>{view='crane';setSeg('#v-crane','#v-eye',true);crane.visible=true};
+$('#v-eye').onclick=()=>{view='eye';setSeg('#v-crane','#v-eye',false);crane.visible=false};
+function refreshNames(){LOCS.forEach(L=>{L.name.visible=mode==='tour'||!!rev[idOf(L)]})}
+function setMode(m){mode=m;rev={};setSeg('#m-tour','#m-recall',m==='tour');shownKey='';refreshNames()}
+$('#m-tour').onclick=()=>setMode('tour');$('#m-recall').onclick=()=>setMode('recall');
+$('#auto').onclick=()=>{autoOn=!autoOn;$('#auto').setAttribute('aria-pressed',autoOn);autoT=0;if(autoOn&&activeIdx<0)flyTo(LOCS[0])};
+
+function distAt(z){if(z>Z0+16)return -1;return Math.max(0,Math.min(D.length-1,Math.floor((Z0+12-z)/DZ)))}
+function nextLoc(dd){let base=activeIdx;if(base<0){const di=distAt(P.z);base=di<0?-1:di*5-1}flyTo(LOCS[Math.max(0,Math.min(LOCS.length-1,base+dd))])}
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+function mountChart(el,spec){
+  const cv=el.querySelector('canvas'),tip=el.querySelector('.tip');
+  const draw=()=>{const r=cv.getBoundingClientRect();const dpr=Math.min(devicePixelRatio,2);cv.width=Math.max(10,r.width*dpr);cv.height=Math.max(10,r.height*dpr);const c=cv.getContext('2d');c.clearRect(0,0,cv.width,cv.height);cv._res=drawChart(c,cv.width,cv.height,spec,{scale:dpr})};
+  requestAnimationFrame(draw);
+  const show=e=>{const res=cv._res;if(!res)return;const r=cv.getBoundingClientRect();const x=e.clientX-r.left;let best=null;res.slots.forEach(s=>{if(Math.abs(s.x-x)<s.w/2)best=s});
+    if(!best){tip.hidden=true;return}const row=spec.c[best.i];let h='';
+    if(spec.type==='bar'){h=`<b>${esc(row[0])}</b><br>${fmtV(row[1],spec)}${row[3]?'<br>'+esc(row[3]):''}<br><span style="color:var(--ink-soft)">书中数字</span>`}
+    else{const [t,o,hh,l,c,b,n]=row;const src=k=>b&&b.includes(k)?' ◆书中':b&&b.includes(k.toUpperCase())?' ◇推算':'';
+      h=`<b>${esc(t||'第'+(best.i+1)+'根')}</b><br>开 ${fmtV(o,spec)}${src('o')}　收 ${fmtV(c,spec)}${src('c')}<br>高 ${fmtV(hh,spec)}${src('h')}　低 ${fmtV(l,spec)}${src('l')}${n?'<br>'+esc(n):''}${!b?'<br><span style="color:var(--ink-soft)">示意值，书中未给</span>':''}`}
+    tip.innerHTML=h;tip.hidden=false;const tw=tip.offsetWidth;tip.style.left=Math.max(4,Math.min(r.width-tw-4,best.x-tw/2))+'px';tip.style.top='34px'};
+  cv.addEventListener('pointermove',show);cv.addEventListener('pointerdown',show);cv.addEventListener('pointerleave',()=>tip.hidden=true);
+}
+function renderPanel(){
+  const pn=$('#panel'),done=Object.values(prog).filter(v=>v===1).length;
+  const nav=`<div class="pnav"><button data-nav="-1">‹ 上一站</button><button data-nav="1">下一站 ›</button><span class="sp"></span><span class="prog">已记住 ${done}/${TOTAL}</span></div>`;
+  let key;
+  if(activeIdx<0){const di=distAt(P.z);key='d'+di+mode+done;if(key===shownKey)return;shownKey=key;
+    if(di<0)pn.innerHTML=`<div class="eb">起点</div><div class="ph"><h2>拉里·利文斯顿的七段人生</h2></div><p class="img">沿小路向北飞。七个街区按书中顺序排开，每区五站，每站一件物件和一块K线屏。</p><p class="more">原型是杰西·利弗莫尔，书由埃德温·勒菲弗撰写，1923年出版。按 N 直接飞到第一站。</p>${nav}`;
+    else{const d=D[di];pn.innerHTML=`<div class="eb">第${CN[di]}区 · ${d.sub} · ${d.ch}</div><div class="ph"><h2>${d.name}</h2><small>${d.yr}</small></div><p class="more">本区五站：${d.S.map((s,k)=>(k+1)+' '+(mode==='recall'?'？':s.t)).join('　')}</p>${nav}`}}
+  else{const L=LOCS[activeIdx],d=D[L.d],s=d.S[L.k],id=idOf(L),hidden=mode==='recall'&&!rev[id],st=prog[id];
+    key=id+mode+(rev[id]?'r':'')+st;if(key===shownKey)return;shownKey=key;
+    const ch=s.chart;
+    const chartHTML=ch?`<div class="chartbox"><div class="ct">${esc(ch.title)}${ch.rel?' · 纵轴为相对变化':''}</div><canvas></canvas><div class="tip" hidden></div>
+      <div class="legend">${ch.type==='bar'?'<span><i class="lg-b"></i>书中给出的数字</span>':'<span><i class="lg-b"></i>实心：含书中价位</span><span><i class="lg-d"></i>◆书中原文 ◇由书中数字推算</span><span><i class="lg-s"></i>虚线：按叙述补全</span><span>红涨绿跌</span>'}</div></div>`:'';
+    pn.innerHTML=`<div class="eb">第${CN[L.d]}区 · ${d.name} · 第 ${L.k+1} 站 · 第${s.ch}章</div>
+      ${hidden?`<div class="ph"><h2>这是书里哪一段？</h2></div><p class="q">看着眼前的物件和K线屏：发生了什么？关键价位是多少？</p><p class="more">先说出来，再揭开核对。</p><div class="acts"><button data-rev="${id}">揭开</button></div>`
+      :`<div class="ph"><h2>${s.t}</h2><small>${s.y}</small></div>${chartHTML}<p class="img">${s.img}</p><p class="key"><i>记住</i><b>${s.key}</b></p><p class="more">${s.more}</p>
+      <p class="quote">${esc(s.q)}<span>原文 · 第${s.ch}章</span></p>
+      ${L.k===4?`<p class="more bridge">${d.bridge}</p>`:''}
+      ${mode==='recall'?`<div class="acts"><button class="ok ${st===1?'sel':''}" data-mark="1">我记得</button><button class="no ${st===0?'sel':''}" data-mark="0">没想起来</button></div>`:''}`}${nav}`;
+    const cb=pn.querySelector('.chartbox');if(cb)mountChart(cb,ch);
+  }
+  pn.querySelectorAll('[data-nav]').forEach(b=>b.onclick=()=>{nextLoc(+b.dataset.nav);b.blur()});
+  pn.querySelectorAll('[data-rev]').forEach(b=>b.onclick=()=>{rev[b.dataset.rev]=1;shownKey='';refreshNames()});
+  pn.querySelectorAll('[data-mark]').forEach(b=>b.onclick=()=>{const L=LOCS[activeIdx];prog[idOf(L)]=+b.dataset.mark;save();refreshMarkers();shownKey='';b.blur();if(+b.dataset.mark===1)setTimeout(()=>nextLoc(1),350)});
+}
+function refreshMarkers(){LOCS.forEach(L=>{const st=L.idx===activeIdx?'on':prog[idOf(L)]===1?'ok':'idle';if(L.state!==st){L.state=st;L.sprite.material.map=markerTex(L.k+1,st);L.sprite.material.needsUpdate=true}})}
+
+/* =================== 飞行 =================== */
+function fwdVec(){return new THREE.Vector3(-Math.sin(yaw)*Math.cos(pitch),Math.sin(pitch),-Math.cos(yaw)*Math.cos(pitch))}
+function flyTo(L){const off=innerWidth>900?0.34:0;const dy=((L.yaw+off-yaw+Math.PI)%(2*Math.PI)+2*Math.PI)%(2*Math.PI)-Math.PI;
+  tween={t:0,dur:RM?0.01:Math.min(2.6,0.8+P.distanceTo(L.v)/22),p0:P.clone(),p1:L.v.clone(),y0:yaw,y1:yaw+dy,pi0:pitch,pi1:L.pitch,loc:L};$('#intro').hidden=true}
+const ease=t=>t<0.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+const KM={KeyW:'fwd',ArrowUp:'fwd',KeyS:'back',ArrowDown:'back',KeyA:'left',ArrowLeft:'left',KeyD:'right',ArrowRight:'right',Space:'up',KeyE:'up',ShiftLeft:'down',ShiftRight:'down',KeyQ:'down'};
+addEventListener('keydown',e=>{if(KM[e.code]){keys[KM[e.code]]=true;if(e.code==='Space'||e.code.startsWith('Arrow'))e.preventDefault();tween=null}if(e.code==='KeyN')nextLoc(1);if(e.code==='KeyB')nextLoc(-1)});
+addEventListener('keyup',e=>{if(KM[e.code])keys[KM[e.code]]=false});
+addEventListener('blur',()=>{for(const k in keys)keys[k]=false});
+$('#pad').querySelectorAll('button').forEach(b=>{const k=b.dataset.k;const on=e=>{e.preventDefault();keys[k]=true;b.classList.add('hold');tween=null;try{b.setPointerCapture(e.pointerId)}catch(_){}};const off=()=>{keys[k]=false;b.classList.remove('hold')};
+  b.addEventListener('pointerdown',on);b.addEventListener('pointerup',off);b.addEventListener('pointercancel',off);b.addEventListener('lostpointercapture',off)});
+let drag=null;const ray=new THREE.Raycaster(),mv=new THREE.Vector2();
+canvas.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,moved:0,id:e.pointerId};canvas.setPointerCapture(e.pointerId)});
+canvas.addEventListener('pointermove',e=>{if(!drag||drag.id!==e.pointerId)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;drag.moved+=Math.abs(dx)+Math.abs(dy);yaw-=dx*0.0042;pitch=Math.max(-1.3,Math.min(1.3,pitch-dy*0.0042));drag.x=e.clientX;drag.y=e.clientY;if(drag.moved>4)tween=null});
+canvas.addEventListener('pointerup',e=>{if(drag&&drag.moved<6){const r=canvas.getBoundingClientRect();mv.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);ray.setFromCamera(mv,camera);const hit=ray.intersectObjects(markers)[0];if(hit)flyTo(hit.object.userData.loc)}drag=null});
+canvas.addEventListener('wheel',e=>{e.preventDefault();tween=null;P.addScaledVector(fwdVec(),-e.deltaY*0.02)},{passive:false});
+
+function resize(){renderer.setSize(innerWidth,innerHeight,false);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();shownKey=''}
+addEventListener('resize',resize);
+const skyC=D.map(d=>new THREE.Color(d.sky)),tmpC=new THREE.Color();
+const clock=new THREE.Clock();let tAll=0;
+function frame(){
+  const dt=Math.min(clock.getDelta(),0.05);tAll+=dt;let moving=false;
+  if(tween){tween.t+=dt/tween.dur;const k=ease(Math.min(1,tween.t));P.lerpVectors(tween.p0,tween.p1,k);P.y+=Math.sin(k*Math.PI)*Math.min(7,tween.p0.distanceTo(tween.p1)*0.08);
+    yaw=tween.y0+(tween.y1-tween.y0)*k;pitch=tween.pi0+(tween.pi1-tween.pi0)*k;moving=true;if(tween.t>=1){tween=null;autoT=0}}
+  else{if(keys.left)yaw+=1.7*dt;if(keys.right)yaw-=1.7*dt;if(keys.fwd)P.addScaledVector(fwdVec(),12*dt);if(keys.back)P.addScaledVector(fwdVec(),-8*dt);if(keys.up)P.y+=7*dt;if(keys.down)P.y-=7*dt;
+    moving=!!(keys.fwd||keys.back||keys.up||keys.down||keys.left||keys.right);
+    if(autoOn&&!moving){autoT+=dt;if(autoT>(mode==='recall'?12:10)){autoT=0;if(activeIdx>=LOCS.length-1){autoOn=false;$('#auto').setAttribute('aria-pressed',false)}else nextLoc(1)}}}
+  P.y=Math.max(1.2,Math.min(90,P.y));
+  let best=-1,bd=5.5;if(!tween)LOCS.forEach(L=>{const d=P.distanceTo(L.v);if(d<bd){bd=d;best=L.idx}});else if(tween.t>0.85)best=tween.loc.idx;
+  if(best!==activeIdx){activeIdx=best;refreshMarkers();shownKey=''}
+  renderPanel();
+  const di=distAt(P.z);chips.querySelectorAll('.chip').forEach((c,i)=>c.classList.toggle('on',i===di));
+  $('#where').textContent=di<0?'起点':'第'+CN[di]+'区 · '+D[di].name;
+  const f=Math.max(0,Math.min(D.length-1,(Z0+12-P.z)/DZ-0.3)),a=Math.floor(f),b=Math.min(D.length-1,a+1);tmpC.copy(skyC[a]).lerp(skyC[b],f-a);scene.background.copy(tmpC);scene.fog.color.copy(tmpC);
+  if(!RM){AN.forEach(fn=>fn(tAll));markers.forEach(s=>{const on=s.userData.loc.idx===activeIdx;s.scale.setScalar((on?0.95:0.78)+Math.sin(tAll*3+s.userData.loc.idx)*0.05)})}
+  crane.position.copy(P);crane.rotation.set(pitch*0.6,yaw,0);const fl=Math.sin(tAll*(moving?9:3))*(moving?0.55:0.2);crane.userData.w[0].rotation.z=-fl;crane.userData.w[1].rotation.z=fl;crane.position.y+=Math.sin(tAll*2)*0.06;
+  const fv=fwdVec();if(view==='crane'){const cp=P.clone().addScaledVector(fv,-4.4);cp.y+=1.9;camera.position.copy(cp);const lk=P.clone().addScaledVector(fv,6);lk.y+=0.9;camera.lookAt(lk)}else{camera.position.copy(P);camera.rotation.set(pitch,yaw,0)}
+  renderer.render(scene,camera);requestAnimationFrame(frame);
+}
+const fontReady=Promise.race([Promise.all([document.fonts.load('72px "ZCOOL XiaoWei"','对赌行少年华尔街的学费预感与恐慌商品与宿敌低谷与归来贴士与信号操纵的艺术'),document.fonts.load('40px "Noto Serif SC"','做空糖业书中价位')]).catch(()=>{}),new Promise(r=>setTimeout(r,2500))]);
+fontReady.then(()=>{buildWorld();resize();refreshMarkers();if(RM)AN.forEach(fn=>fn(1.3));$('#loading').hidden=true;$('#intro').hidden=false;$('#go').onclick=()=>{$('#intro').hidden=true};requestAnimationFrame(frame)});
+</script>
+
+</body>
+</html>
