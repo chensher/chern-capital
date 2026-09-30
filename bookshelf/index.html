@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>记忆书架</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Noto+Serif+SC:wght@400;700&display=swap">
+<style>
+/* 布局：一面深色胡桃木书架，每本书一根书脊；点书脊把书抽出来，下方展开这座宫殿的简介与入口 */
+:root{
+  --wall:#1B1714; --wood:#5A3A24; --wood-d:#3E2716; --wood-l:#7A5234;
+  --paper:#EFE6D2; --ink:#F1EADB; --soft:#B9AC96; --gold:#D9AE5A; --line:rgba(241,234,219,.14);
+  --display:"ZCOOL XiaoWei","STKaiti","KaiTi",serif;
+  --body:"Noto Serif SC","Songti SC","SimSun",serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+.fx{font-family:var(--body)}
+html{background:var(--wall)}
+body{margin:0;background:radial-gradient(ellipse at 50% -10%,#2E2621 0%,var(--wall) 60%);color:var(--ink);font-family:var(--body);min-height:100vh;padding:0 16px}
+.wrap{max-width:1040px;margin:0 auto;padding-block:calc(env(safe-area-inset-top,0px) + 40px) 60px;display:flex;flex-direction:column;gap:28px}
+.home{display:inline-block;color:var(--soft);text-decoration:none;font-size:13px;margin-bottom:14px}
+.home:hover{color:var(--gold)}
+.planned{display:inline-block;margin-top:16px;border:1px dashed var(--line);color:var(--soft);padding:9px 18px;border-radius:6px;font-size:14px}
+header h1{font-family:var(--display);font-weight:400;font-size:clamp(38px,7vw,64px);margin:0;letter-spacing:.06em;line-height:1.1}
+header p{color:var(--soft);max-width:36em;line-height:1.8;margin:10px 0 0}
+
+.shelf{position:relative;padding:22px 22px 0;background:linear-gradient(var(--wood-d),#2C1C10);border-radius:6px;box-shadow:inset 0 0 0 10px var(--wood),inset 0 0 40px rgba(0,0,0,.6),0 20px 40px rgba(0,0,0,.5)}
+.row{display:flex;align-items:flex-end;gap:6px;min-height:290px;padding:0 10px;overflow-x:auto;scrollbar-width:thin}
+.plank{height:18px;margin:0 -22px;background:linear-gradient(var(--wood-l),var(--wood) 40%,var(--wood-d));box-shadow:0 6px 10px rgba(0,0,0,.45)}
+.book{flex:none;border:0;cursor:pointer;position:relative;border-radius:3px 3px 1px 1px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:18px 0 16px;color:var(--c-ink,#F4E6C0);background:var(--c,#6A1E1E);
+  box-shadow:inset 3px 0 0 rgba(255,255,255,.12),inset -4px 0 0 rgba(0,0,0,.25),0 0 0 1px rgba(0,0,0,.4);transition:transform .25s ease;font-family:var(--display)}
+.book:hover,.book:focus-visible{transform:translateY(-10px)}
+.book[aria-pressed="true"]{transform:translateY(-22px)}
+.book .t{writing-mode:vertical-rl;font-size:18px;letter-spacing:.14em;line-height:1}
+.book .a{writing-mode:vertical-rl;font-family:var(--body);font-size:11px;opacity:.8;letter-spacing:.08em}
+.book .band{position:absolute;left:0;right:0;height:5px;background:var(--gold);opacity:.8}
+.book .band.b1{top:8px}.book .band.b2{bottom:5px}
+.empty{flex:none;width:44px;height:200px;border:1.5px dashed rgba(241,234,219,.18);border-bottom:0;border-radius:3px 3px 0 0;display:grid;place-items:center;color:rgba(241,234,219,.28);font-size:11px;writing-mode:vertical-rl;letter-spacing:.3em}
+.lean{flex:none;width:34px;height:190px;background:#3A4A3A;border-radius:3px;transform:rotate(8deg);transform-origin:bottom left;margin-left:6px;box-shadow:inset 3px 0 0 rgba(255,255,255,.08)}
+
+.card{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:28px;align-items:start;border-top:1px solid var(--line);padding-top:24px}
+.card h2{font-family:var(--display);font-weight:400;font-size:clamp(28px,4.5vw,40px);margin:0;line-height:1.2}
+.meta{color:var(--soft);font-size:13.5px;margin:6px 0 0}
+.card p{line-height:1.85;color:#DDD3C0;margin:0 0 12px;max-width:40em}
+.facts{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.facts li{border:1px solid var(--line);border-radius:6px;padding:10px 12px}
+.facts b{display:block;font-family:var(--display);font-weight:400;font-size:26px;color:var(--gold);font-variant-numeric:tabular-nums}
+.facts span{font-size:12px;color:var(--soft)}
+.districts{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:2px;font-size:13.5px}
+.districts li{display:flex;gap:10px;padding:6px 0;border-bottom:1px solid var(--line)}
+.districts li span:first-child{color:var(--gold);width:1.5em;flex:none}
+.districts li span:last-child{margin-left:auto;color:var(--soft);font-size:12px;white-space:nowrap}
+.enter{display:inline-flex;align-items:center;gap:8px;margin-top:16px;background:var(--gold);color:#1E1812;text-decoration:none;padding:10px 20px;border-radius:6px;font-size:15px}
+.enter:hover{background:#E8C274}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+footer{color:var(--soft);font-size:12px;line-height:1.8;border-top:1px solid var(--line);padding-top:14px}
+@media (max-width:720px){.card{grid-template-columns:1fr}.facts{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (prefers-reduced-motion:reduce){.book{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="home" href="../">← chern_capital</a>
+    <h1>记忆书架</h1>
+    <p>每一本书是一座可以飞进去的三维记忆宫殿：书的结构变成街区和路线，关键情节变成只属于它的物件。从书架上抽出一本，进去走一圈。</p>
+  </header>
+
+  <section class="shelf" aria-label="书架">
+    <div class="row" id="row"></div>
+    <div class="plank"></div>
+  </section>
+
+  <section class="card" id="card" aria-live="polite"></section>
+
+  <footer>新书上架：在本页 <code>BOOKS</code> 列表加一项，并把宫殿放进 <code>bookshelf/books/&lt;书名&gt;/index.html</code>。</footer>
+</div>
+<script>
+const BOOKS=[
+ {slug:'reminiscences-of-a-stock-operator',title:'股票作手回忆录',en:'Reminiscences of a Stock Operator',author:'埃德温·勒菲弗',year:1923,
+  color:'#6A1E1E',w:58,h:262,
+  intro:'以杰西·利弗莫尔为原型的拉里·利文斯顿，从14岁的报价板男孩到操纵大师。七个街区对应他人生的七段，每站一件专属物件和一块K线屏；K线按书中原文价位绘制，并标明哪些价位来自原文、哪些是补全。',
+  stats:[[7,'街区'],[35,'站'],[24,'章']],
+  districts:[['对赌行少年','第1—2章'],['华尔街的学费','第3—5、7章'],['预感与恐慌','第6、8、9章'],['商品与宿敌','第10—12章'],['低谷与归来','第13—15章'],['贴士与信号','第16—18章'],['操纵的艺术','第19—24章']]},
+ {slug:'chan',href:'../reading.html',title:'缠论',en:'原文精读 · 第一轮',author:'缠中说禅',year:'',
+  color:'#2E4A5E',w:50,h:236,
+  intro:'第一座阅读宫殿：把位次、人性、趋势、安全线、独立系统、背驰与买点分别放进不同的房间，附原文全文。',
+  stats:[[5,'房间'],[1,'轮精读'],['全文','原文']],
+  districts:[['重构位次，安顿人性',''],['人性不是改造对象，位次才是操作对象',''],['趋势、节奏与安全线',''],['独立程序与轮动系统',''],['均线缠绕、背驰与买点','']]},
+ {slug:'how-to-make-money-in-stocks',planned:true,title:'笑傲股市',en:'How to Make Money in Stocks',author:'威廉·欧奈尔',year:'',
+  color:'#4E5A2A',w:54,h:250,
+  intro:'成长股与 CAN SLIM 体系的入口。计划拆成选股、盈利增长、相对强度、突破买点与风险控制几个街区。',
+  stats:[['—','街区'],['—','站'],['待建','状态']],districts:[['选股',''],['盈利增长',''],['相对强度',''],['突破买点',''],['风险控制','']]},
+ {slug:'trade-like-a-stock-market-wizard',planned:true,title:'股票魔法师',en:'Trade Like a Stock Market Wizard',author:'马克·米勒维尼',year:'',
+  color:'#5A2E4E',w:52,h:244,
+  intro:'米勒维尼风格的趋势模板入口。计划承载 VCP、趋势模板、买点纪律、止损与仓位管理。',
+  stats:[['—','街区'],['—','站'],['待建','状态']],districts:[['趋势模板',''],['VCP',''],['买点纪律',''],['止损',''],['仓位管理','']]}
+];
+const fx=t=>t.replace(/[回徊]/g,m=>`<span class="fx">${m}</span>`);
+const row=document.getElementById('row'),card=document.getElementById('card');
+function show(b){
+  row.querySelectorAll('.book').forEach(x=>x.setAttribute('aria-pressed',x.dataset.slug===b.slug));
+  const meta=[b.en,b.author,b.year].filter(Boolean).join(' · ');
+  const go=b.planned?`<span class="planned">宫殿待建</span>`:`<a class="enter" href="${b.href||'books/'+b.slug+'/'}">进入宫殿 →</a>`;
+  card.innerHTML=`<div><h2>${fx(b.title)}</h2><p class="meta">${meta}</p>${go}</div>
+    <div><p>${b.intro}</p><ul class="facts">${b.stats.map(s=>`<li><b>${s[0]}</b><span>${s[1]}</span></li>`).join('')}</ul>
+    <ol class="districts">${b.districts.map((d,i)=>`<li><span>${i+1}</span><span>${d[0]}</span><span>${d[1]||''}</span></li>`).join('')}</ol></div>`;
+  try{history.replaceState(null,'','#'+b.slug)}catch(e){}
+}
+BOOKS.forEach(b=>{const el=document.createElement('button');el.className='book';el.dataset.slug=b.slug;el.style.cssText=`--c:${b.color};width:${b.w}px;height:${b.h}px`+(b.planned?';opacity:.55':'');
+  el.setAttribute('aria-pressed','false');el.setAttribute('aria-label',b.title);
+  el.innerHTML=`<i class="band b1"></i><span class="t">${fx(b.title)}</span><i class="band b2"></i><span class="a">${b.author}</span>`;el.onclick=()=>show(b);row.appendChild(el)});
+for(let i=0;i<3;i++){const e=document.createElement('div');e.className='empty';e.textContent='待上架';row.appendChild(e)}
+const lean=document.createElement('div');lean.className='lean';row.appendChild(lean);
+show(BOOKS.find(b=>'#'+b.slug===location.hash)||BOOKS[0]);
+</script>
+</body>
+</html>
